@@ -1,0 +1,17 @@
+pandoc: 2.19.2
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  ANALYTES_STATS: ANALYTES_STATS.html
+  BASELINE_STATS: BASELINE_STATS.html
+  FIBER_TYPES_STATS: FIBER_TYPES_STATS.html
+  MUSCLES_STATS: MUSCLES_STATS.html
+  PRE_POST_STATS: PRE_POST_STATS.html
+  analyte_plots: analyte_plots.html
+  baseline_plots: baseline_plots.html
+  fiber_type_plots: fiber_type_plots.html
+  muscle_plots: muscle_plots.html
+  pre_post_plots: pre_post_plots.html
+  weekly_measures_plots: weekly_measures_plots.html
+last_built: 2023-07-14T23:53Z
+
