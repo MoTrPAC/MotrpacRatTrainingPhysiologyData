@@ -12,6 +12,6 @@ PHYSIO
 }
 \description{
 All physiology measures combined into a single
-  \code{data.table}.
+  \code{data.frame}.
 }
 \keyword{datasets}
