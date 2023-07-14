@@ -1,0 +1,477 @@
+---
+title: "Statistical analyses of muscle-specific measures"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Statistical analyses of muscle-specific measures}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
+link-citations: yes
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup, message=FALSE, warning=FALSE}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(ggplot2)
+library(MASS)
+library(dplyr)
+library(emmeans)
+library(tibble)
+library(tidyr)
+library(purrr)
+theme_set(theme_bw()) # base plot theme
+```
+
+# Regression Models
+
+Since all measures that we will explore are strictly positive, we will fit log-link generalized linear models (GLM) using either the Gaussian, quasi-Poisson, gamma, or inverse Gaussian distributions, depending on the observed mean-variance relationship. We will determine the mean-variance relationship with code from Dunn and Smyth[@dunn_generalized_2018] (pg. 429–430). If there are problems with the model diagnostic plots, we will instead transform the response and fit a Gaussian GLM. If the response is log transformed, an identity link will be used; otherwise, we will retain the log link so that contrasts are ratios. Outliers will be inspected and removed if they are influential. We will report all observations that may be removed, as well as the reason for doing so.
+
+
+## Terminal Weight
+
+```{r}
+ggplot(MUSCLES, aes(x = group, y = term_weight)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(muscle ~ age + sex, scales = "free_y") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- MUSCLES %>% 
+  group_by(sex, group, age, muscle) %>% 
+  summarise(mn = mean(term_weight, na.rm = TRUE),
+            vr = var(term_weight, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope is close to 2, so a log-link Gamma GLM may be a appropriate.
+
+```{r}
+fit.term <- glm(term_weight ~ age * sex * group * muscle,
+                family = Gamma("log"),
+                data = MUSCLES)
+plot_lm(fit.term)
+```
+
+In addition to several outliers (224, 868, 907), the right tail of the QQ-plot deviates from the line. We will try a log-link Gaussian GLM with reciprocal group variance weights.
+
+```{r}
+wt.term <- MUSCLES %>% 
+  group_by(age, sex, group, muscle) %>% 
+  mutate(1 / var(term_weight, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.term <- update(fit.term, family = gaussian("log"),
+                   weights = wt.term)
+plot_lm(fit.term)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.term, test = "F")
+```
+
+```{r}
+fit.term.1 <- update(fit.term, 
+                     formula = . ~ (age + sex + group + muscle) ^ 2 +
+                       age:group:(sex + muscle))
+anova(fit.term.1, fit.term, test = "F")
+```
+
+No significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.term <- fit.term.1
+plot_lm(fit.term)
+```
+
+The diagnostic plots still look fine.
+
+```{r}
+summary(fit.term)
+```
+
+
+## Mean Cross-Sectional Area
+
+```{r, fig.width=5}
+MUSCLES %>% 
+  filter(!is.na(mean_CSA)) %>% 
+  ggplot(aes(x = group, y = mean_CSA)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(muscle ~ age + sex, scales = "free_y") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- MUSCLES %>% 
+  group_by(sex, group, age, muscle) %>% 
+  summarise(mn = mean(mean_CSA, na.rm = TRUE),
+            vr = var(mean_CSA, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{2.5}$. This is intermediate between the gamma and inverse Gaussian distributions. We will try a gamma GLM.
+
+```{r}
+fit.area <- glm(mean_CSA ~ age * sex * group * muscle,
+                family = Gamma("log"),
+                data = MUSCLES)
+plot_lm(fit.area)
+```
+
+Observation 567 is outlying.
+
+```{r}
+MUSCLES %>% 
+  mutate(idx = 1:n()) %>% 
+  group_by(age, sex, group, muscle) %>% 
+  filter(567 %in% idx, !is.na(mean_CSA)) %>% 
+  arrange(-mean_CSA) %>% 
+  relocate(idx, .before = everything())
+```
+
+The other measures are high for observation 567, relative to the rest of the group, so we will keep this observation in the model.
+
+```{r}
+anova(fit.area, test = "F")
+```
+
+The 4-way interaction is significant, so we will not remove any terms.
+
+```{r}
+summary(fit.area)
+```
+
+
+## Glycogen
+
+```{r}
+ggplot(MUSCLES, aes(x = group, y = glycogen)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(muscle ~ age + sex, scales = "free_y") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- MUSCLES %>% 
+  group_by(sex, group, age, muscle) %>% 
+  summarise(mn = mean(glycogen, na.rm = TRUE),
+            vr = var(glycogen, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.4}$. This is intermediate between the Poisson and gamma distributions. We will fit a log-link gamma GLM.
+
+```{r}
+fit.glyc <- glm(glycogen ~ age * sex * group * muscle,
+                family = Gamma("log"),
+                data = MUSCLES)
+plot_lm(fit.glyc)
+```
+
+It seems like the gamma distribution over-corrects for the mean-variance relationship at higher values. We will try a quasi-Poisson instead.
+
+```{r}
+fit.glyc <- update(fit.glyc, family = quasipoisson("log"))
+plot_lm(fit.glyc)
+```
+
+We observe an increasing mean-variance trend at lower values that stabilizes at higher values: the opposite of what we saw with the gamma. We will try a log-link Gaussian with reciprocal group variance weights.
+
+```{r}
+wt.glyc <- MUSCLES %>% 
+  group_by(age, sex, group, muscle) %>% 
+  mutate(1 / var(glycogen, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.glyc <- update(fit.glyc, family = gaussian("log"),
+                   weights = wt.glyc)
+plot_lm(fit.glyc)
+```
+
+The diagnostic plots look much better, though there may be some slight deviation in the tails of the QQ-plot. We may be able to fix this by simplifying the model.
+
+```{r}
+anova(fit.glyc, test = "F")
+```
+
+```{r}
+fit.glyc.1 <- update(fit.glyc, 
+                     formula = . ~ (age + sex + group + muscle) ^ 2 +
+                       age:group:(sex + muscle))
+anova(fit.glyc.1, fit.glyc, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.glyc <- fit.glyc.1
+plot_lm(fit.glyc)
+```
+
+The diagnostic plots look fine.
+
+```{r}
+summary(fit.glyc)
+```
+
+
+## Capillary Contacts
+
+```{r, fig.width=5}
+filter(MUSCLES, !is.na(capillary_contacts)) %>% 
+  ggplot(aes(x = group, y = capillary_contacts)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(muscle ~ age + sex, scales = "free_y")
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- MUSCLES %>% 
+  group_by(sex, group, age, muscle) %>% 
+  summarise(mn = mean(capillary_contacts, na.rm = TRUE),
+            vr = var(capillary_contacts, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope is close to 0, indicating constant variance. We will fit a log-link Gaussian GLM.
+
+```{r}
+fit.cap <- glm(capillary_contacts ~ age * sex * group * muscle,
+               family = gaussian("log"),
+               data = MUSCLES)
+plot_lm(fit.cap)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.cap, test = "F")
+```
+
+```{r}
+fit.cap.1 <- update(fit.cap, formula = . ~ (age + sex + group + muscle) ^ 2 +
+                      age:sex:group)
+anova(fit.cap.1, fit.cap, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.cap <- fit.cap.1
+plot_lm(fit.cap)
+```
+
+The diagnostic plots look fine.
+
+```{r}
+summary(fit.cap)
+```
+
+
+## Citrate Synthase
+
+```{r}
+filter(MUSCLES, !is.na(citrate_synthase)) %>% 
+  ggplot(aes(x = group, y = citrate_synthase)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(muscle ~ age + sex, scales = "free_y") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- MUSCLES %>% 
+  group_by(sex, group, age, muscle) %>% 
+  summarise(mn = mean(citrate_synthase, na.rm = TRUE),
+            vr = var(citrate_synthase, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope is close to 2, so a gamma GLM may be appropriate.
+
+```{r}
+fit.citrate <- glm(citrate_synthase ~ age * sex * group * muscle,
+                   family = Gamma("log"),
+                   data = MUSCLES)
+plot_lm(fit.citrate)
+```
+
+The right tail of the QQ-plot deviates drastically from the line. We will try a log-link Gaussian GLM with reciprocal group variance weights.
+
+```{r}
+wt.citrate <- MUSCLES %>% 
+  group_by(age, sex, group, muscle) %>% 
+  mutate(1 / var(citrate_synthase, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.citrate <- update(fit.citrate, family = gaussian("log"),
+                      weights = wt.citrate)
+plot_lm(fit.citrate)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.citrate, test = "F")
+```
+
+All terms are significant!
+
+```{r}
+summary(fit.citrate)
+```
+
+
+# Comparisons
+
+```{r}
+model_list <- list("Terminal Weight" = fit.term,
+                   "Mean CSA" = fit.area,
+                   "Glycogen" = fit.glyc,
+                   "Capillary Contacts" = fit.cap,
+                   "Citrate Synthase" = fit.citrate)
+
+# Estimated marginal means
+MUSCLES_EMM <- map(model_list, function(mod_i) {
+  emmeans(mod_i, specs = "group", by = c("age", "sex", "muscle"),
+          type = "response", infer = TRUE)
+})
+```
+
+```{r}
+# Extract model info
+model_df <- model_list %>% 
+  map_chr(.f = ~ paste(deparse(.x[["call"]]), collapse = "")) %>% 
+  enframe(name = "response", 
+          value = "model") %>% 
+  mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
+         model_type = sub("^([^\\(]+).*", "\\1", model),
+         formula = sub(".*formula = ([^,]+),.*", "\\1", model),
+         family = sub(".*family = ([^\\)]+\\)),.*", "\\1", model),
+         # if weights were used, they were reciprocal group variances
+         weights = ifelse(grepl("weights = ", model), 
+                          "reciprocal group variances", NA)) %>% 
+  dplyr::select(-model)
+
+# Results
+MUSCLES_STATS <- MUSCLES_EMM %>% 
+  map(function(emm_i) {
+    contrast(emm_i, method = "dunnett") %>% 
+      summary(infer = TRUE) %>% 
+      as.data.frame() %>% 
+      rename(any_of(c(lower.CL = "asymp.LCL",
+                      upper.CL = "asymp.UCL")))
+  }) %>%
+  enframe(name = "response") %>% 
+  unnest(value) %>%
+  arrange(response) %>% 
+  mutate(signif = cut(p.value, 
+                      breaks = c(0, 0.001, 0.01, 0.05, 1),
+                      labels = c("***", "**", "*", ""),
+                      include.lowest = TRUE, right = FALSE,
+                      ordered_result = TRUE)) %>% 
+  left_join(model_df, by = "response") %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  relocate(starts_with("statistic"), .before = p.value) %>% 
+  relocate(signif, .after = p.value) %>% 
+  relocate(ends_with("CL", ignore.case = FALSE), .before = null)
+```
+
+See `?MUSCLES_STATS` for details.
+
+```{r}
+print.data.frame(head(MUSCLES_STATS))
+```
+
+```{r, eval=FALSE, include=FALSE}
+# Save data
+usethis::use_data(MUSCLES_EMM, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+
+usethis::use_data(MUSCLES_STATS, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
+# References
+

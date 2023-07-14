@@ -1,0 +1,676 @@
+---
+title: "Statistical analyses of baseline body composition and VO2max testing measures"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Statistical analyses of baseline body composition and VO2max testing measures}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
+link-citations: yes
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(ggplot2)
+library(MASS)
+library(dplyr)
+library(emmeans)
+library(tibble)
+library(tidyr)
+library(purrr)
+library(latex2exp)
+library(rstatix)
+theme_set(theme_bw()) # base plot theme
+```
+
+
+# Regression Models
+
+Since all of the measures in this vignette are strictly positive, we will check the mean–variance relationship with code from Dunn and Smyth[@dunn_generalized_2018] (pg. 429–430) and fit an appropriate log-link GLM. This allows us to back-transform the means without introducing bias, unlike when the response is transformed. Also, the log-link allows us to test ratios between means, rather than their absolute differences.
+
+Since neither percentage fat mass nor percentage lean mass approach either of their boundaries of 0 and 100%, we will treat them as if they could take on any positive value. That is, the modeling process will be the same as for the other measures.
+
+If there are obvious problems with the model diagnostic plots, or the mean–variance relationship does not correspond to an exponential family distribution, we will include reciprocal group variances as weights in a log-link Gaussian GLM. Finally, we will remove insignificant predictors to achieve model parsimony based on ANOVA F-tests.
+
+
+## NMR Weight
+
+```{r, fig.height=3}
+# Plot points
+ggplot(NMR, aes(x = group, y = pre_weight)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0)) +
+  facet_grid(~ age + sex) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There are no obvious outlying values or other issues. We will check the mean–variance relationship.
+
+```{r}
+mv <- NMR %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(pre_weight),
+            vr = var(pre_weight))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.76}$. This is close to a gamma distribution, though the plot shows that the relationship is not exactly linear: the variance decreases in the group with the largest mean. Rather than fitting a gamma GLM, we will fit a weighted log-link Gaussian GLM.
+
+```{r}
+wt.weight <- NMR %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(pre_weight, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.weight <- glm(pre_weight ~ age * sex * group,
+                  family = gaussian("log"),
+                  weights = wt.weight,
+                  data = NMR)
+plot_lm(fit.weight)
+```
+
+The diagnostic plots seem fine. We will try to simplify the model.
+
+```{r}
+anova(fit.weight, test = "F")
+```
+
+```{r}
+fit.weight.1 <- update(fit.weight, formula = . ~ age * group + sex)
+anova(fit.weight.1, fit.weight, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.weight <- fit.weight.1
+plot_lm(fit.weight)
+```
+
+The diagnostic plots still look fine.
+
+```{r}
+summary(fit.weight)
+```
+
+
+## NMR Lean Mass
+
+```{r, fig.height=3}
+# Plot points
+ggplot(NMR, aes(x = group, y = pre_lean)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_grid(~ age + sex) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There are several large outlying values in the 6M 1W and 2W male groups. We will check the mean–variance relationship.
+
+```{r}
+mv <- NMR %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(pre_lean, na.rm = TRUE),
+            vr = var(pre_lean, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.5}$. This is intermediate between the Poisson and gamma distributions, though the plot shows that the relationship is not exactly linear: the variance decreases in the group with the largest mean. Rather than fitting a Poisson or gamma GLM, we will fit a weighted log-link Gaussian GLM.
+
+```{r}
+wt.lean <- NMR %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(pre_lean, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.lean <- glm(pre_lean ~ sex * group * age,
+                family = gaussian("log"),
+                weights = wt.lean,
+                data = NMR)
+plot_lm(fit.lean)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.lean, test = "F")
+```
+
+The 3-way interaction is significant, so we will not remove any terms.
+
+```{r}
+summary(fit.lean)
+```
+
+
+## NMR Fat Mass
+
+```{r, fig.height = 3}
+# Plot points
+ggplot(NMR, aes(x = group, y = pre_fat)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_grid(~ age + sex) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There is one large outlying sample in the 18M 4W female group. We will check the mean–variance relationship.
+
+```{r}
+mv <- NMR %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(pre_fat, na.rm = TRUE),
+            vr = var(pre_fat, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.68}$, so a gamma GLM may be appropriate.
+
+```{r}
+fit.fat <- glm(pre_fat ~ age * sex * group,
+               family = Gamma("log"),
+               data = NMR)
+plot_lm(fit.fat)
+```
+
+A few observations appear to be outlying, and the variance seems to decrease slightly at higher expected values. We will try a log-link Gaussian GLM with reciprocal group variance weights instead.
+
+```{r}
+wt.fat <- NMR %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(pre_fat, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.fat <- update(fit.fat, family = gaussian("log"),
+                  weights = wt.fat)
+plot_lm(fit.fat)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.fat, test = "F")
+```
+
+We will keep the 3-way interaction, even though it is not significant at the 0.05 level.
+
+```{r}
+fit.fat <- update(fit.fat, formula = . ~ . - sex:group:age)
+plot_lm(fit.fat)
+```
+
+```{r}
+summary(fit.fat)
+```
+
+
+## NMR % Lean Mass
+
+```{r, fig.height=3}
+# Plot points
+ggplot(NMR, aes(x = group, y = pre_lean_pct)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_grid(~ age + sex) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There may be a few outlying values. We will check the mean–variance relationship.
+
+```{r}
+mv <- NMR %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(pre_lean_pct, na.rm = TRUE),
+            vr = var(pre_lean_pct, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{2.3}$, so a gamma GLM may be appropriate.
+
+```{r}
+fit.lean_pct <- glm(pre_lean_pct ~ age * sex * group,
+                    family = Gamma("log"),
+                    data = NMR)
+plot_lm(fit.lean_pct)
+```
+
+There are a few outliers. We will try a log-link Gaussian GLM with reciprocal group variance weights.
+
+```{r}
+wt.lean_pct <- NMR %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(pre_lean_pct, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.lean_pct <- update(fit.lean_pct,
+                       family = gaussian("log"),
+                       weights = wt.lean_pct)
+plot_lm(fit.lean_pct)
+```
+
+The diagnostic plots look fine now. We will try to simplify the model.
+
+```{r}
+anova(fit.lean_pct, test = "F")
+```
+
+All terms are significant, so we will not change the model.
+
+```{r}
+summary(fit.lean_pct)
+```
+
+
+## NMR % Fat Mass
+
+```{r, fig.height=3}
+# Plot points
+ggplot(NMR, aes(x = group, y = pre_fat_pct)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_grid(~ age + sex) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There may be a few outlying values. We will check the mean–variance relationship.
+
+```{r}
+mv <- NMR %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(pre_fat_pct, na.rm = TRUE),
+            vr = var(pre_fat_pct, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.3}$, so a quasi-Poisson GLM may be appropriate.
+
+```{r}
+fit.fat_pct <- glm(pre_fat_pct ~ age * sex * group,
+                   family = quasipoisson("log"),
+                   data = NMR)
+plot_lm(fit.fat_pct)
+```
+
+The diagnostic plots seem fine. We will try to simplify the model.
+
+```{r}
+anova(fit.fat_pct, test = "F")
+```
+
+```{r}
+fit.fat_pct.1 <- update(fit.fat_pct, formula = . ~ age * (sex + group))
+anova(fit.fat_pct.1, fit.fat_pct, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.fat_pct <- fit.fat_pct.1
+plot_lm(fit.fat_pct)
+```
+
+```{r}
+summary(fit.fat_pct)
+```
+
+
+## Absolute VO$_2$max
+
+Absolute VO2max is calculated by multiplying relative VO2max ($mL \cdot kg^{-1} \cdot min^{-1}$) by body weight (kg).
+
+```{r, fig.height=3}
+# Plot points
+ggplot(VO2MAX, aes(x = group, y = pre_vo2max_ml_min)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_grid(~ age + sex) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There is a large outlying value in the 6M 2W male group. It is the largest value overall.
+
+```{r}
+filter(VO2MAX, age == "6M") %>% 
+  ggplot(aes(x = pre_weight, y = pre_vo2max_ml_min)) +
+  geom_point(na.rm = TRUE, alpha = 0.5)
+```
+
+That outlier has one of the highest weights, though it is not unusual. We will determine the mean–variance relationship.
+
+```{r}
+mv <- VO2MAX %>% 
+  group_by(age, sex, group) %>% 
+  summarise(mn = mean(pre_vo2max_ml_min, na.rm = TRUE),
+            vr = var(pre_vo2max_ml_min, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.5}$. This is intermediate between the Poisson and gamma distributions. We will fit a log-link gamma GLM. We will need to combine age and group or some coefficients will be inestimable. Note that the point with the largest variance on the plot is the group with that outlier.
+
+```{r}
+# Concatenate age and group
+VO2MAX <- mutate(VO2MAX, age_group = paste0(age, "_", group))
+
+fit.vo2max_abs <- glm(pre_vo2max_ml_min ~ age_group * sex,
+                      family = Gamma("log"),
+                      data = VO2MAX)
+plot_lm(fit.vo2max_abs)
+```
+
+Observation 119 has a large residual, but does not appear to substantially affect the fit. However, removal will bring the mean of that group closer to its matching SED group, so the results of that comparison will be more conservative. This is the approach we will take.
+
+```{r}
+fit.vo2max_abs <- update(fit.vo2max_abs, subset = -119)
+plot_lm(fit.vo2max_abs)
+```
+
+The diagnostic plots look fine now, so we will try to simplify the model.
+
+```{r}
+anova(fit.vo2max_abs, test = "F")
+```
+
+All terms are significant.
+
+```{r}
+summary(fit.vo2max_abs)
+```
+
+
+## VO$_2$max (relative to total body mass)
+
+```{r, fig.height=3}
+# Plot points
+ggplot(VO2MAX, aes(x = group, y = pre_vo2max_ml_kg_min)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_grid(~ age + sex) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There is an extreme observation in the 18M SED female group. We will check the mean–variance relationship.
+
+```{r}
+mv <- VO2MAX %>% 
+  group_by(age, sex, group) %>% 
+  summarise(mn = mean(pre_vo2max_ml_min, na.rm = TRUE),
+            vr = var(pre_vo2max_ml_min, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.5}$. This is intermediate between the Poisson and gamma distributions. We will fit a log-link gamma GLM.
+
+```{r}
+fit.vo2max_rel <- glm(pre_vo2max_ml_kg_min ~ age_group * sex,
+                      family = Gamma("log"),
+                      data = VO2MAX)
+plot_lm(fit.vo2max_rel)
+```
+
+Observation 153 has a large residual, but does not substantially affect the model fit. Removal will bring the mean of that group closer to the rest, however, so we will do so. This ensures the comparison against the SED group will produce more conservative results.
+
+```{r}
+fit.vo2max_rel <- update(fit.vo2max_rel, subset = -153)
+plot_lm(fit.vo2max_rel)
+```
+
+The diagnostic plots look fine, so we will try to simplify the model.
+
+```{r}
+anova(fit.vo2max_rel, test = "F")
+```
+
+All terms are significant.
+
+```{r}
+summary(fit.vo2max_rel)
+```
+
+
+## Maximum Run Speed
+
+Since run speed was increased in 1.8 m/min increments, as defined in the training protocol, it may be better to use a non-parametric test. Rather than plotting the individual points, since they can only take on a few different values, we will instead count the number of samples that take on a particular value in each group and scale the points accordingly.
+
+```{r, fig.height=3}
+# Plot points
+VO2MAX %>% 
+  count(age, sex, group, pre_speed_max) %>% 
+  ggplot(aes(x = group, y = pre_speed_max, size = n)) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(~ age + sex) +
+  scale_size_area(max_size = 5) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will use Wilcoxon Rank Sum tests to compare each trained group to their matching control group. We will adjust p-values within each age and sex group after we set up comparisons for all measures.
+
+```{r}
+# Testing the differences is equivalent to a paired test
+speed_res <- VO2MAX %>% 
+  group_by(age, sex) %>% 
+  wilcox_test(formula = pre_speed_max ~ group, mu = 0,
+              detailed = TRUE, ref.group = "SED",
+              p.adjust.method = "holm") %>% 
+  as.data.frame() %>% 
+  # Rename columns to match emmeans output
+  dplyr::rename(p.value = p.adj,
+                lower.CL = conf.low,
+                upper.CL = conf.high,
+                W.ratio = statistic,
+                n_SED = n1,
+                n_trained = n2) %>%
+  mutate(across(.cols = where(is.numeric),
+                ~ ifelse(is.nan(.x), NA, .x)),
+         contrast = paste(group2, "-", group1)) %>%
+  ungroup() %>%
+  dplyr::select(age, sex, contrast, estimate, lower.CL, upper.CL,
+                starts_with("n_"), W.ratio, p.value)
+```
+
+```{r}
+print.data.frame(head(speed_res))
+```
+
+
+
+
+# Comparisons
+
+We will compare the means of each trained timepoint to those of their sex-matched sedentary controls within each age group using the Dunnett test. Only maximum run speed and the VO$_2$max measures will not use the Dunnett test. The former because it uses the nonparametric Wilcoxon Rank Sum test, and the latter because we concatenated age and group, so we will need to manually set up the correct contrasts.
+
+```{r}
+# We will include the maximum run speed test results at the end
+model_list <- list("NMR Weight" = fit.weight,
+                   "NMR Lean Mass" = fit.lean,
+                   "NMR Fat Mass" = fit.fat,
+                   "NMR % Lean" = fit.lean_pct,
+                   "NMR % Fat" = fit.fat_pct,
+                   "Absolute VO2max" = fit.vo2max_abs,
+                   "Relative VO2max" = fit.vo2max_rel)
+
+# Extract model info
+model_df <- model_list %>% 
+  map_chr(.f = ~ paste(deparse(.x[["call"]]), collapse = "")) %>% 
+  enframe(name = "response", 
+          value = "model") %>% 
+  mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
+         model_type = sub("^([^\\(]+).*", "\\1", model),
+         formula = sub(".*formula = ([^,]+),.*", "\\1", model),
+         family = sub(".*family = ([^\\)]+\\)),.*", "\\1", model),
+         family = ifelse(model_type == "lm", "gaussian", family),
+         # if weights were used, they were reciprocal group variances
+         weights = ifelse(grepl("weights = ", model), 
+                          "reciprocal group variances", NA)) %>% 
+  dplyr::select(-model) %>% 
+  mutate(obs_removed = case_when(
+    response == "Absolute VO2max" ~ VO2MAX$iowa_id[119],
+    response == "Relative VO2max" ~ VO2MAX$iowa_id[153]
+  ))
+```
+
+We need to manually specify contrasts for the VO$_2$max models that include `age_group` as a predictor.
+
+
+```{r}
+# Estimated marginal means
+BASELINE_EMM <- map(model_list, function(mod_i) {
+  terms_i <- attr(terms(mod_i), which = "term.labels")
+  specs <- intersect(c("group", "age_group"), terms_i)
+  by <- intersect(c("age", "sex"), terms_i)
+  
+  if (length(by) == 0) {
+    by <- NULL
+  }
+  
+  out <- emmeans(mod_i, specs = specs, by = by, 
+                 infer = TRUE, type = "response")
+  
+  return(out)
+})
+
+# Separate VO2max EMMs from the other measures
+other_stats <- BASELINE_EMM[1:5] %>% 
+  map(function(emm_i) {
+    out <- contrast(emm_i, method = "dunnett") %>% 
+      summary(infer = TRUE) %>% 
+      as.data.frame()
+    
+    return(out)
+  })
+
+vo2max_stats <- BASELINE_EMM[-c(1:5)] %>% 
+  map(function(emm_i) {
+    out <- contrast(emm_i, method = list(
+      "18M: 8W / SED" = c(1, -1, 0, 0, 0, 0, 0),
+      "6M: 1W / SED" =  c(0, 0, 1, 0, 0, 0, -1),
+      "6M: 2W / SED" =  c(0, 0, 0, 1, 0, 0, -1),
+      "6M: 4W / SED" =  c(0, 0, 0, 0, 1, 0, -1),
+      "6M: 8W / SED" =  c(0, 0, 0, 0, 0, 1, -1)
+    )) %>% 
+      summary(infer = TRUE) %>% 
+      as.data.frame() %>% 
+      mutate(age = sub(":.*", "", contrast),
+             contrast = sub(".*: ", "", contrast)) %>% 
+      group_by(age, sex) %>% 
+      mutate(p.value = p.adjust(p.value, method = "holm"))
+    
+    return(out)
+  })
+
+# Combine statistics (including max run speed)
+BASELINE_STATS <- c(other_stats, vo2max_stats,
+                    list("Maximum Run Speed" = speed_res)) %>%
+  enframe(name = "response") %>% 
+  unnest(value) %>%
+  mutate(signif = cut(p.value, 
+                      breaks = c(0, 0.001, 0.01, 0.05, 1),
+                      labels = c("***", "**", "*", ""),
+                      include.lowest = TRUE, right = FALSE,
+                      ordered_result = TRUE)) %>% 
+  left_join(model_df, by = "response") %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  mutate(statistic_type = sub("\\.ratio", "", statistic_type),
+         model_type = ifelse(statistic_type == "W", 
+                             "Wilcoxon", model_type)) %>% 
+  relocate(signif, .after = p.value) %>%
+  relocate(starts_with("statistic"), .before = p.value)
+```
+
+See `?BASELINE_STATS` for details.
+
+```{r}
+print.data.frame(head(BASELINE_STATS, 10))
+```
+
+```{r, eval=FALSE, include=FALSE}
+# Save data
+usethis::use_data(BASELINE_EMM, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+
+usethis::use_data(BASELINE_STATS, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
+# References
+

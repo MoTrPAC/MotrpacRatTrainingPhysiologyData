@@ -1,0 +1,10 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^doc$
+^Meta$
+^plots$
+^sandbox$
+^data-raw$
+^vignettes/articles$
+^.Rcache$

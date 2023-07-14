@@ -1,0 +1,53 @@
+Package: MotrpacRatTrainingPhysiologyData
+Type: Package
+Title: MoTrPAC PASS1B Rat Physiology Data
+Version: 0.1.0
+Author: Authors@R: 
+  c(
+    person(given = "Tyler J.", family = "Sagendorf",
+           email = "tyler.sagendorf@pnnl.gov",
+           comment = c(ORCID = "0000-0003-1552-4870"),
+           role = c("aut", "cre")),
+    person(given = "Sue", family = "Bodine",
+           role = "dtc"),
+    person(given = "Simon", family = "Schenk",
+           role = "dtc"),
+    person(given = "Christopher B.", family = "Newgard",
+           comment = c("Provided clinical analyte data."),
+           role = "dtc"),
+    person(given = "Michael J.", family = "Muehlbauer",
+           comment = c("Provided clinical analyte data."),
+           role = "dtc"))
+Maintainer: Tyler Sagendorf <tyler.sagendorf@pnnl.gov>
+Description: Data and analyses for the MoTrPAC PASS1B rat physiology manuscript.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+LazyDataCompression: bzip2
+Depends: 
+    R (>= 3.5.0)
+Imports:
+    dplyr,
+    ggbeeswarm,
+    ggplot2,
+    ggpubr,
+    ggsignif,
+    graphics,
+    grid,
+    rlang,
+    rstatix,
+    stats
+Suggests:
+    emmeans,
+    knitr,
+    latex2exp,
+    lubridate,
+    MASS,
+    purrr,
+    readxl,
+    rmarkdown,
+    scales,
+    tibble,
+    tidyr
+RoxygenNote: 7.2.3
+VignetteBuilder: knitr

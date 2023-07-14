@@ -1,0 +1,726 @@
+---
+title: "Statistical analyses of plasma clinical analytes"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Statistical analyses of plasma clinical analytes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
+link-citations: yes
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(ggplot2)
+library(dplyr)
+library(emmeans)
+library(tibble)
+library(tidyr)
+library(purrr)
+library(latex2exp)
+theme_set(theme_bw()) # base plot theme
+```
+
+
+# Regression Models
+
+Since clinical analytes are strictly positive, we will check the mean–variance relationship with code from Dunn and Smyth[@dunn_generalized_2018] (pg. 429–430) and fit an appropriate log-link GLM. This allows us to back-transform the means without introducing bias, unlike when the response is transformed. Also, the log-link allows us to test ratios between means, rather than their absolute differences.
+
+If there are obvious problems with the model diagnostic plots, or the mean–variance relationship does not correspond to an exponential family distribution, we will include inverse group variances as weights in a log-link Gaussian GLM. Finally, we will remove insignificant predictors to achieve model parsimony based on ANOVA F-tests.
+
+
+## Corticosterone
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = corticosterone)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(corticosterone, na.rm = TRUE),
+            vr = var(corticosterone, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope is closer to 1 than 2, so we will use a quasi-Poisson distribution.
+
+```{r}
+fit.cort <- glm(corticosterone ~ age * sex * group,
+                family = quasipoisson("log"),
+                data = ANALYTES)
+plot_lm(fit.cort)
+```
+
+The model seems to be a poor fit. We will try a log-link Gaussian GLM with inverse group variance weights.
+
+```{r}
+wt.cort <- ANALYTES %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(corticosterone, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.cort <- update(fit.cort, family = gaussian("log"),
+                   weights = wt.cort)
+plot_lm(fit.cort)
+```
+
+The diagnostic plots seem mostly fine, though the left tail of the QQ-plot seems light. We will try to simplify the model to improve the model fit.
+
+```{r}
+anova(fit.cort, test = "F")
+```
+
+```{r}
+fit.cort.1 <- update(fit.cort, formula = . ~ sex + group)
+anova(fit.cort.1, fit.cort, test = "F")
+```
+
+There is no significant difference between the full model and the one with only sex and group as predictors.
+
+```{r}
+fit.cort <- fit.cort.1
+plot_lm(fit.cort)
+```
+
+```{r}
+summary(fit.cort)
+```
+
+
+## Glucagon
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = glucagon)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(glucagon, na.rm = TRUE),
+            vr = var(glucagon, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.5}$). This is intermediate between the Poisson and gamma distributions. We will fit a quasi-Poisson GLM since we are not dealing with count data.
+
+```{r}
+fit.glucagon <- glm(glucagon ~ age * sex * group,
+                    family = quasipoisson("log"),
+                    data = ANALYTES)
+plot_lm(fit.glucagon)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.glucagon, test = "F")
+```
+
+The 3-way intersection is significant, so we will not remove any terms.
+
+```{r}
+summary(fit.glucagon)
+```
+
+
+## Glucose
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = glucose)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There are several outlying values in the 18M SED female and 6M 8W male groups. We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(glucose, na.rm = TRUE),
+            vr = var(glucose, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope indicates a slightly decreasing mean-variance trend, though some groups have lower variances than expected, based on the others. We will fit a log-link Gaussian GLM with inverse group variance weights.
+
+```{r}
+wt.glucose <- ANALYTES %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(glucose, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.glucose <- glm(glucose ~ age * sex * group,
+                   family = gaussian("log"),
+                   weights = wt.glucose,
+                   data = ANALYTES)
+plot_lm(fit.glucose)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.glucose, test = "F")
+```
+
+```{r}
+fit.glucose.1 <- update(fit.glucose, 
+                        formula = . ~ sex * (age + group))
+fit.glucose.2 <- update(fit.glucose,
+                        formula = . ~ (sex + age + group) ^ 2)
+anova(fit.glucose.1, fit.glucose.2, fit.glucose, test = "F")
+```
+
+We will use the model with all 2-way interactions.
+
+```{r}
+fit.glucose <- fit.glucose.2
+plot_lm(fit.glucose)
+```
+
+```{r}
+summary(fit.glucose)
+```
+
+
+## Glycerol
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = glycerol)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(glycerol, na.rm = TRUE),
+            vr = var(glycerol, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope near 2 suggest a gamma GLM may be appropriate.
+
+```{r}
+fit.glycerol <- glm(glycerol ~ age * sex * group,
+                    family = Gamma("log"),
+                    data = ANALYTES)
+plot_lm(fit.glycerol)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.glycerol, test = "F")
+```
+
+The 3-way interaction is significant, so we will not remove any terms.
+
+```{r}
+summary(fit.glycerol)
+```
+
+
+## Insulin
+
+It does not matter which units we use for insulin. It does not affect the model fit or the ratios when we set up the comparisons later.
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = insulin_pm)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There are extremely large values in the 2W Female group at both ages, though they are comparable to values from their corresponding 4W groups. We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(insulin_pm, na.rm = TRUE),
+            vr = var(insulin_pm, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope is close to 2, so a gamma GLM may be appropriate.
+
+```{r}
+fit.ins <- glm(insulin_pm ~ age * sex * group,
+               family = Gamma("log"),
+               data = ANALYTES)
+plot_lm(fit.ins)
+```
+
+The gamma distribution is sensitive to large outlying values, which we observed when plotting insulin. We will try a log-link Gaussian with reciprocal group variances as weights.
+
+```{r}
+wt.ins <- ANALYTES %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(insulin_pm, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.ins <- update(fit.ins, 
+                  family = gaussian("log"), 
+                  weights = wt.ins)
+plot_lm(fit.ins)
+```
+
+The diagnostic plots look fine now. We will try to simplify the model.
+
+```{r}
+anova(fit.ins, test = "F")
+```
+
+We will remove the `group:age` and 3-way interactions.
+
+```{r}
+fit.ins.1 <- update(fit.ins, 
+                    formula = . ~ sex * (age + group))
+fit.ins.2 <- update(fit.ins, 
+                    formula = . ~ (age + sex + group) ^ 2)
+anova(fit.ins.1, fit.ins.2, fit.ins, test = "F")
+```
+
+No significant differences between the models, so we will use the simplest one.
+
+```{r}
+fit.ins <- fit.ins.1
+plot_lm(fit.ins)
+```
+
+```{r}
+summary(fit.ins)
+```
+
+
+## Ketones
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = ketones)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(ketones, na.rm = TRUE),
+            vr = var(ketones, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope of the line is close to 2, suggesting a gamma GLM may be appropriate.
+
+```{r}
+fit.ket <- glm(ketones ~ sex * group * age,
+               family = Gamma("log"),
+               data = ANALYTES)
+plot_lm(fit.ket)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.ket, test = "F")
+```
+
+The 3-way interaction is marginally significant, so we will not simplify the model.
+
+```{r}
+summary(fit.ket)
+```
+
+
+## Lactate
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = lactate)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+The large value in the 6M SED Male group may be an outlier. There is also a large value in the 2W group. We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(lactate, na.rm = TRUE),
+            vr = var(lactate, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope of the line is close to 6! We will try a log-link Gaussian GLM with inverse group variance weights.
+
+```{r}
+wt.lact <- ANALYTES %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(lactate, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.lact <- glm(lactate ~ age * sex * group, 
+                family = gaussian("log"),
+                weights = wt.lact,
+                data = ANALYTES)
+plot_lm(fit.lact)
+```
+
+We will try to simplify the model to improve the diagnostics.
+
+```{r}
+anova(fit.lact, test = "F")
+```
+
+
+```{r}
+fit.lact.1 <- update(fit.lact, formula = . ~ age * group + sex)
+anova(fit.lact.1, fit.lact, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.lact <- fit.lact.1
+plot_lm(fit.lact)
+```
+
+The diagnostic plots look better.
+
+```{r}
+summary(fit.lact)
+```
+
+
+## Leptin
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = leptin)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There are a few large outlying values. We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(leptin, na.rm = TRUE),
+            vr = var(leptin, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope is close to 1, so we will use a quasi-Poisson distribution, since we are not dealing with count data.
+
+```{r}
+fit.lep <- glm(leptin ~ age * sex * group,
+               family = quasipoisson("log"),
+               data = ANALYTES)
+plot_lm(fit.lep)
+```
+
+Observations are deviating from the right tail of the QQ-plot. We will fit a log-link Gaussian GLM with inverse group variance weights.
+
+```{r}
+wt.lep <- ANALYTES %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(leptin, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.lep <- update(fit.lep,
+                  family = gaussian("log"),
+                  weights = wt.lep)
+plot_lm(fit.lep)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.lep, test = "F")
+```
+
+We will remove the 3-way interaction.
+
+```{r}
+fit.lep <- update(fit.lep, formula = . ~ . - sex:group:age)
+plot_lm(fit.lep)
+```
+
+```{r}
+summary(fit.lep)
+```
+
+
+## NEFA
+
+```{r, fig.height=3}
+# Plot points
+ggplot(ANALYTES, aes(x = group, y = nefa)) +
+  geom_point(position = position_jitter(width = 0.1, height = 0),
+             na.rm = TRUE) +
+  facet_wrap(~ age + sex, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- ANALYTES %>% 
+  group_by(sex, group, age) %>% 
+  summarise(mn = mean(nefa, na.rm = TRUE),
+            vr = var(nefa, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope of the line is close to 3, suggesting the group variance is proportional to the cube of the group mean. This corresponds to an inverse Gaussian distribution.
+
+```{r}
+fit.nefa <- glm(nefa ~ sex * group * age,
+                family = inverse.gaussian("log"),
+                data = ANALYTES)
+plot_lm(fit.nefa)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.nefa, test = "F")
+```
+
+We will remove the `group:age` and 3-way interaction and compare the models.
+
+```{r}
+fit.nefa.1 <- update(fit.nefa, formula = . ~ sex * (group + age))
+anova(fit.nefa.1, fit.nefa, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.nefa <- fit.nefa.1
+plot_lm(fit.nefa)
+```
+
+
+```{r}
+summary(fit.nefa)
+```
+
+
+# Comparisons
+
+We will compare the means of each trained timepoint to those of their sex-matched sedentary controls within each age group using the Dunnett test. If the response had been transformed, tests and interpretation will be done on the transformed scale to avoid introducing bias when back-transforming.
+
+```{r}
+# Create emm_list objects
+model_list <- list("Corticosterone" = fit.cort,
+                   "Glucagon" = fit.glucagon,
+                   "Glucose" = fit.glucose,
+                   "Glycerol" = fit.glycerol,
+                   "Insulin" = fit.ins,
+                   "Ketones" = fit.ket,
+                   "Lactate" = fit.lact,
+                   "Leptin" = fit.lep,
+                   "NEFA" = fit.nefa)
+
+ANALYTES_EMM <- map(model_list, function(mod_i) {
+  terms_i <- attr(terms(mod_i), which = "term.labels")
+  by <- intersect(c("age", "sex"), terms_i)
+  
+  if (length(by) == 0) {
+    by <- NULL
+  }
+  
+  emmeans(mod_i, specs = "group", by = by, 
+          type = "response", infer = TRUE)
+})
+```
+
+```{r}
+# Extract model info
+model_df <- model_list %>% 
+  map_chr(.f = ~ paste(deparse(.x[["call"]]), collapse = "")) %>% 
+  enframe(name = "response", 
+          value = "model") %>% 
+  mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
+         model_type = sub("^([^\\(]+).*", "\\1", model),
+         formula = sub(".*formula = ([^,]+),.*", "\\1", model),
+         family = sub(".*family = ([^\\)]+\\)),.*", "\\1", model),
+         family = ifelse(model_type == "lm", "gaussian", family),
+         # if weights were used, they were inverse group variances
+         weights = ifelse(grepl("weights = ", model), 
+                          "inverse group variances", NA)) %>% 
+  select(-model)
+
+# Results
+ANALYTES_STATS <- ANALYTES_EMM %>% 
+  map(function(emm_i) {
+    contrast(emm_i, method = "dunnett") %>% 
+      summary(infer = TRUE) %>% 
+      as.data.frame() %>% 
+      rename(any_of(c(lower.CL = "asymp.LCL",
+                      upper.CL = "asymp.UCL")))
+  }) %>%
+  enframe(name = "response") %>% 
+  unnest(value) %>%
+  mutate(signif = cut(p.value, 
+                      breaks = c(0, 0.001, 0.01, 0.05, 1),
+                      labels = c("***", "**", "*", ""),
+                      include.lowest = TRUE, right = FALSE,
+                      ordered_result = TRUE)) %>% 
+  left_join(model_df, by = "response") %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  relocate(age, .before = sex) %>% 
+  relocate(starts_with("statistic"), .before = p.value) %>% 
+  relocate(signif, .after = p.value) %>% 
+  relocate(ends_with("CL", ignore.case = FALSE), .before = null)
+```
+
+See `?ANALYTES_STATS` for details.
+
+```{r}
+print.data.frame(head(ANALYTES_STATS, 10))
+```
+
+```{r, eval=FALSE, include=FALSE}
+# Save data
+usethis::use_data(ANALYTES_STATS, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+
+usethis::use_data(ANALYTES_EMM, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
+# References
+

@@ -1,0 +1,704 @@
+---
+title: "Plots of plasma clinical analytes"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  rmarkdown::html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 2
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 1.5,
+  fig.height = 1.8,
+  out.height = "50%",
+  out.width = "50%",
+  dpi = 400,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(purrr)
+library(ggplot2)
+library(latex2exp)
+```
+
+```{r}
+# Reformat confidence interval data
+conf_df <- map(ANALYTES_EMM, function(emm_i) {
+  terms_i <- attr(terms(emm_i@model.info), which = "term.labels")
+  
+  out <- summary(emm_i) %>% 
+    as.data.frame() %>% 
+    rename(any_of(c(lower.CL = "asymp.LCL",
+                    upper.CL = "asymp.UCL",
+                    response_mean = "response",
+                    response_mean = "rate")))
+  
+  if ("age_group" %in% terms_i) {
+    out <- mutate(out,
+                  age = sub("_.*", "", age_group),
+                  group = sub(".*_", "", age_group),
+                  age_group = NULL)
+  }
+  
+  out <- out %>% 
+    mutate(group = factor(group, 
+                          levels = c("SED", paste0(2 ^ (0:3), "W"))))
+  
+  return(out)
+}) %>% 
+  enframe(name = "response") %>% 
+  unnest(value)
+```
+
+
+# Ketones {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "ketones", 
+              conf = filter(conf_df, response == "Ketones"),
+              stats = filter(ANALYTES_STATS, response == "Ketones"),
+              sex = "Female", age = "6M") +
+  labs(y = TeX("Ketones ($\\mu$mol/L)"))
+
+ggsave("../../plots/analytes_ketones_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "ketones", 
+              conf = filter(conf_df, response == "Ketones"),
+              stats = filter(ANALYTES_STATS, response == "Ketones"),
+              sex = "Male", age = "6M") +
+  labs(y = TeX("Ketones ($\\mu$mol/L)"))
+
+ggsave("../../plots/analytes_ketones_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "ketones",  
+              conf = filter(conf_df, response == "Ketones"),
+              stats = filter(ANALYTES_STATS, response == "Ketones"),
+              sex = "Female", age = "18M") +
+  labs(y = TeX("Ketones ($\\mu$mol/L)"))
+
+ggsave("../../plots/analytes_ketones_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "ketones",  
+              conf = filter(conf_df, response == "Ketones"),
+              stats = filter(ANALYTES_STATS, response == "Ketones"),
+              sex = "Male", age = "18M") +
+  labs(y = TeX("Ketones ($\\mu$mol/L)"))
+
+ggsave("../../plots/analytes_ketones_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+
+# NEFA {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "nefa", 
+              conf = filter(conf_df, response == "NEFA"), 
+              stats = filter(ANALYTES_STATS, response == "NEFA"),
+              sex = "Female", age = "6M", y_position = 1.25) +
+  scale_y_continuous(name = "NEFA (mmol/L)",
+                     breaks = seq(0.3, 1.3, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0.3, 1.34), clip = "off")
+
+ggsave("../../plots/analytes_NEFA_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "nefa", 
+              conf = filter(conf_df, response == "NEFA"),
+              stats = filter(ANALYTES_STATS, response == "NEFA"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "NEFA (mmol/L)",
+                     breaks = seq(0.3, 1.3, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0.3, 1.3), clip = "off")
+
+ggsave("../../plots/analytes_NEFA_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "nefa", 
+              conf = filter(conf_df, response == "NEFA"),
+              stats = filter(ANALYTES_STATS, response == "NEFA"),
+              sex = "Female", age = "18M", y_position = 1.1) +
+  scale_y_continuous(name = "NEFA (mmol/L)",
+                     breaks = seq(0.3, 1.3, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0.3, 1.3), clip = "off")
+
+ggsave("../../plots/analytes_NEFA_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "nefa",
+              conf = filter(conf_df, response == "NEFA"), 
+              stats = filter(ANALYTES_STATS, response == "NEFA"),
+              sex = "Male", age = "18M") +
+  labs(y = "NEFA (mmol/L)")
+
+ggsave("../../plots/analytes_NEFA_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+
+# Lactate {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "lactate", 
+              conf = filter(conf_df, response == "Lactate"),
+              stats = filter(ANALYTES_STATS, response == "Lactate"),
+              sex = "Female", age = "6M", y_position = 1.85) +
+  scale_y_continuous(name = "Lactate (mmol/L)",
+                     breaks = seq(1, 2, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(1, 2), clip = "off")
+
+ggsave("../../plots/analytes_lactate_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "lactate", 
+              conf = filter(conf_df, response == "Lactate"),
+              stats = filter(ANALYTES_STATS, response == "Lactate"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "Lactate (mmol/L)",
+                     breaks = seq(0, 3, 1),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 3), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_lactate_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "lactate", 
+              conf = filter(conf_df, response == "Lactate"),
+              stats = filter(ANALYTES_STATS, response == "Lactate"),
+              sex = "Female", age = "18M") +
+  scale_y_continuous(name = "Lactate (mmol/L)",
+                     breaks = seq(1, 2, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(1.08, 2.1), clip = "off") +
+  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_lactate_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "lactate", 
+              conf = filter(conf_df, response == "Lactate"),
+              stats = filter(ANALYTES_STATS, response == "Lactate"),
+              sex = "Male", age = "18M") +
+  scale_y_continuous(name = "Lactate (mmol/L)",
+                     breaks = seq(1, 1.8, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(1, 1.9), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_lactate_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+
+# Glucose {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "glucose", 
+              conf = filter(conf_df, response == "Glucose"),
+              stats = filter(ANALYTES_STATS, response == "Glucose"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = "Glucose (mg/dL)",
+                     breaks = seq(120, 180, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(117, 183), clip = "off") +
+  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glucose_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "glucose", 
+              conf = filter(conf_df, response == "Glucose"),
+              stats = filter(ANALYTES_STATS, response == "Glucose"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "Glucose (mg/dL)",
+                     breaks = seq(150, 230, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(150, 230), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glucose_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "glucose", 
+              conf = filter(conf_df, response == "Glucose"),
+              stats = filter(ANALYTES_STATS, response == "Glucose"),
+              sex = "Female", age = "18M") +
+  scale_y_continuous(name = "Glucose (mg/dL)",
+                     breaks = seq(120, 200, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(120, 200), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glucose_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "glucose", 
+              conf = filter(conf_df, response == "Glucose"),
+              stats = filter(ANALYTES_STATS, response == "Glucose"),
+              sex = "Male", age = "18M", y_position = 201) +
+  scale_y_continuous(name = "Glucose (mg/dL)",
+                     breaks = seq(150, 200, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(145, 205), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glucose_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+
+# Glycerol {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "glycerol", 
+              conf = filter(conf_df, response == "Glycerol"),
+              stats = filter(ANALYTES_STATS, response == "Glycerol"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = "Glycerol (mg/dL)",
+                     breaks = seq(0.5, 2.5, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0.5, 2.7), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glycerol_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "glycerol", 
+              conf = filter(conf_df, response == "Glycerol"),
+              stats = filter(ANALYTES_STATS, response == "Glycerol"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "Glycerol (mg/dL)",
+                     breaks = seq(0.5, 2.5, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0.45, 2.5), clip = "off") +
+  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glycerol_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "glycerol", 
+              conf = filter(conf_df, response == "Glycerol"),
+              stats = filter(ANALYTES_STATS, response == "Glycerol"),
+              sex = "Female", age = "18M") +
+  scale_y_continuous(name = "Glycerol (mg/dL)",
+                     breaks = seq(0.8, 2.2, 0.4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0.7, 2.2), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glycerol_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "glycerol", 
+              conf = filter(conf_df, response == "Glycerol"),
+              stats = filter(ANALYTES_STATS, response == "Glycerol"),
+              sex = "Male", age = "18M") +
+  scale_y_continuous(name = "Glycerol (mg/dL)",
+                     breaks = seq(0.6, 1.8, 0.4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0.6, 1.9), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glycerol_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+# Corticosterone {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "corticosterone", 
+              conf = filter(conf_df, response == "Corticosterone") %>% 
+                mutate(age = "6M"),
+              stats = filter(ANALYTES_STATS, 
+                             response == "Corticosterone") %>% 
+                mutate(age = "6M"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = "Corticosterone (ng/mL)",
+                     breaks = seq(0, 100, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 110), clip = "off") +
+  theme(plot.margin = unit(c(20, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_corticosterone_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "corticosterone", 
+              conf = filter(conf_df, response == "Corticosterone") %>% 
+                mutate(age = "6M"),
+              stats = filter(ANALYTES_STATS, 
+                             response == "Corticosterone") %>% 
+                mutate(age = "6M"),
+              sex = "Male", age = "6M", y_position = 145) +
+  scale_y_continuous(name = "Corticosterone (ng/mL)",
+                     breaks = seq(0, 160, 40),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 160), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_corticosterone_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "corticosterone", 
+              conf = filter(conf_df, response == "Corticosterone") %>% 
+                mutate(age = "18M"),
+              stats = filter(ANALYTES_STATS, 
+                             response == "Corticosterone") %>% 
+                mutate(age = "18M"),
+              sex = "Female", age = "18M", y_position = 75) +
+  scale_y_continuous(name = "Corticosterone (ng/mL)",
+                     breaks = seq(0, 80, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 80), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_corticosterone_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "corticosterone", 
+              conf = filter(conf_df, response == "Corticosterone") %>% 
+                mutate(age = "18M"),
+              stats = filter(ANALYTES_STATS, 
+                             response == "Corticosterone") %>% 
+                mutate(age = "18M"),
+              sex = "Male", age = "18M") +
+  scale_y_continuous(name = "Corticosterone (ng/mL)",
+                     breaks = seq(0, 170, 40),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 170), clip = "off") +
+  theme(plot.margin = unit(c(20, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_corticosterone_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+
+# Glucagon {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "glucagon", 
+              conf = filter(conf_df, response == "Glucagon"),
+              stats = filter(ANALYTES_STATS, response == "Glucagon"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = "Glucagon (pM)",
+                     breaks = seq(0, 160, 40),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 162), clip = "off") +
+  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glucagon_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "glucagon", 
+              conf = filter(conf_df, response == "Glucagon"),
+              stats = filter(ANALYTES_STATS, response == "Glucagon"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "Glucagon (pM)",
+                     breaks = seq(0, 80, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 80), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glucagon_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "glucagon", 
+              conf = filter(conf_df, response == "Glucagon"),
+              stats = filter(ANALYTES_STATS, response == "Glucagon"),
+              sex = "Female", age = "18M") +
+  scale_y_continuous(name = "Glucagon (pM)",
+                     breaks = seq(0, 130, 40),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 130), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glucagon_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "glucagon", 
+              conf = filter(conf_df, response == "Glucagon"),
+              stats = filter(ANALYTES_STATS, response == "Glucagon"),
+              sex = "Male", age = "18M") +
+  scale_y_continuous(name = "Glucagon (pM)",
+                     breaks = seq(0, 80, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 80), clip = "off") +
+  theme(plot.margin = unit(c(6, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_glucagon_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+
+# Insulin {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "insulin_pm", 
+              conf = filter(conf_df, response == "Insulin"),
+              stats = filter(ANALYTES_STATS, response == "Insulin"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = "Insulin (pM)",
+                     breaks = seq(0, 1000, 200),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1050), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_insulin_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "insulin_pm", 
+              conf = filter(conf_df, response == "Insulin"),
+              stats = filter(ANALYTES_STATS, response == "Insulin"),
+              sex = "Male", age = "6M", y_position = 970) +
+  scale_y_continuous(name = "Insulin (pM)",
+                     breaks = seq(0, 1000, 200),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1000), clip = "off") +
+  theme(plot.margin = unit(c(14, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_insulin_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "insulin_pm", 
+              conf = filter(conf_df, response == "Insulin"),
+              stats = filter(ANALYTES_STATS, response == "Insulin"),
+              sex = "Female", age = "18M") +
+  scale_y_continuous(name = "Insulin (pM)",
+                     breaks = seq(400, 1400, 200),
+                     expand = expansion(mult = 1e-2)) +
+    coord_cartesian(ylim = c(380, 1400), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_insulin_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "insulin_pm", 
+              conf = filter(conf_df, response == "Insulin"),
+              stats = filter(ANALYTES_STATS, response == "Insulin"),
+              sex = "Male", age = "18M", y_position = 930) +
+  scale_y_continuous(name = "Insulin (pM)",
+                     breaks = seq(400, 1000, 200),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(380, 1000), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_insulin_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+# Leptin {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "leptin", 
+              conf = filter(conf_df, response == "Leptin"),
+              stats = filter(ANALYTES_STATS, response == "Leptin"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = "Leptin (pg/mL)", 
+                     labels = scales::label_scientific(),
+                     breaks = seq(0, 3e4, 1e4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 3e4), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_leptin_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "leptin", 
+              conf = filter(conf_df, response == "Leptin"),
+              stats = filter(ANALYTES_STATS, response == "Leptin"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "Leptin (pg/mL)", 
+                     labels = scales::label_scientific(),
+                     breaks = seq(0, 6e4, 1e4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 6e4), clip = "off") +
+  theme(plot.margin = unit(c(18, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_leptin_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, response = "leptin", 
+              conf = filter(conf_df, response == "Leptin"),
+              stats = filter(ANALYTES_STATS, response == "Leptin"),
+              sex = "Female", age = "18M") +
+  scale_y_continuous(name = "Leptin (pg/mL)", 
+                     labels = scales::label_scientific(),
+                     breaks = seq(0, 7e4, 2e4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 7e4), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_leptin_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, response = "leptin", 
+              conf = filter(conf_df, response == "Leptin"),
+              stats = filter(ANALYTES_STATS, response == "Leptin"),
+              sex = "Male", age = "18M") +
+  scale_y_continuous(name = "Leptin (pg/mL)", 
+                     labels = scales::label_scientific(),
+                     breaks = seq(0, 6e4, 1e4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 6e4), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/analytes_leptin_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+

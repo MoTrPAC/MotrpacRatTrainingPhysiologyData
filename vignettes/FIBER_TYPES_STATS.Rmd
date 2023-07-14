@@ -1,0 +1,207 @@
+---
+title: "Statistical analyses of mean fiber area and fiber count by muscle and fiber type"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  rmarkdown::html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Statistical analyses of mean fiber area and fiber count by muscle and fiber type}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  message = FALSE,
+  warning = FALSE,
+  eval = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(ggplot2)
+library(MASS)
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(purrr)
+library(emmeans)
+library(lme4)
+library(stats)
+theme_set(theme_bw()) # base plot theme
+```
+
+```{r fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "MG") %>% 
+  ggplot(aes(x = group, y = fiber_area)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type)
+```
+
+```{r fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "LG") %>% 
+  ggplot(aes(x = group, y = fiber_area)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type)
+```
+
+```{r fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "PL") %>% 
+  ggplot(aes(x = group, y = fiber_area)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type)
+```
+
+
+```{r fig.height=3.5, fig.width=3.5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "SOL") %>% 
+  ggplot(aes(x = group, y = fiber_area)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type)
+
+```
+
+
+
+```{r fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "MG") %>% 
+  ggplot(aes(x = group, y = fiber_count / total_fiber_count)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type) +
+  labs(y = "Proportion of fibers")
+```
+
+```{r fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "LG") %>% 
+  ggplot(aes(x = group, y = fiber_count / total_fiber_count)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type) +
+  labs(y = "Proportion of fibers")
+```
+
+```{r fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "PL") %>% 
+  ggplot(aes(x = group, y = fiber_count / total_fiber_count)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type) +
+  labs(y = "Proportion of fibers")
+```
+
+```{r fig.height=3.5, fig.width=3.5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "SOL") %>% 
+  ggplot(aes(x = group, y = fiber_count / total_fiber_count)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type) +
+  labs(y = "Proportion of fibers")
+```
+
+
+
+
+```{r}
+mv <- FIBER_TYPES %>% 
+  group_by(sex, group, age, muscle, type) %>% 
+  summarise(mn = mean(fiber_area, na.rm = TRUE),
+            vr = var(fiber_area, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+
+```{r fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+```{r}
+FIBER_TYPES <- mutate(FIBER_TYPES, muscle_type = paste0(muscle, "_", type))
+
+fit.area <- glm(fiber_area ~ (age + sex + group + muscle_type) ^ 4,
+                family = Gamma("log"),
+                data = FIBER_TYPES)
+plot_lm(fit.area)
+```
+
+```{r}
+anova(fit.area, test = "F")
+```
+
+```{r}
+fit.area.1 <- update(fit.area, 
+                     formula = . ~ muscle_type * age * (sex + group) + sex:group)
+anova(fit.area.1, fit.area, test = "F")
+```
+
+```{r}
+fit.area <- fit.area.1
+plot_lm(fit.area)
+```
+
+```{r}
+FIBER_TYPES[which(residuals(fit.area.1) >= 0.3), ]
+```
+
+```{r}
+fit.area <- update(fit.area, subset = iowa_id != "06M8T11")
+plot_lm(fit.area)
+```
+
+```{r}
+summary(fit.area)
+```
+
+
+
+
+
+```{r}
+mv <- FIBER_TYPES %>% 
+  group_by(sex, group, age, muscle, type) %>% 
+  summarise(mn = mean(fiber_count, na.rm = TRUE),
+            vr = var(fiber_count, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+
+

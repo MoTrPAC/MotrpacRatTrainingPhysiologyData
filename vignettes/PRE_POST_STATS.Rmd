@@ -1,0 +1,659 @@
+---
+title: "Statistical analyses of post- vs. pre-training body composition and VO2max testing measures"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  rmarkdown::html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Statistical analyses of post- vs. pre-training body composition and VO2max testing measures}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+```{r setup, message=FALSE, warning=FALSE}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(ggplot2)
+library(MASS)
+library(dplyr)
+library(emmeans)
+library(tibble)
+library(tidyr)
+library(purrr)
+library(latex2exp)
+library(rstatix)
+theme_set(theme_bw()) # base plot theme
+```
+
+
+# Regression Models
+
+We will fit linear regression models with age, sex, group, and their interactions as predictors of the differences between post- and pre-training values for different measures of body composition and VO$_2$max. If heteroscedasticity is observed, we will include reciprocal group variances as weights. Certain observations may be removed if their inclusion substantially affects the model fit. Model parsimony will be achieved through ANOVA F-tests.
+
+
+## NMR Weight
+
+```{r, fig.height=3}
+# Plot points
+NMR %>% 
+  filter(!is.na(post_weight)) %>% 
+  droplevels.data.frame() %>% 
+  ggplot(aes(x = group, y = post_weight - pre_weight)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_wrap(~ sex + age, nrow = 1) +
+  labs(y = "NMR total body mass (post - pre)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There is one negative outlying value in the 6M SED male group that may affect the model fit. We will start with a WLS model, since we observe different group variances.
+
+```{r}
+wt.weight <- NMR %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(post_weight - pre_weight, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.weight <- lm(I(post_weight - pre_weight) ~ age * sex * group,
+                 weights = wt.weight,
+                 data = NMR)
+plot_lm(fit.weight)
+```
+
+The diagnostic plots appear fine. We will try to simplify the model.
+
+```{r}
+anova(fit.weight, test = "F")
+```
+
+The 3-way interaction is not significant, so we will remove it.
+
+```{r}
+fit.weight <- update(fit.weight, formula = . ~ . - age:sex:group)
+plot_lm(fit.weight)
+```
+
+```{r}
+summary(fit.weight)
+```
+
+
+## 1W, 2W: Terminal - Pre NMR Weight
+
+```{r, fig.height=3}
+term_nmr_df <- WEIGHTS %>% 
+  filter(group %in% c("1W", "2W")) %>% 
+  select(pid, iowa_id, age, sex, group, term_weight, nmr_pre_weight) %>% 
+  mutate(diff = term_weight - nmr_pre_weight) %>% 
+  na.omit()
+
+# Plot points
+p_term <- ggplot(term_nmr_df, aes(x = group, y = diff)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             alpha = 0.5) +
+  facet_grid(~ sex + age) +
+  labs(y = "terminal - NMR weight (pre)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+p_term
+```
+
+There is an extreme observation in both 6M Male groups.
+
+```{r, fig.height=3, fig.width=4}
+ggplot(term_nmr_df, aes(x = nmr_pre_weight, y = term_weight)) +
+  geom_point(na.rm = TRUE, alpha = 0.5) +
+  stat_smooth(method = "lm", formula = y ~ x, se = FALSE, na.rm = TRUE)
+```
+
+We see the outlier in the 6M 2W male group is an outlier in the scatterplot. We will plot the data without that observation.
+
+```{r, fig.height=3}
+# Remove those two points and update the plot
+p_term$data <- filter(term_nmr_df, diff > -50)
+p_term
+```
+
+Nearly every group has at least one outlying sample, and the groups have different variances. We will remove that extremely negative outlier and fit a WLS model.
+
+```{r}
+out.term_nmr <- which(term_nmr_df$diff < -50) # 58
+
+wt.term_nmr <- term_nmr_df %>%
+  mutate(term_weight = ifelse(1:n() %in% out.term_nmr, 
+                              NA, term_weight)) %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(term_weight - nmr_pre_weight, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.term_nmr <- lm(I(term_weight - nmr_pre_weight) ~ age * sex * group,
+                   weights = wt.term_nmr,
+                   subset = -out.term_nmr,
+                   data = term_nmr_df)
+plot_lm(fit.term_nmr)
+```
+
+The diagnostic plots look mostly fine. We will try to simplify the model.
+
+```{r}
+anova(fit.term_nmr, test = "F")
+```
+
+The 3-way interaction is significant, so we will not remove any terms.
+
+```{r}
+summary(fit.term_nmr)
+```
+
+
+## NMR Lean Mass
+
+```{r, fig.height=3}
+# Plot points
+NMR %>% 
+  filter(!is.na(post_lean)) %>% 
+  droplevels.data.frame() %>% 
+  ggplot(aes(x = group, y = post_lean - pre_lean)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_wrap(~ sex + age, nrow = 1) +
+  labs(y = "NMR lean mass (post - pre)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We observe several outlying values in several of the 6M male groups, as well as in 18M 8W males.
+
+```{r}
+fit.lean <- lm(I(post_lean - pre_lean) ~ age * sex * group,
+               data = NMR)
+plot_lm(fit.lean)
+```
+
+Observations 80 and 140 are outlying, and greatly impact group variances. We will try WLS.
+
+```{r}
+NMR[c(80, 140), ] %>% 
+  select(pid, iowa_id, age, sex, group, pre_lean, post_lean) %>% 
+  mutate(diff = post_lean - pre_lean)
+```
+
+```{r}
+wt.lean <- NMR %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(post_lean - pre_lean, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.lean <- update(fit.lean, weights = wt.lean)
+plot_lm(fit.lean)
+```
+
+The diagnostic plots seem mostly fine. We will try to simplify the model.
+
+```{r}
+anova(fit.lean, test = "F")
+```
+
+```{r}
+fit.lean.1 <- update(fit.lean, formula = . ~ sex * (age + group))
+fit.lean.2 <- update(fit.lean.1, formula = . ~ . + age:group)
+anova(fit.lean.1, fit.lean.2, fit.lean, test = "F")
+```
+
+There is no significant difference between the second and third models, so we will use the simpler one.
+
+```{r}
+fit.lean <- fit.lean.2
+plot_lm(fit.lean)
+```
+
+```{r}
+summary(fit.lean)
+```
+
+
+## NMR Fat Mass
+
+```{r, fig.height=3}
+# Plot points
+NMR %>% 
+  filter(!is.na(post_fat)) %>% 
+  droplevels.data.frame() %>% 
+  ggplot(aes(x = group, y = post_fat - pre_fat)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_wrap(~ sex + age, nrow = 1) +
+  labs(y = "NMR fat mass (post - pre)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We observe unequal group variances, and several outlying values (especially in the 6M 4W male group). We will fit a WLS model with reciprocal group variances as weights.
+
+```{r}
+wt.fat <- NMR %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(post_fat - pre_fat, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.fat <- lm(I(post_fat - pre_fat) ~ age * sex * group,
+              weights = wt.fat,
+              data = NMR)
+plot_lm(fit.fat)
+```
+
+The diagnostic plots seem mostly fine. We will try to simplify the model.
+
+```{r}
+anova(fit.fat, test = "F")
+```
+
+We will remove the 3-way interaction and the `sex:age` interaction.
+
+```{r}
+fit.1 <- update(fit.fat, formula = . ~ group * (sex + age))
+anova(fit.1, fit.fat, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.fat <- fit.1
+plot_lm(fit.fat)
+```
+
+```{r}
+summary(fit.fat)
+```
+
+
+## NMR % Lean Mass
+
+```{r, fig.height=3}
+# Plot points
+NMR %>% 
+  filter(!is.na(post_lean_pct)) %>% 
+  droplevels.data.frame() %>% 
+  ggplot(aes(x = group, y = post_lean_pct - pre_lean_pct)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_wrap(~ sex + age, nrow = 1) +
+  labs(y = "NMR % lean mass (post - pre)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+We observe several outlying values in several of the 6M male groups, similar to the plot of the differences in lean mass. We also observe unequal group variances, so we will fit a WLS model with reciprocal group variances as weights.
+
+```{r}
+wt.lean_pct <- NMR %>% 
+  group_by(sex, group, age) %>% 
+  mutate(1 / var(post_lean_pct - pre_lean_pct, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.lean_pct <- lm(I(post_lean_pct - pre_lean_pct) ~ age * sex * group,
+                   weights = wt.lean_pct,
+                   data = NMR)
+plot_lm(fit.lean_pct)
+```
+
+The diagnostic plots look mostly fine. We will try to simplify the model.
+
+```{r}
+anova(fit.lean_pct, test = "F")
+```
+
+We will remove the 3-way interaction.
+
+```{r}
+fit.lean_pct.1 <- update(fit.lean_pct, formula = . ~ . - sex:group:age)
+plot_lm(fit.lean_pct.1)
+```
+
+The QQ-plot looks slightly worse, so we will retain all terms.
+
+```{r}
+summary(fit.lean_pct)
+```
+
+
+## NMR % Fat Mass
+
+```{r, fig.height=3}
+# Plot points
+NMR %>% 
+  filter(!is.na(post_fat_pct)) %>% 
+  droplevels.data.frame() %>% 
+  ggplot(aes(x = group, y = post_fat_pct - pre_fat_pct)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_wrap(~ sex + age, nrow = 1) +
+  labs(y = "NMR % fat mass (post - pre)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There are several groups with outlying values: mainly, two from the 6M 4W males and one from the 18M 8W females. We will try an OLS model first.
+
+```{r}
+fit.fat_pct <- lm(I(post_fat_pct - pre_fat_pct) ~ age * sex * group,
+                  data = NMR)
+plot_lm(fit.fat_pct)
+```
+
+Those extreme values are being flagged in the diagnostic plots.
+
+```{r}
+NMR[c(136, 138, 218), ] %>% 
+  select(pid, iowa_id, age, sex, group, post_fat_pct, pre_fat_pct) %>%
+  mutate(diff = post_fat_pct - pre_fat_pct)
+```
+
+The two outliers in the 6M 4W male group are about equidistant from the mean of the other values, so their removal will only shrink the variance of the group. Removal of the 18M 8W female sample, however, will reduce the variance and shift the mean away from 0. We will try a WLS model and remove these observations, since they have a huge impact on the group variances and would shift the right tail of the QQ-plot if they were included.
+
+```{r}
+# We will remove these values, but keep the rows.
+# This is so we can use the subset argument in update, which
+# is easier to keep track of when we extract model info later.
+wt.fat_pct <- NMR %>% 
+  mutate(idx = 1:n(),
+         post_fat_pct = ifelse(idx %in% c(136, 138, 218), 
+                               NA, post_fat_pct)) %>% 
+  group_by(age, sex, group) %>% 
+  mutate(1 / var(post_fat_pct - pre_fat_pct, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.fat_pct <- update(fit.fat_pct, 
+                      subset = -c(136, 138, 218), 
+                      weights = wt.fat_pct)
+plot_lm(fit.fat_pct)
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.fat_pct, test = "F")
+```
+
+We will remove the 3-way interaction.
+
+```{r}
+fit.fat_pct <- update(fit.fat_pct, formula = . ~ . - age:sex:group)
+plot_lm(fit.fat_pct)
+```
+
+The diagnostic plots still look fine.
+
+```{r}
+summary(fit.fat_pct)
+```
+
+
+## Absolute VO$_2$max
+
+```{r, fig.height=3}
+# Plot points
+VO2MAX %>% 
+  filter(!is.na(post_vo2max_ml_min)) %>% 
+  droplevels.data.frame() %>% 
+  ggplot(aes(x = group, y = post_vo2max_ml_min - pre_vo2max_ml_min)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_wrap(~ sex + age, nrow = 1) +
+  labs(y = TeX("Absolute VO$_2$max (post - pre)")) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+Several groups have both large and small outlying values. Namely, 6M SED and 4W males and 18M SED females. Also, we do not have data for the 18M 4W groups of either sex, so certain coefficients will be inestimable. To handle this, we will combine age and group into a single factor.
+
+```{r}
+# Concatenate age and group
+VO2MAX <- mutate(VO2MAX, age_group = paste0(age, "_", group))
+
+fit.vo2max_abs <- lm(I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ 
+                       age_group * sex,
+                     data = VO2MAX)
+plot_lm(fit.vo2max_abs)
+```
+
+The diagnostic plots look mostly fine. We will try to simplify the model.
+
+```{r}
+anova(fit.vo2max_abs, test = "F")
+```
+
+```{r}
+fit.vo2max_abs.1 <- update(fit.vo2max_abs, formula = . ~ age_group)
+anova(fit.vo2max_abs.1, fit.vo2max_abs, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.vo2max_abs <- fit.vo2max_abs.1
+plot_lm(fit.vo2max_abs)
+```
+
+The diagnostic plots look fine.
+
+```{r}
+summary(fit.vo2max_abs)
+```
+
+
+## VO$_2$max (relative to total body mass)
+
+```{r, fig.height=3}
+# Plot points
+VO2MAX %>% 
+  filter(!is.na(post_vo2max_ml_kg_min)) %>% 
+  droplevels.data.frame() %>% 
+  ggplot(aes(x = group, 
+             y = post_vo2max_ml_kg_min - pre_vo2max_ml_kg_min)) +
+  geom_point(position = position_jitter(width = 0.15, height = 0),
+             na.rm = TRUE, alpha = 0.5) +
+  facet_grid(~ sex + age) +
+  labs(y = "Relative VO2max (post - pre)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+There is an outlying sample in the 18M SED female group.
+
+```{r}
+fit.vo2max_rel <- lm(I(post_vo2max_ml_kg_min - pre_vo2max_ml_kg_min) ~ 
+                       age_group * sex,
+                     data = VO2MAX)
+plot_lm(fit.vo2max_rel)
+```
+
+The diagnostic plots look mostly fine, though we observe unequal group variances. We will try a WLS model.
+
+```{r}
+wt.vo2max_rel <- VO2MAX %>%
+  group_by(age_group, sex) %>%
+  mutate(1 / var(post_vo2max_ml_kg_min - pre_vo2max_ml_kg_min,
+                 na.rm = TRUE)) %>%
+  pull(-1)
+
+fit.vo2max_rel <- update(fit.vo2max_rel, weights = wt.vo2max_rel)
+plot_lm(fit.vo2max_rel)
+```
+
+The diagnostic plots look a bit better, and the mean-variance relationship appears constant. We will try to simplify the model.
+
+```{r}
+anova(fit.vo2max_rel, test = "F")
+```
+
+```{r}
+fit.vo2max_rel.1 <- update(fit.vo2max_rel, formula = . ~ age_group)
+anova(fit.vo2max_rel.1, fit.vo2max_rel, test = "F")
+```
+
+There is no significant difference between the models, so we will use the simpler one.
+
+```{r}
+fit.vo2max_rel <- fit.vo2max_rel.1 
+plot_lm(fit.vo2max_rel)
+```
+
+The diagnostic plots look about the same.
+
+```{r}
+summary(fit.vo2max_rel)
+```
+
+
+## Maximum Run Speed
+
+Since run speed was increased in 1.8 m/min increments, as defined in the training protocol, it may be better to use a non-parametric test. Rather than plotting the individual points for the differences, since they can only take on a few different values, we will instead count the number of samples that take on a particular value in each group and scale the points accordingly.
+
+```{r, fig.height=3}
+# Plot points
+VO2MAX %>% 
+  mutate(diff = post_speed_max - pre_speed_max) %>% 
+  filter(!is.na(diff)) %>% 
+  droplevels.data.frame() %>% 
+  count(age, sex, group, diff) %>% 
+  ggplot(aes(x = group, y = diff, size = n)) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(~ age + sex) +
+  scale_size_area(max_size = 5) +
+  labs(y = "Maximum Run Speed (post - pre)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+Most groups only take on 4 or 5 different values. We will use Wilcoxon Rank Sum tests to compare each trained group to their matching control group. We will adjust p-values within each age and sex group after we set up comparisons for all measures.
+
+```{r}
+# Testing the differences is equivalent to a paired test
+speed_res <- VO2MAX %>% 
+  filter(!is.na(post_speed_max)) %>% 
+  mutate(speed_diff = post_speed_max - pre_speed_max) %>% 
+  group_by(age, sex, group) %>% 
+  wilcox_test(formula = speed_diff ~ 1, mu = 0,
+              detailed = TRUE,
+              p.adjust.method = "none") %>% 
+  as.data.frame() %>% 
+  dplyr::rename(p.value = p,
+                lower.CL = conf.low, 
+                upper.CL = conf.high,
+                W.ratio = statistic) %>% 
+  mutate(across(.cols = where(is.numeric), 
+                ~ ifelse(is.nan(.x), NA, .x))) %>% 
+  ungroup() %>% 
+  dplyr::select(age, sex, group, estimate, lower.CL, upper.CL,
+                n, W.ratio, p.value)
+```
+
+
+
+# Comparisons
+
+We will test if group means are different from 0 and adjust p-values using the Holm procedure within each combination of sex and age.
+
+```{r}
+# We will include the maximum run speed test results at the end
+model_list <- list("NMR Weight" = fit.weight,
+                   "Term - NMR Pre Weight" = fit.term_nmr,
+                   "NMR Lean Mass" = fit.lean,
+                   "NMR Fat Mass" = fit.fat,
+                   "NMR % Lean" = fit.lean_pct,
+                   "NMR % Fat" = fit.fat_pct,
+                   "Absolute VO2max" = fit.vo2max_abs,
+                   "Relative VO2max" = fit.vo2max_rel)
+
+# Extract model info
+model_df <- model_list %>% 
+  map_chr(.f = ~ paste(deparse(.x[["call"]]), collapse = "")) %>% 
+  enframe(name = "response", 
+          value = "model") %>% 
+  mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
+         model_type = sub("^([^\\(]+).*", "\\1", model),
+         formula = sub(".*formula = ([^,]+),.*", "\\1", model),
+         family = sub(".*family = ([^\\)]+\\)),.*", "\\1", model),
+         family = ifelse(model_type == "lm", "gaussian", family),
+         # if weights were used, they were reciprocal group variances
+         weights = ifelse(grepl("weights = ", model), 
+                          "reciprocal group variances", NA)) %>% 
+  dplyr::select(-model) %>% 
+  mutate(obs_removed = case_when(
+    response == "Term - NMR Pre Weight" ~ NMR$iowa_id[58],
+    response == "NMR % Fat" ~ paste(NMR$iowa_id[c(136, 138, 218)],
+                                    collapse = ", ")
+  ))
+
+# Estimated marginal means
+PRE_POST_STATS <- map(model_list, function(mod_i) {
+  terms_i <- attr(terms(mod_i), which = "term.labels")
+  specs <- intersect(c("age_group", "group"), terms_i)
+  by <- intersect(c("age", "sex"), terms_i)
+  
+  if (length(by) == 0) {
+    by <- NULL
+  }
+  
+  out <- emmeans(mod_i, specs = specs, by = by, infer = TRUE) %>% 
+    summary() %>% 
+    as.data.frame()
+  
+  if (specs == "age_group") {
+    out <- mutate(out,
+                  age = sub("_.*", "", age_group),
+                  group = sub(".*_", "", age_group),
+                  age_group = NULL)
+  }
+  
+  return(out)
+}) %>%
+  # Include maximum run speed results
+  c(list("Maximum Run Speed" = speed_res)) %>% 
+  enframe(name = "response") %>% 
+  unnest(value) %>%
+  group_by(age, sex) %>% 
+  mutate(p.value = p.adjust(p.value, method = "holm")) %>% 
+  ungroup() %>% 
+  mutate(signif = cut(p.value, 
+                      breaks = c(0, 0.001, 0.01, 0.05, 1),
+                      labels = c("***", "**", "*", ""),
+                      include.lowest = TRUE, right = FALSE,
+                      ordered_result = TRUE)) %>% 
+  left_join(model_df, by = "response") %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  mutate(statistic_type = sub("\\.ratio", "", statistic_type),
+         model_type = ifelse(statistic_type == "W", 
+                             "Wilcoxon", model_type)) %>% 
+  relocate(group, .after = sex) %>% 
+  relocate(signif, .after = p.value) %>%
+  relocate(starts_with("statistic"), .before = p.value)
+```
+
+See `?PRE_POST_STATS` for details.
+
+```{r}
+print.data.frame(head(PRE_POST_STATS, 10))
+```
+
+```{r, eval=FALSE, include=FALSE}
+# Save data
+usethis::use_data(PRE_POST_STATS, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+

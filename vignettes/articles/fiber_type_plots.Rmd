@@ -1,0 +1,372 @@
+---
+title: "Plots of fiber area by muscle and fiber type"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  rmarkdown::html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 2
+---
+
+# Much of the code in FIBER_TYPES_STATS was somehow lost when running `devtools::build_vignettes()`. This includes code used to generate `FIBER_TYPES_EMM` and `FIBER_TYPES` data objects. This article is broken until FIBER_TYPES_STATS.Rmd gets fixed.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 1.8,
+  fig.height = 1.5,
+  out.height = "50%",
+  out.width = "50%",
+  dpi = 400,
+  message = FALSE,
+  warning = FALSE,
+  eval = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(dplyr)
+library(ggplot2)
+library(latex2exp)
+
+conf_df <- FIBER_TYPES_EMM %>% 
+  map(function(emm_i) {
+    out <- summary(emm_i) %>% 
+      as.data.frame() %>% 
+      rename(any_of(c(lower.CL = "asymp.LCL",
+                      upper.CL = "asymp.UCL",
+                      response_mean = "response",
+                      response_mean = "rate"))) %>% 
+      mutate(muscle = sub("_.*", "", muscle_type),
+             type = sub(".*_", "", muscle_type),
+             muscle_type = NULL)
+    
+    return(out)
+  }) %>% 
+  enframe(name = "response") %>% 
+  unnest(value)
+```
+
+
+
+# LG {.tabset}
+
+## 6M Female
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "6M", sex = "Female", muscle = "LG",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+  scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(700, 3300), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_LG_6M_female.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "6M", sex = "Male", muscle = "LG",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+  scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
+                     breaks = 1000 * 1:5,
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = 1000 * c(1, 5), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_LG_6M_male.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+
+
+## 18M Female
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "18M", sex = "Female", muscle = "LG",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 150) + 
+  scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = 1000 * c(1, 3.25), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_LG_18M_female.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+
+## 18M Male
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "18M", sex = "Male", muscle = "LG",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 120) + 
+  scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
+                     breaks = seq(1000, 3500, 500),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = 1000 * c(1, 3.7), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_LG_18M_male.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+
+# MG {.tabset}
+
+## 6M Female
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "6M", sex = "Female", muscle = "MG",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 100) + 
+  scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
+                     breaks = seq(800, 2800, 400),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(800, 2800), clip = "off") +
+  theme(plot.margin = margin(t = 8, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_MG_6M_female.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "6M", sex = "Male", muscle = "MG",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+  scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
+                     breaks = 1000 * 1:5,
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = 1000 * c(1, 5), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_MG_6M_male.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+
+
+## 18M Female
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "18M", sex = "Female", muscle = "MG",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 120) + 
+  scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = 1000 * c(1, 3.2), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_MG_18M_female.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+
+## 18M Male
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "18M", sex = "Male", muscle = "MG",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 120) + 
+  scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
+                     breaks = seq(1000, 3500, 500),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = 1000 * c(1, 3.6), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_MG_18M_male.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+
+# PL {.tabset}
+
+## 6M Female
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "6M", sex = "Female", muscle = "PL",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 100) + 
+  scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
+                     breaks = seq(500, 2500, 500),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(500, 2600), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_PL_6M_female.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "6M", sex = "Male", muscle = "PL",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+  scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
+                     breaks = 1000 * 1:5,
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = 1000 * c(0.7, 5), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_PL_6M_male.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "18M", sex = "Female", muscle = "PL",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 150) + 
+  scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = 1000 * c(0.75, 3.2), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_PL_18M_female.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "18M", sex = "Male", muscle = "PL",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 140) + 
+  scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
+                     breaks = seq(1000, 4000, 1000),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(800, 4050), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_PL_18M_male.png", 
+       height = 1.7, width = 2, units = "in", dpi = 400)
+```
+
+
+
+# SOL {.tabset}
+
+## 6M Female
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "6M", sex = "Female", muscle = "SOL",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 100) + 
+  scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
+                     breaks = seq(800, 1800, 200),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(800, 1840), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_SOL_6M_female.png", 
+       height = 1.7, width = 1.2, units = "in", dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "6M", sex = "Male", muscle = "SOL",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+  scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
+                     breaks = seq(1200, 2200, 200),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(1200, 2200), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_SOL_6M_male.png", 
+       height = 1.7, width = 1.2, units = "in", dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "18M", sex = "Female", muscle = "SOL",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                bracket.nudge.y = 90) + 
+  scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
+                     breaks = seq(800, 2000, 200),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(790, 2000), clip = "off") +
+  theme(plot.margin = margin(t = 6, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_SOL_18M_female.png",
+       height = 1.7, width = 1.2, units = "in", dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_fiber_type(x = FIBER_TYPES, 
+                response = "fiber_area",
+                age = "18M", sex = "Male", muscle = "SOL",
+                conf = filter(conf_df, response == "Fiber CSA"),
+                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+  scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(1000, 3000), clip = "off") +
+  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+
+ggsave(filename = "../../plots/fiber_CSA_SOL_18M_male.png", 
+       height = 1.7, width = 1.2, units = "in", dpi = 400)
+```
+
+

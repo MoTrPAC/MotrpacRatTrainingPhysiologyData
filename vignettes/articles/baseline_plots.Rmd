@@ -1,0 +1,571 @@
+---
+title: "Plots of baseline measures"
+output: 
+  rmarkdown::html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 2
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 1.5,
+  fig.height = 1.8,
+  out.height = "50%",
+  out.width = "50%",
+  dpi = 400,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(purrr)
+library(ggplot2)
+library(latex2exp)
+library(ggpubr)
+```
+
+```{r}
+# Reformat confidence interval data
+conf_df <- map(BASELINE_EMM, function(emm_i) {
+  terms_i <- attr(terms(emm_i@model.info), which = "term.labels")
+  
+  out <- summary(emm_i) %>% 
+    as.data.frame() %>% 
+    rename(any_of(c(lower.CL = "asymp.LCL",
+                    upper.CL = "asymp.UCL",
+                    response_mean = "response",
+                    response_mean = "rate")))
+  
+  if ("age_group" %in% terms_i) {
+    out <- mutate(out,
+                  age = sub("_.*", "", age_group),
+                  group = sub(".*_", "", age_group),
+                  age_group = NULL)
+  }
+  
+  out <- out %>% 
+    mutate(group = factor(group, 
+                          levels = c("SED", paste0(2 ^ (0:3), "W"))))
+  
+  return(out)
+}) %>% 
+  enframe(name = "response") %>% 
+  unnest(value)
+```
+
+
+# NMR Body Mass {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_weight",
+              conf = filter(conf_df, response == "NMR Weight"),
+              stats = filter(BASELINE_STATS, response == "NMR Weight"),
+              sex = "Female", age = "6M", y_position = 207) +
+  labs(y  = "NMR Body Mass (g)")
+
+ggsave("../../plots/baseline_NMR_weight_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_weight",
+              conf = filter(conf_df, response == "NMR Weight"),
+              stats = filter(BASELINE_STATS, response == "NMR Weight"),
+              sex = "Male", age = "6M", y_position = 415) +
+  labs(y  = "NMR Body Mass (g)")
+
+ggsave("../../plots/baseline_NMR_weight_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_weight",
+              conf = filter(conf_df, response == "NMR Weight"),
+              stats = filter(BASELINE_STATS, response == "NMR Weight"),
+              sex = "Female", age = "18M", y_position = 265) +
+  labs(y  = "NMR Body Mass (g)")
+
+ggsave("../../plots/baseline_NMR_weight_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_weight",
+              conf = filter(conf_df, response == "NMR Weight"),
+              stats = filter(BASELINE_STATS, response == "NMR Weight"),
+              sex = "Male", age = "18M") +
+  labs(y  = "NMR Body Mass (g)")
+
+ggsave("../../plots/baseline_NMR_weight_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+# NMR Lean Mass {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_lean",
+              conf = filter(conf_df, response == "NMR Lean Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Lean Mass"),
+              sex = "Female", age = "6M", y_position = 123) +
+  labs(y  = "NMR Lean Mass (g)")
+
+ggsave("../../plots/baseline_NMR_lean_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_lean",
+              conf = filter(conf_df, response == "NMR Lean Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Lean Mass"),
+              sex = "Male", age = "6M") +
+  labs(y  = "NMR Lean Mass (g)")
+
+ggsave("../../plots/baseline_NMR_lean_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_lean",
+              conf = filter(conf_df, response == "NMR Lean Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Lean Mass"),
+              sex = "Female", age = "18M", y_position = 146) +
+  labs(y  = "NMR Lean Mass (g)")
+
+ggsave("../../plots/baseline_NMR_lean_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_lean",
+              conf = filter(conf_df, response == "NMR Lean Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Lean Mass"),
+              sex = "Male", age = "18M") +
+  labs(y  = "NMR Lean Mass (g)")
+
+ggsave("../../plots/baseline_NMR_lean_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+# NMR Fat Mass {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_fat",
+              conf = filter(conf_df, response == "NMR Fat Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Fat Mass"),
+              sex = "Female", age = "6M") +
+  labs(y  = "NMR Fat Mass (g)")
+
+ggsave("../../plots/baseline_NMR_fat_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_fat",
+              conf = filter(conf_df, response == "NMR Fat Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Fat Mass"),
+              sex = "Male", age = "6M") +
+  labs(y  = "NMR Fat Mass (g)")
+
+ggsave("../../plots/baseline_NMR_fat_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+## 18M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_fat",
+              conf = filter(conf_df, response == "NMR Fat Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Fat Mass"),
+              sex = "Female", age = "18M", y_position = 57) +
+  labs(y  = "NMR Fat Mass (g)")
+
+ggsave("../../plots/baseline_NMR_fat_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+## 18M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_fat",
+              conf = filter(conf_df, response == "NMR Fat Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Fat Mass"),
+              sex = "Male", age = "18M") +
+  labs(y  = "NMR Fat Mass (g)")
+
+ggsave("../../plots/baseline_NMR_fat_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+# NMR % Lean {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_lean_pct",
+              conf = filter(conf_df, response == "NMR % Lean"),
+              stats = filter(BASELINE_STATS, response == "NMR % Lean"),
+              sex = "Female", age = "6M") +
+  labs(y  = "NMR % Lean Mass")
+
+ggsave("../../plots/baseline_NMR_pct_lean_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_lean_pct",
+              conf = filter(conf_df, response == "NMR % Lean"),
+              stats = filter(BASELINE_STATS, response == "NMR % Lean"),
+              sex = "Male", age = "6M") +
+  labs(y  = "NMR % Lean Mass")
+
+ggsave("../../plots/baseline_NMR_pct_lean_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_lean_pct",
+              conf = filter(conf_df, response == "NMR % Lean"),
+              stats = filter(BASELINE_STATS, response == "NMR % Lean"),
+              sex = "Female", age = "18M", y_position = 57.4) +
+  labs(y  = "NMR % Lean Mass")
+
+ggsave("../../plots/baseline_NMR_pct_lean_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_lean_pct",
+              conf = filter(conf_df, response == "NMR % Lean"),
+              stats = filter(BASELINE_STATS, response == "NMR % Lean"),
+              sex = "Male", age = "18M", y_position = 55.7) +
+  labs(y  = "NMR % Lean Mass")
+
+ggsave("../../plots/baseline_NMR_pct_lean_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+# NMR % Fat {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_fat_pct",
+              conf = filter(conf_df, response == "NMR % Fat"),
+              stats = filter(BASELINE_STATS, response == "NMR % Fat"),
+              sex = "Female", age = "6M") +
+  labs(y  = "NMR % Fat Mass")
+
+ggsave("../../plots/baseline_NMR_pct_fat_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_fat_pct",
+              conf = filter(conf_df, response == "NMR % Fat"),
+              stats = filter(BASELINE_STATS, response == "NMR % Fat"),
+              sex = "Male", age = "6M") +
+  labs(y  = "NMR % Fat Mass")
+
+ggsave("../../plots/baseline_NMR_pct_fat_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(x = NMR, response = "pre_fat_pct",
+              conf = filter(conf_df, response == "NMR % Fat"),
+              stats = filter(BASELINE_STATS, response == "NMR % Fat"),
+              sex = "Female", age = "18M") +
+  labs(y  = "NMR % Fat Mass")
+
+ggsave("../../plots/baseline_NMR_pct_fat_18M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(x = NMR, response = "pre_fat_pct",
+              conf = filter(conf_df, response == "NMR % Fat"),
+              stats = filter(BASELINE_STATS, response == "NMR % Fat"),
+              sex = "Male", age = "18M") +
+  labs(y  = "NMR % Fat Mass")
+
+ggsave("../../plots/baseline_NMR_pct_fat_18M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+# Absolute VO$_2$max {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
+              conf = filter(conf_df, response == "Absolute VO2max"),
+              stats = filter(BASELINE_STATS, response == "Absolute VO2max"),
+              sex = "Female", age = "6M") +
+  labs(y  = TeX("VO$_2$max (mL/min)"))
+
+ggsave("../../plots/baseline_absolute_VO2max_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
+              conf = filter(conf_df, response == "Absolute VO2max"),
+              stats = filter(BASELINE_STATS, response == "Absolute VO2max"),
+              sex = "Male", age = "6M", y_position = 26) +
+  labs(y  = TeX("VO$_2$max (mL/min)"))
+
+ggsave("../../plots/baseline_absolute_VO2max_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r, fig.width=1}
+plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
+              conf = filter(conf_df, response == "Absolute VO2max"),
+              stats = filter(BASELINE_STATS, response == "Absolute VO2max"),
+              sex = "Female", age = "18M") +
+  labs(y  = TeX("VO$_2$max (mL/min)"))
+
+ggsave("../../plots/baseline_absolute_VO2max_18M_female.png",
+       height = 1.8, width = 1, dpi = 400)
+```
+
+## 18M Male
+
+```{r, fig.width=1}
+plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
+              conf = filter(conf_df, response == "Absolute VO2max"),
+              stats = filter(BASELINE_STATS, response == "Absolute VO2max"),
+              sex = "Male", age = "18M") +
+  labs(y  = TeX("VO$_2$max (mL/min)"))
+
+ggsave("../../plots/baseline_absolute_VO2max_18M_male.png",
+       height = 1.8, width = 1, dpi = 400)
+```
+
+# Relative VO$_2$max {.tabset}
+
+## 6M Female
+
+```{r}
+plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
+              conf = filter(conf_df, response == "Relative VO2max"),
+              stats = filter(BASELINE_STATS, response == "Relative VO2max"),
+              sex = "Female", age = "6M") +
+  labs(y  = TeX("VO$_2$max (mL/kg/min)"))
+
+ggsave("../../plots/baseline_relative_VO2max_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
+              conf = filter(conf_df, response == "Relative VO2max"),
+              stats = filter(BASELINE_STATS, response == "Relative VO2max"),
+              sex = "Male", age = "6M") +
+  labs(y  = TeX("VO$_2$max (mL/kg/min)"))
+
+ggsave("../../plots/baseline_relative_VO2max_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+## 18M Female
+
+```{r, fig.width=1}
+plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
+              conf = filter(conf_df, response == "Relative VO2max"),
+              stats = filter(BASELINE_STATS, response == "Relative VO2max"),
+              sex = "Female", age = "18M") +
+  labs(y  = TeX("VO$_2$max (mL/kg/min)"))
+
+ggsave("../../plots/baseline_relative_VO2max_18M_female.png",
+       height = 1.8, width = 1, dpi = 400)
+```
+
+## 18M Male
+
+```{r, fig.width=1}
+plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
+              conf = filter(conf_df, response == "Relative VO2max"),
+              stats = filter(BASELINE_STATS, response == "Relative VO2max"),
+              sex = "Male", age = "18M") +
+  labs(y  = TeX("VO$_2$max (mL/kg/min)"))
+
+ggsave("../../plots/baseline_relative_VO2max_18M_male.png",
+       height = 1.8, width = 1, dpi = 400)
+```
+
+# Maximum Run Speed {.tabset}
+
+```{r}
+# Custom theme for maximum run speed plots
+t1 <- theme(text = element_text(size = 6.5, color = "black"),
+            line = element_line(linewidth = 0.3, color = "black"),
+            axis.ticks = element_line(linewidth = 0.3, color = "black"),
+            panel.grid = element_blank(),
+            panel.border = element_blank(),
+            axis.ticks.x = element_blank(),
+            axis.text = element_text(size = 5,
+                                     color = "black"),
+            axis.text.x = element_text(size = 6.5, angle = 90, hjust = 1,
+                                       vjust = 0.5),
+            axis.title = element_text(size = 6.5, margin = margin(),
+                                      color = "black"),
+            axis.line = element_line(linewidth = 0.3),
+            strip.background = element_blank(),
+            strip.text = element_blank(),
+            panel.spacing = unit(-1, "pt"),
+            plot.title = element_text(size = 7, color = "black"),
+            plot.subtitle = element_text(size = 6, color = "black"),
+            legend.position = "bottom",
+            legend.direction = "horizontal",
+            legend.title.align = 0.5,
+            legend.key.size = unit(4, "pt"), 
+            legend.box.spacing = unit(0, "pt"),
+            legend.box.margin = margin(t = 0, b = 0, unit = "pt"),
+            strip.placement = "outside"
+)
+```
+
+## 6M Female
+
+```{r}
+VO2MAX %>% 
+  filter(sex == "Female", age == "6M") %>% 
+  count(age, sex, group, pre_speed_max) %>% 
+  ggplot(aes(x = group, y = pre_speed_max, size = n)) +
+  geom_point(shape = 16, color = "#ff6eff") +
+  scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
+  scale_y_continuous(name = "Maximum Run Speed (m/min)",
+                     breaks = seq(19.8, 36, 1.8),
+                     limits = c(19.8, 28.8)) +
+  labs(x = NULL) +
+  theme_bw(base_size = 6) +
+  t1
+
+ggsave("../../plots/baseline_max_run_speed_6M_female.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+
+## 6M Male
+
+```{r}
+VO2MAX %>% 
+  filter(sex == "Male", age == "6M") %>% 
+  count(age, sex, group, pre_speed_max) %>% 
+  ggplot(aes(x = group, y = pre_speed_max, size = n)) +
+  geom_point(shape = 16, color = "#5555ff") +
+  ggpubr::stat_pvalue_manual(
+    data = data.frame(y.position = c(23.4, 25.2) + 0.5,
+                      group1 = rep("SED", 2),
+                      group2 = c("1W", "2W"),
+                      label = c("         Wilcoxon p = 0.002", 
+                                "   Wilcoxon p = 0.001")),
+    label.size = 5 / .pt, vjust = -0.25
+  ) +
+  scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
+  scale_y_continuous(name = "Maximum Run Speed (m/min)",
+                     breaks = seq(19.8, 25.2, 1.8)) +
+  coord_cartesian(ylim = c(19.7, 25.2), clip = "off") +
+  labs(x = NULL) +
+  theme_bw(base_size = 6) +
+  t1 +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+
+ggsave("../../plots/baseline_max_run_speed_6M_male.png",
+       height = 1.8, width = 1.5, dpi = 400)
+```
+
+## 18M Female
+
+```{r, fig.width=1.2}
+VO2MAX %>% 
+  filter(sex == "Female", age == "18M") %>% 
+  count(age, sex, group, pre_speed_max) %>% 
+  ggplot(aes(x = group, y = pre_speed_max, size = n)) +
+  geom_point(shape = 16, color = "#ff6eff") +
+  scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
+  scale_y_continuous(name = "Maximum Run Speed (m/min)",
+                     limits = c(16.2, 21.6),
+                     breaks = seq(16.2, 21.6, 1.8)) +
+  labs(x = NULL) +
+  theme_bw(base_size = 6) +
+  t1
+
+ggsave("../../plots/baseline_max_run_speed_18M_female.png",
+       height = 1.8, width = 1.2, dpi = 400)
+```
+
+## 18M Male
+
+```{r, fig.width=1.2}
+VO2MAX %>% 
+  filter(sex == "Male", age == "18M") %>% 
+  count(age, sex, group, pre_speed_max) %>% 
+  ggplot(aes(x = group, y = pre_speed_max, size = n)) +
+  geom_point(shape = 16, color = "#5555ff", na.rm = TRUE) +
+  scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
+  scale_y_continuous(name = "Maximum Run Speed (m/min)",
+                     limits = c(12.6, 18),
+                     breaks = seq(12.6, 18, 1.8)) +
+  labs(x = NULL) +
+  theme_bw(base_size = 6) +
+  t1
+
+ggsave("../../plots/baseline_max_run_speed_18M_male.png",
+       height = 1.8, width = 1.2, dpi = 400)
+```
