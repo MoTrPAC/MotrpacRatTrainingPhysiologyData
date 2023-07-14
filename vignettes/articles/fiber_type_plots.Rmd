@@ -9,8 +9,6 @@ output:
     toc_depth: 2
 ---
 
-# Much of the code in FIBER_TYPES_STATS was somehow lost when running `devtools::build_vignettes()`. This includes code used to generate `FIBER_TYPES_EMM` and `FIBER_TYPES` data objects. This article is broken until FIBER_TYPES_STATS.Rmd gets fixed.
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -21,8 +19,7 @@ knitr::opts_chunk$set(
   out.width = "50%",
   dpi = 400,
   message = FALSE,
-  warning = FALSE,
-  eval = FALSE
+  warning = FALSE
 )
 ```
 
@@ -32,6 +29,9 @@ library(MotrpacRatTrainingPhysiologyData)
 library(dplyr)
 library(ggplot2)
 library(latex2exp)
+library(tidyr)
+library(tibble)
+library(purrr)
 
 conf_df <- FIBER_TYPES_EMM %>% 
   map(function(emm_i) {

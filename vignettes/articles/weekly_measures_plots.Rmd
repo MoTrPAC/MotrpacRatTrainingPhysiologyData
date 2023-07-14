@@ -1,5 +1,7 @@
 ---
 title: "Plots of weekly body weight and blood lactate"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   rmarkdown::html_document:
     toc: true
@@ -14,7 +16,8 @@ knitr::opts_chunk$set(
   fig.width = 7,
   fig.height = 7,
   message = FALSE,
-  warning = FALSE
+  warning = FALSE,
+  eval = FALSE
 )
 ```
 
@@ -59,7 +62,7 @@ WEEKLY_MEASURES %>%
         axis.ticks.x = element_blank(),
         panel.grid.major.x = element_blank())
 
-ggsave("../../6M_SED_weekly_body_weight_omics.png", 
+ggsave("../../plots/6M_SED_weekly_body_weight_omics.png", 
        height = 3, width = 5, dpi = 400, bg = "white")
 ```
 

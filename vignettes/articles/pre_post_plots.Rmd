@@ -1,5 +1,7 @@
 ---
 title: "Plots of post - pre differences"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   rmarkdown::html_document:
     code_folding: hide
