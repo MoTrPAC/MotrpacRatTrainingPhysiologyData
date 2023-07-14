@@ -53,4 +53,5 @@ Suggests:
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 URL:
-    https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/
+    https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/,
+    https://pnnl-comp-mass-spec.github.io/MotrpacRatTrainingPhysiologyData/
