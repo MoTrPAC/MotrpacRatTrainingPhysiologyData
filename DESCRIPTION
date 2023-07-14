@@ -2,7 +2,8 @@ Package: MotrpacRatTrainingPhysiologyData
 Type: Package
 Title: MoTrPAC PASS1B Rat Physiology Data
 Version: 0.1.0
-Author: Authors@R: 
+Date: 2023-07-14
+Authors@R: 
   c(
     person(given = "Tyler J.", family = "Sagendorf",
            email = "tyler.sagendorf@pnnl.gov",
@@ -51,3 +52,5 @@ Suggests:
     tidyr
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
+URL:
+    https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/
