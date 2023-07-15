@@ -12,7 +12,7 @@ NMR
 }
 \description{
 A \code{data.frame} containing measures of body composition
-  (total body mass, body fat, % body fat, lean mass, and % lean mass) both
+  (total body mass, body fat, %% body fat, lean mass, and %% lean mass) both
   pre- and post-training.
 }
 \examples{

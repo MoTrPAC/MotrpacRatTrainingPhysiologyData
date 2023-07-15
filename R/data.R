@@ -42,6 +42,19 @@
 #'
 #' @usage ANALYTES
 #'
+#' @details
+#' \tabular{lll}{
+#'   \bold{Analyte} \tab \bold{Catalogue No.} \tab \bold{Company} \cr
+#'   Corticosterone \tab 55-CORMS-E01 \tab Alpco (Salem, NH) \cr
+#'   Glucose \tab B24985 \tab Beckman (Brea, CA) \cr
+#'   Glycerol \tab 445850 \tab Beckman \cr
+#'   Lactate \tab A95550 \tab Beckman \cr
+#'   Total Ketones \tab 415-73301, 411-73401 \tab Fujifilm Wako (Osaka, Japan) \cr
+#'   NEFA \tab 995-34791, 999-34691, 993-35191, 991-34891 \tab Fujifilm Wako \cr
+#'   Glucagon \tab K1535YK \tab Meso Scale  Discovery (Rockville, MD) \cr
+#'   Insulin, Leptin \tab K15158C (multiplex assay) \tab Meso Scale Discovery \cr
+#' }
+#'
 #' @seealso \code{\link{ANALYTES_EMM}}, \code{\link{ANALYTES_STATS}}
 #'
 #' @examples
@@ -54,7 +67,7 @@
 #' @title Baseline (pre-training) measures estimated marginal means
 #'
 #' @description A list of \code{emmGrid} objects: NMR mass, lean mass, fat mass,
-#'   % lean mass, % fat mass; absolute VO\eqn{_2}max; and relative
+#'   %% lean mass, %% fat mass; absolute VO\eqn{_2}max; and relative
 #'   VO\eqn{_2}max.
 #'
 #' @usage BASELINE_EMM
@@ -76,8 +89,8 @@
 #' @title Statistical analysis results of baseline (pre-training) measures
 #'
 #' @description A \code{data.frame} containing statistical analysis results of
-#'   baseline (pre-training) measures: NMR mass, lean mass, fat mass, % lean
-#'   mass, % fat mass; absolute VO\eqn{_2}max; relative VO\eqn{_2}max; and
+#'   baseline (pre-training) measures: NMR mass, lean mass, fat mass, %% lean
+#'   mass, %% fat mass; absolute VO\eqn{_2}max; relative VO\eqn{_2}max; and
 #'   maximum run speed.
 #'
 #' @usage BASELINE_STATS
@@ -212,7 +225,7 @@
 #' @title NMR body composition measures
 #'
 #' @description A \code{data.frame} containing measures of body composition
-#'   (total body mass, body fat, % body fat, lean mass, and % lean mass) both
+#'   (total body mass, body fat, %% body fat, lean mass, and %% lean mass) both
 #'   pre- and post-training.
 #'
 #' @usage NMR
@@ -243,8 +256,8 @@
 #' @title Statistical analysis results of post - pre training differences
 #'
 #' @description A \code{data.frame} containing statistical analysis results of
-#'   post - pre training differences: NMR body mass, lean mass, fat mass, % lean
-#'   mass, % fat mass; difference between terminal and pre-training NMR mass at
+#'   post - pre training differences: NMR body mass, lean mass, fat mass, %% lean
+#'   mass, %% fat mass; difference between terminal and pre-training NMR mass at
 #'   1W and 2W of endurance training; absolute VO\eqn{_2}max; relative
 #'   VO\eqn{_2}max; and maximum run speed.
 #'

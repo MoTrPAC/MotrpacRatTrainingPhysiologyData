@@ -12,8 +12,8 @@ BASELINE_STATS
 }
 \description{
 A \code{data.frame} containing statistical analysis results of
-  baseline (pre-training) measures: NMR mass, lean mass, fat mass, % lean
-  mass, % fat mass; absolute VO\eqn{_2}max; relative VO\eqn{_2}max; and
+  baseline (pre-training) measures: NMR mass, lean mass, fat mass, %% lean
+  mass, %% fat mass; absolute VO\eqn{_2}max; relative VO\eqn{_2}max; and
   maximum run speed.
 }
 \examples{

@@ -12,7 +12,7 @@ BASELINE_EMM
 }
 \description{
 A list of \code{emmGrid} objects: NMR mass, lean mass, fat mass,
-  % lean mass, % fat mass; absolute VO\eqn{_2}max; and relative
+  %% lean mass, %% fat mass; absolute VO\eqn{_2}max; and relative
   VO\eqn{_2}max.
 }
 \examples{

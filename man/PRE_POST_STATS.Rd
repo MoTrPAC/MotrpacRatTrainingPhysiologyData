@@ -12,8 +12,8 @@ PRE_POST_STATS
 }
 \description{
 A \code{data.frame} containing statistical analysis results of
-  post - pre training differences: NMR body mass, lean mass, fat mass, % lean
-  mass, % fat mass; difference between terminal and pre-training NMR mass at
+  post - pre training differences: NMR body mass, lean mass, fat mass, %% lean
+  mass, %% fat mass; difference between terminal and pre-training NMR mass at
   1W and 2W of endurance training; absolute VO\eqn{_2}max; relative
   VO\eqn{_2}max; and maximum run speed.
 }
