@@ -14,4 +14,11 @@ ANALYTES
 A \code{data.frame} containing common clinical analytes measured
   in plasma.
 }
+\examples{
+print.data.frame(head(ANALYTES))
+
+}
+\seealso{
+\code{\link{ANALYTES_EMM}}, \code{\link{ANALYTES_STATS}}
+}
 \keyword{datasets}

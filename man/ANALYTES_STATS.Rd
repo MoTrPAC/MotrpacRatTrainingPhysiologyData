@@ -3,7 +3,7 @@
 \docType{data}
 \name{ANALYTES_STATS}
 \alias{ANALYTES_STATS}
-\title{Results of statistical analysis of plasma clinical analytes}
+\title{Statistical analysis results of plasma clinical analytes}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 136 rows and 18 columns.
 }
@@ -11,7 +11,14 @@ An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) w
 ANALYTES_STATS
 }
 \description{
-A \code{data.frame} containing analysis results for common
-  clinical analytes measured in plasma.
+A \code{data.frame} containing analysis results of plasma
+  clinical analytes.
+}
+\examples{
+print.data.frame(head(ANALYTES_STATS))
+
+}
+\seealso{
+\code{\link{ANALYTES}}, \code{\link{ANALYTES_EMM}}
 }
 \keyword{datasets}

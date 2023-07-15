@@ -14,4 +14,8 @@ PHYSIO
 All physiology measures combined into a single
   \code{data.frame}.
 }
+\examples{
+head(PHYSIO)
+
+}
 \keyword{datasets}

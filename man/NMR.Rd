@@ -3,7 +3,7 @@
 \docType{data}
 \name{NMR}
 \alias{NMR}
-\title{NMR body composition}
+\title{NMR body composition measures}
 \format{
 An object of class \code{data.frame} with 282 rows and 19 columns.
 }
@@ -14,5 +14,12 @@ NMR
 A \code{data.frame} containing measures of body composition
   (total body mass, body fat, % body fat, lean mass, and % lean mass) both
   pre- and post-training.
+}
+\examples{
+print.data.frame(head(NMR))
+
+}
+\seealso{
+\code{\link{PHYSIO}}, \code{\link{PRE_POST_STATS}}
 }
 \keyword{datasets}

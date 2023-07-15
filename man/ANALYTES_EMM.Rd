@@ -3,7 +3,7 @@
 \docType{data}
 \name{ANALYTES_EMM}
 \alias{ANALYTES_EMM}
-\title{Estimated marginal means object for each plasma clinical analyte}
+\title{Plasma clinical analytes estimated marginal means}
 \format{
 An object of class \code{list} of length 9.
 }
@@ -12,5 +12,18 @@ ANALYTES_EMM
 }
 \description{
 A list of \code{emmGrid} objects, one for each clinical analyte.
+}
+\examples{
+names(ANALYTES_EMM) # clinical analytes
+
+str(ANALYTES_EMM)
+
+# Print one of the emmGrid objects
+ANALYTES_EMM[["Corticosterone"]]
+
+}
+\seealso{
+\code{\link{ANALYTES}}, \code{\link{ANALYTES_STATS}},
+  \code{\link[emmeans]{emmeans}}
 }
 \keyword{datasets}
