@@ -109,15 +109,58 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>MotrpacRatTrainingPhysiologyData contains all input data, analysis steps (in the form of vignettes), and results for the MoTrPAC PASS1B Physiology manuscript. This includes data from both male and female Fischer 344 (F344) rats that were either sedentary or completed an endurance exercise training intervention. Training began at 6 or 18 months of age and lasted for a duration of 1, 2, 4, or 8 weeks.</p>
-<p>Datasets and analysis results include the following:</p>
+<!-- badges: end -->
+<hr>
+<div class="section level2">
+<h2 id="table-of-contents">Table of Contents<a class="anchor" aria-label="anchor" href="#table-of-contents"></a>
+</h2>
 <ul>
-<li>NMR body composition (pre- and post-training)</li>
-<li>VO<span class="math inline"><sub>2</sub></span>max and maximal running speed (pre- and post-training)</li>
-<li>Terminal mass, citrate synthase, glycogen, mean cross-sectional area, and capillary contacts for medial gastrocnemius (MG), lateral gastroc (LG), plantaris (PL), and soleus (SOL) muscles.</li>
-<li>Weekly body mass and blood lactate measures</li>
+<li>
+<a href="#overview">Overview</a>
+<ul>
+<li><a href="#about-this-package">About This Package</a></li>
+<li><a href="#about-motrpac">About MoTrPAC</a></li>
 </ul>
-<p>For more details, see the preprint (linked below).</p>
+</li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#getting-help">Getting Help</a></li>
+<li><a href="#acknowledgements">Acknowledgements</a></li>
+<li><a href="#data-use-agreement">Data Use Agreement</a></li>
+</ul>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<div class="section level3">
+<h3 id="about-this-package">About This Package<a class="anchor" aria-label="anchor" href="#about-this-package"></a>
+</h3>
+<p>This package contains all input data, analysis steps (in the form of vignettes), and results for the MoTrPAC PASS1B Physiology manuscript. This includes data from both male and female Fischer 344 (F344) rats that were either sedentary or completed an endurance exercise training intervention. Training began at 6 or 18 months of age and lasted for a duration of 1, 2, 4, or 8 weeks.</p>
+<p>The <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/tree/master/data-raw" class="external-link">data-raw/</a> directory contains R scripts that detail how most of the exported datasets were created. For data objects that end in <code>"_STATS"</code> or <code>"_EMM"</code>, please refer to the appropriate vignette. Vignettes contain all details of the statistical analyses while the online-only articles generate most of the figures in the manuscript.</p>
+<p><strong>Vignettes:</strong></p>
+<ul>
+<li>Statistical analyses of baseline body composition and VO2max testing measures</li>
+<li>Statistical analyses of mean fiber area and fiber count by muscle and fiber type</li>
+<li>Statistical analyses of muscle-specific measures</li>
+<li>Statistical analyses of plasma clinical analytes</li>
+<li>Statistical analyses of post- vs. pre-training body composition and VO2max testing measures</li>
+</ul>
+<p><strong>Articles:</strong></p>
+<ul>
+<li>Plots of plasma clinical analytes</li>
+<li>Plots of baseline measures</li>
+<li>Plots of fiber area by muscle and fiber type</li>
+<li>Plots of muscle measures</li>
+<li>Plots of post - pre differences</li>
+<li>Plots of weekly body weight and blood lactate</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="about-motrpac">About MoTrPAC<a class="anchor" aria-label="anchor" href="#about-motrpac"></a>
+</h3>
+<p>MoTrPAC is a national research consortium designed to discover and perform preliminary characterization of the range of molecular transducers (the “molecular map”) that underlie the effects of physical activity in humans. The program’s goal is to study the molecular changes that occur during and after exercise and ultimately to advance the understanding of how physical activity improves and preserves health. The six-year program is the largest targeted NIH investment of funds into the mechanisms of how physical activity improves health and prevents disease. See <a href="https://www.motrpac.org/" class="external-link">motrpac.org</a> and <a href="https://motrpac-data.org/" class="external-link">motrpac-data.org</a> for more details.</p>
+</div>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -127,11 +170,6 @@
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="preprint">Preprint<a class="anchor" aria-label="anchor" href="#preprint"></a>
-</h2>
-<p>A link to the preprint will be included here, once available.</p>
 </div>
 <div class="section level2">
 <h2 id="getting-help">Getting Help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
@@ -147,7 +185,7 @@
 <div class="section level2">
 <h2 id="data-use-agreement">Data Use Agreement<a class="anchor" aria-label="anchor" href="#data-use-agreement"></a>
 </h2>
-<p>Recipients and their Agents agree that in publications using <strong>any</strong> data from MoTrPAC public-use data sets they will acknowledge MoTrPAC as the source of data, including the version number of the data sets used, e.g.:</p>
+<p>Recipients and their Agents agree that in publications using <strong>any</strong> data from MoTrPAC public-use data sets they will acknowledge MoTrPAC as the source of data, including the version number of the data sets used, <em>e.g.</em>:</p>
 <ul>
 <li><p>Data used in the preparation of this article were obtained from the Molecular Transducers of Physical Activity Consortium (MoTrPAC) database, which is available for public access at <a href="motrpac-data.org">motrpac-data.org</a>. Specific datasets used are [version numbers].</p></li>
 <li><p>Data used in the preparation of this article were obtained from the Molecular Transducers of Physical Activity Consortium (MoTrPAC) MotrpacRatTrainingPhysiologyData R package [version number].</p></li>
