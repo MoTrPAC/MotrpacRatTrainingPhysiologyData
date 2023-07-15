@@ -100,6 +100,201 @@
     <p>An object of class <code>data.frame</code> with 282 rows and 123 columns.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">PHYSIO</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      sex age      pid iowa_id omics_analysis group arrival_dob arrival_weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Female  6M 10043527  06F8T1           TRUE   SED  2018-02-01          180.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Female  6M 10043799  06F8T3          FALSE   SED  2018-02-01          179.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Female  6M 10043950  06F8T4           TRUE   SED  2018-02-01          176.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Female  6M 10044094  06F8T5          FALSE   SED  2018-02-01          180.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Female  6M 10044337  06F8T8           TRUE   SED  2018-02-01          183.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 Female  6M 10044418  06F8T9          FALSE   SED  2018-02-01          177.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   famil_d_treadmillbegin famil_days_treadmillbegin famil_d_treadmillcomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             2018-07-11                         9                2018-07-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             2018-07-11                         9                2018-07-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             2018-07-11                         9                2018-07-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             2018-07-11                         9                2018-07-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             2018-07-11                         9                2018-07-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6             2018-07-11                         9                2018-07-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   famil_days_treadmillcomplete famil_activity_score famil_weight nmr_pre_day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                           22                    4        181.2  2018-07-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                           22                    4        179.2  2018-07-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                           22                    4        174.4  2018-07-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                           22                    3        181.2  2018-07-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                           22                    4        185.2  2018-07-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                           22                    3        178.3  2018-07-25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nmr_pre_weight nmr_pre_fat nmr_pre_lean nmr_pre_fat_pct nmr_pre_lean_pct</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          181.2     20.2944     109.2636            11.2             60.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          179.0     19.1530     105.9680            10.7             59.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          174.4     19.1840     103.2448            11.0             59.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          181.2     20.4756     105.4584            11.3             58.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          185.2     21.2980     108.8976            11.5             58.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          178.3     20.1479     104.1272            11.3             58.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nmr_pre_fluid_pct vo2_pre_weight     vo2_pre_t_start vo2_pre_blactate_begin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1               9.5          178.3 2018-07-30 10:03:44                    1.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               9.6          182.8 2018-07-30 14:01:35                    1.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3              10.0          178.2 2018-07-30 15:04:29                    2.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4               9.7          182.0 2018-07-30 16:12:44                    2.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5              10.1          182.4 2018-07-31 10:09:26                    2.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6               9.6          174.5 2018-07-31 12:14:06                    1.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vo2_pre_vo2max_ml_kg_min vo2_pre_vo2max_ml_min vo2_pre_vco2_max</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                     83.8              14.94154            79.72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                     71.7              13.10676            75.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     72.5              12.91950            76.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                     69.7              12.68540            71.08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                     69.6              12.69504            76.19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                     77.6              13.54120            76.09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vo2_pre_rer_max vo2_pre_speed_max  vo2_pre_t_complete vo2_pre_blactate_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            1.03              25.2 2018-07-30 10:39:54                  8.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            1.08              25.2 2018-07-30 14:37:45                 11.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            1.06              25.2 2018-07-30 15:38:49                  9.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            1.04              25.2 2018-07-30 16:47:04                  4.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            1.10              23.4 2018-07-31 10:42:56                 12.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6            1.00              23.4 2018-07-31 12:58:11                 11.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                            vo2_pre_comments</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                     Sat on shock too long towards the end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                                      &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 Nosebleed, potentially from sitting on the shock too much towards the end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vo2_post_weight    vo2_post_t_start vo2_post_blactate_begin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           199.2 2018-09-25 12:30:00                     1.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           203.0 2018-09-29 17:33:00                     1.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           202.3 2018-09-29 18:24:00                     1.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           190.4 2018-09-25 15:45:00                     1.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           204.6 2018-09-25 13:10:00                     1.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           190.8 2018-09-26 17:35:00                     1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vo2_post_vo2max_ml_kg_min vo2_post_vo2max_ml_min vo2_post_vco2_max</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                     73.16               14.57347             80.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                     63.77               12.94531             69.09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     64.63               13.07465             67.41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                     61.85               11.77624             63.09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                     73.52               15.04219             74.19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                     63.65               12.14442             69.17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vo2_post_rer_max vo2_post_speed_max vo2_post_t_complete vo2_post_blactate_end</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             1.09               23.4 2018-09-25 13:13:00                  12.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             1.11               21.6 2018-09-29 18:17:00                  10.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             1.06               21.6 2018-09-29 19:08:00                  11.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             1.03               19.8 2018-09-25 16:29:00                   7.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             1.01               23.4 2018-09-25 13:56:00                   9.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6             1.09               21.6 2018-09-26 18:23:00                  10.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vo2_post_comments nmr_post_day nmr_post_weight nmr_post_fat nmr_post_lean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1              &lt;NA&gt;   2018-09-26             199      21.2004      107.9952</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2              &lt;NA&gt;   2018-09-30             203      25.4180       99.7030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3              &lt;NA&gt;   2018-09-30             202      27.0320       96.9664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4              &lt;NA&gt;   2018-09-26             190      24.6432      103.8276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5              &lt;NA&gt;   2018-09-26             205      27.5948      101.4896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6              &lt;NA&gt;   2018-09-27             191      24.4271      102.7008</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nmr_post_fat_pct nmr_post_lean_pct nmr_post_fluid_pct term_weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             11.7              59.6               10.0       196.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             14.2              55.7                9.3       196.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             15.5              55.6                9.8       195.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             13.6              57.3               10.1       190.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             14.9              54.8                9.7       199.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6             13.7              57.6                9.7       186.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   term_lg_weight term_mg_weight term_pl_weight term_sol_weight    cs_lg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            556            390            189              82 40.20675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            530            372            172              70 41.60562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            567            384            179              73 37.10619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            531            385            174              72       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            540            389            174              75 42.07989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6            578            389            175              74       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      cs_mg     cs_pl   cs_sol   glyc_lg  glyc_mg  glyc_pl  glyc_sol meancsa_mg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 46.79487  40.10283 47.12712 0.4531043       NA       NA 11.941125         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 52.48407  36.59255 32.76956 0.3550705 1.772164 3.980179 23.530658       1457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 57.42818 140.06084 44.22423 0.7453570 2.375028 1.554174  7.450681         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       NA        NA       NA        NA       NA       NA        NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 47.65070  58.01174 40.95903 0.1695662 2.119549 2.883105 11.291369       1830</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       NA        NA       NA        NA       NA       NA        NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   meancsa_lg meancsa_sol meancsa_pl mg_type_i mg_type_iia mg_type_iib</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         NA          NA         NA        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2097        1281       1634  1087.277    868.7957    1962.459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         NA          NA         NA        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         NA          NA         NA        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       2129        1493       1506  1232.599   1167.0718    2407.851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         NA          NA         NA        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mg_type_iix lg_type_i lg_type_iia lg_type_iib lg_type_iix sol_type_i</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          NA        NA          NA          NA          NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    1000.966  1225.550    894.3318    2586.348    1605.606       1302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          NA        NA          NA          NA          NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          NA        NA          NA          NA          NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    1413.750  1290.528    985.2905    2859.240    1703.942       1539</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          NA        NA          NA          NA          NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sol_type_iia sol_type_iib sol_type_iix pl_type_i pl_type_iia pl_type_iib</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           NA           NA           NA        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        876.3           NA           NA     819.6       894.8        2529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           NA           NA           NA        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           NA           NA           NA        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        861.8           NA           NA     683.0       771.0        2287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           NA           NA           NA        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pl_type_iix meancc_mg meancc_lg meancc_sol meancc_pl day1_weight day6_weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          NA        NA        NA         NA        NA         181         183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        1605      3.44      3.43       3.84      4.16         182         186</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          NA        NA        NA         NA        NA         176         177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          NA        NA        NA         NA        NA         182         185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        1331      3.13      3.69       4.13      4.53         187         188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          NA        NA        NA         NA        NA         179         179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   day11_weight day16_weight day21_weight day26_weight day31_weight day36_weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          188          182          192          194          195        199.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          191          192          195          193          194        203.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          195          191          191          189          193        202.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          189          185          189          191          192        190.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          191          191          196          198          200        205.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          184          185          199          190          193        191.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   day1_posttrainlact day5_posttrainlact day6_posttrainlact day10_posttrainlact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 NA                 NA                 NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                 NA                 NA                 NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 NA                 NA                 NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                 NA                 NA                 NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 NA                 NA                 NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 NA                 NA                 NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   day11_posttrainlact day15_posttrainlact day16_posttrainlact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   day20_posttrainlact day21_posttrainlact day25_posttrainlact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   day26_posttrainlact day30_posttrainlact day31_posttrainlact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  NA                  NA                  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   day35_posttrainlact day40_posttrainlact runseq ketones nefa lactate glucose</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  NA                  NA     81     803 0.53    1.80     147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  NA                  NA     NA      NA   NA      NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  NA                  NA    121     917 1.00    1.38     151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  NA                  NA    103     928   NA      NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  NA                  NA     42     996 1.01    1.23     132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  NA                  NA    122     694   NA      NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   glycerol corticosterone glucagon insulin leptin insulin_uu_ml insulin_pm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     1.29             47    145.7    2249  14278        51.727      387.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       NA             NA       NA      NA     NA            NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     1.95             38     64.2    1655  19476        38.065      285.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       NA             43     61.5     514  10055        11.822       88.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     2.64             17    103.2    2332  18695        53.636      402.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       NA             NA     67.5    1778  17816        40.894      306.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   insulin_glucagon_molar_ratio</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                          2.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                          4.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                          1.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                          3.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                          4.5</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

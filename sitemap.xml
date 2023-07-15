@@ -61,10 +61,46 @@
     <loc>/reference/ANALYTES_STATS.html</loc>
   </url>
   <url>
+    <loc>/reference/BASELINE_EMM.html</loc>
+  </url>
+  <url>
+    <loc>/reference/BASELINE_STATS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FIBER_TYPES.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FIBER_TYPES_EMM.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FIBER_TYPES_STATS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/MUSCLES.html</loc>
+  </url>
+  <url>
+    <loc>/reference/MUSCLES_EMM.html</loc>
+  </url>
+  <url>
+    <loc>/reference/MUSCLES_STATS.html</loc>
+  </url>
+  <url>
     <loc>/reference/NMR.html</loc>
   </url>
   <url>
     <loc>/reference/PHYSIO.html</loc>
+  </url>
+  <url>
+    <loc>/reference/PRE_POST_STATS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/VO2MAX.html</loc>
+  </url>
+  <url>
+    <loc>/reference/WEEKLY_MEASURES.html</loc>
+  </url>
+  <url>
+    <loc>/reference/WEIGHTS.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
