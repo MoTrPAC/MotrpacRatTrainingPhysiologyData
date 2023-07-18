@@ -1,0 +1,173 @@
+---
+title: "Statistical analysis of weekly total body weight"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Statistical analysis of weekly total body weight}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(emmeans)
+theme_set(theme_bw()) # base plot theme
+```
+
+
+# Overview
+
+Total body weight was measured at the start of each week in SED and trained groups. We are interested in whether body weight changes from week 1 to each subsequent week. Since we are measuring the same group of rats each week, we will subtract the week 1 measures from the paired measures at each following week. That is, calculate the change in body weight for each rat at each week (weeks 2-8). We will only test the SED and 8W groups.
+
+**Note:** While we create plots for weekly measures of blood lactate in an article, we do not perform any statistical analyses of lactate.
+
+```{r fig.height=4}
+WEEKLY_MEASURES %>% 
+  filter(group %in% c("SED", "8W")) %>% 
+  ggplot(aes(x = week, y = weight)) + 
+  geom_point(na.rm = TRUE, shape = 16) +
+  facet_grid(group ~ age + sex)
+```
+
+# Regression Models
+
+```{r}
+# Reformat data for modeling
+weight_df <- WEEKLY_MEASURES %>% 
+  select(pid, age, sex, group, week, weight) %>% 
+  filter(group %in% c("SED", "8W")) %>% 
+  na.omit() %>% 
+  droplevels.data.frame() %>% 
+  pivot_wider(names_from = week, 
+              values_from = weight, 
+              names_prefix = "week_") %>% 
+  pivot_longer(cols = week_2:week_8,
+               names_to = "week", 
+               values_to = "weight") %>% 
+  mutate(week = factor(sub("week_", "", week), levels = 2:8),
+         diff = weight - week_1) %>% 
+  filter(!is.na(weight))
+
+print.data.frame(head(weight_df))
+```
+
+```{r fig.height=4, fig.width=6.5}
+# Plot of differences from week 1
+ggplot(weight_df, aes(x = week, y = diff)) +
+  geom_point() +
+  facet_grid(group ~ age + sex) +
+  labs(y = "Difference in weight from week 1")
+```
+
+It appears that variances are unequal. Since all predictors are categorical, this means there is heteroscedasticity. We will include reciprocal group variances as weights in the model.
+
+```{r}
+# Reciprocal group variance weights
+wt.weight <- weight_df %>% 
+  group_by(age, sex, group, week) %>% 
+  mutate(1 / var(weight - week_1, na.rm = TRUE)) %>% 
+  pull(-1)
+
+fit.weight <- lm(I(weight - week_1) ~ age * sex * group * week,
+                 weights = wt.weight,
+                 data = weight_df)
+plot_lm(fit.weight)
+```
+
+Diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.weight, test = "F")
+```
+
+The 4-way interaction is not significant, so we will remove it.
+
+```{r}
+fit.weight <- update(fit.weight, 
+                     formula = . ~ (age + sex + group + week) ^ 3)
+plot_lm(fit.weight)
+```
+
+The diagnostic plots still look fine.
+
+```{r}
+summary(fit.weight)
+```
+
+
+# Comparisons
+
+For each week from 2 to 8, we will test whether the mean of the differences from week 1 is not zero. P-values will be Holm-adjusted across weeks within each combination of age, sex, and group.
+
+```{r}
+WEEKLY_WEIGHT_STATS <- emmeans(fit.weight, specs = "week",
+                               by = c("age", "sex", "group"), 
+                               infer = TRUE, adjust = "holm") %>% 
+  summary() %>% 
+  as.data.frame() %>% 
+  mutate(signif = cut(p.value, 
+                      breaks = c(0, 0.001, 0.01, 0.05, 1),
+                      labels = c("***", "**", "*", ""),
+                      include.lowest = TRUE, right = FALSE,
+                      ordered_result = TRUE),
+         response = "Weekly Body Weight") %>% 
+  relocate(response, .before = everything())
+```
+
+See `?WEEKLY_WEIGHT_STATS` for details.
+
+```{r}
+print.data.frame(head(WEEKLY_WEIGHT_STATS))
+```
+
+We will also calculate 95% confidence intervals for the mean of each week (not the mean of the differences from week 1), as that may be interesting to look at.
+
+```{r}
+WEEKLY_WEIGHT_EMM <- WEEKLY_MEASURES %>% 
+  filter(group %in% c("SED", "8W")) %>% 
+  mutate(week = factor(week, levels = 1:8)) %>% 
+  select(-lactate) %>% 
+  na.omit() %>% 
+  group_by(age, sex, group, week) %>% 
+  summarise(value = mean_cl_normal(weight), .groups = "keep") %>%
+  unnest(value)
+```
+
+```{r}
+print.data.frame(head(WEEKLY_WEIGHT_EMM))
+```
+
+```{r, eval=FALSE, include=FALSE}
+# Save data
+usethis::use_data(WEEKLY_WEIGHT_STATS, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+
+usethis::use_data(WEEKLY_WEIGHT_EMM, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+```
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
