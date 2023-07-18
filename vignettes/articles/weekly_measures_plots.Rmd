@@ -1,23 +1,25 @@
 ---
-title: "Plots of weekly body weight and blood lactate"
+title: "Plots of weekly total body mass and blood lactate"
 author: Tyler Sagendorf
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   rmarkdown::html_document:
+    code_folding: hide
     toc: true
     toc_depth: 2
-    code_folding: hide
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 7,
-  fig.height = 7,
+  fig.height = 1.7, 
+  fig.width = 3.8,
+  out.height = "70%",
+  out.width = "70%",
+  dpi = 400,
   message = FALSE,
-  warning = FALSE,
-  eval = FALSE
+  warning = FALSE
 )
 ```
 
@@ -27,131 +29,58 @@ library(MotrpacRatTrainingPhysiologyData)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+library(emmeans)
 ```
 
 
-# Weight
+# Body Weight {.tabset}
 
-Body weight was measured at the start of each new week.
-
-```{r}
-ggplot(WEEKLY_MEASURES, aes(x = week, y = weight)) + 
-  geom_point(na.rm = TRUE, shape = 16) +
-  facet_grid(group ~ age + sex) +
-  theme_bw()
-```
+Body weight was measured at the start of each week prior to training.
 
 ```{r include=FALSE, eval=FALSE, echo=FALSE}
-WEEKLY_MEASURES %>% 
-  filter(age == "6M", group == "SED", omics_analysis) %>% 
-  ggplot(aes(x = as.factor(week), y = weight)) + 
-  geom_line(aes(group = pid), lty = "dashed", linewidth = 0.3, alpha = 0.7) +
-  geom_point(na.rm = TRUE, size = 1.5, shape = 16, aes(color = sex),
-             position = ggbeeswarm::position_beeswarm(cex = 2, 
-                                                      dodge.width = 0.1)) +
-  # stat_summary(fun = mean, geom = "line", lty = "longdash",
-  #              aes(group = 1), color = "black", linewidth = 0.5) +
-  scale_color_manual(values = c("#ff6eff", "#5555ff"),
-                     breaks = c("Female", "Male")) +
-  guides(color = guide_none()) +
-  facet_wrap(~ sex, scales = "free", ncol = 1, strip.position = "right") +
-  labs(x = "Week", 
-       y = "Body Mass (g)") +
-  theme_bw() +
-  theme(strip.background = element_blank(),
-        axis.ticks.x = element_blank(),
-        panel.grid.major.x = element_blank())
-
-ggsave("../../plots/6M_SED_weekly_body_weight_omics.png", 
-       height = 3, width = 5, dpi = 400, bg = "white")
+# WEEKLY_MEASURES %>% 
+#   filter(age == "6M", group == "SED", omics_analysis) %>% 
+#   ggplot(aes(x = as.factor(week), y = weight)) + 
+#   geom_line(aes(group = pid), lty = "dashed", linewidth = 0.3, alpha = 0.7) +
+#   geom_point(na.rm = TRUE, size = 1.5, shape = 16, aes(color = sex),
+#              position = ggbeeswarm::position_beeswarm(cex = 2, 
+#                                                       dodge.width = 0.1)) +
+#   scale_color_manual(values = c("#ff6eff", "#5555ff"),
+#                      breaks = c("Female", "Male")) +
+#   guides(color = guide_none()) +
+#   facet_wrap(~ sex, scales = "free", ncol = 1, strip.position = "right") +
+#   labs(x = "Week", 
+#        y = "Body Mass (g)") +
+#   theme_bw() +
+#   theme(strip.background = element_blank(),
+#         axis.ticks.x = element_blank(),
+#         panel.grid.major.x = element_blank())
+# 
+# ggsave("../../plots/6M_SED_weekly_body_weight_omics.png", 
+#        height = 3, width = 5, dpi = 400, bg = "white")
 ```
 
 
-```{r}
-weight_df <- WEEKLY_MEASURES %>% 
-  select(pid, age, sex, group, week, weight) %>% 
-  filter(group %in% c("SED", "8W")) %>% 
-  na.omit() %>% 
-  droplevels.data.frame() %>% 
-  pivot_wider(names_from = week, 
-              values_from = weight, 
-              names_prefix = "week_") %>% 
-  pivot_longer(cols = week_2:week_8,
-               names_to = "week", 
-               values_to = "weight") %>% 
-  mutate(week = factor(sub("week_", "", week), levels = 2:8)) %>% 
-  filter(!is.na(weight))
-
-wt.weight <- weight_df %>% 
-  group_by(age, sex, group, week) %>% 
-  mutate(1 / var(weight - week_1, na.rm = TRUE)) %>% 
-  pull(-1)
-
-fit.weight <- lm(I(weight - week_1) ~ age * sex * group * week,
-                 weights = wt.weight,
-                 data = weight_df)
-plot_lm(fit.weight)
-```
+## 6M Female
 
 ```{r}
-anova(fit.weight, test = "F")
-```
-
-The 4-way interaction is not significant, so we will remove it.
-
-```{r}
-fit.weight <- update(fit.weight, 
-                     formula = . ~ (age + sex + group + week) ^ 3)
-plot_lm(fit.weight)
-```
-
-The diagnostic plots look fine.
-
-```{r}
-summary(fit.weight)
-```
-
-```{r}
-WEIGHT_STATS <- emmeans(fit.weight, specs = "week",
-                        by = c("age", "sex", "group"), 
-                        infer = TRUE, adjust = "holm") %>% 
-  summary() %>% 
-  as.data.frame() %>% 
-  mutate(signif = cut(p.value, 
-                      breaks = c(0, 0.001, 0.01, 0.05, 1),
-                      labels = c("***", "**", "*", ""),
-                      include.lowest = TRUE, right = FALSE,
-                      ordered_result = TRUE))
-
-WEIGHT_EMM <- WEEKLY_MEASURES %>% 
-  filter(group %in% c("SED", "8W")) %>% 
-  mutate(week = factor(week, levels = 1:8)) %>% 
-  select(-lactate) %>% 
-  na.omit() %>% 
-  group_by(age, sex, group, week) %>% 
-  summarise(value = mean_cl_normal(weight)) %>% 
-  unnest(value)
-```
-
-```{r}
-WEIGHT_EMM %>% 
+WEEKLY_WEIGHT_EMM %>% 
   filter(age == "6M", sex == "Female") %>% 
   ggplot(aes(x = week, y = y)) +
   geom_crossbar(aes(ymin = ymin, ymax = ymax),
                 fatten = 1, color = "#ff6eff", 
                 width = 0.7, linewidth = 0.4) +
-  geom_text(data = left_join(WEIGHT_STATS, WEIGHT_EMM, 
+  geom_text(data = left_join(WEEKLY_WEIGHT_STATS, WEEKLY_WEIGHT_EMM, 
                              by = c("age", "sex", "group", "week")) %>% 
               filter(age == "6M", sex == "Female"), 
             aes(x = week, y = ymax, label = signif),
             size = 3, vjust = 0) +
   facet_grid(~ group) +
-  scale_x_discrete(name = "Training Day",
-                   breaks = 1:8, labels = seq(1, 36, 5)) +
   scale_y_continuous(name = "Body Mass (g)",
                      expand = expansion(mult = 5e-3),
                      breaks = seq(180, 210, 10)) +
   coord_cartesian(ylim = c(175, 210), clip = "off") +
+  labs(x = "Week") +
   theme_bw(base_size = 6.5) +
   theme(text = element_text(color = "black"),
         axis.text = element_text(color = "black", size = 5.5),
@@ -167,25 +96,26 @@ ggsave("../../plots/weekly_body_mass_6M_female.png",
        height = 1.7, width = 3.8, dpi = 400)
 ```
 
+## 6M Male
+
 ```{r}
-WEIGHT_EMM %>% 
+WEEKLY_WEIGHT_EMM %>% 
   filter(age == "6M", sex == "Male") %>% 
   ggplot(aes(x = week, y = y)) +
   geom_crossbar(aes(ymin = ymin, ymax = ymax),
                 fatten = 1, color = "#5555ff", 
                 width = 0.7, linewidth = 0.4) +
-  geom_text(data = left_join(WEIGHT_STATS, WEIGHT_EMM, 
+  geom_text(data = left_join(WEEKLY_WEIGHT_STATS, WEEKLY_WEIGHT_EMM, 
                              by = c("age", "sex", "group", "week")) %>% 
               filter(age == "6M", sex == "Male"), 
             aes(x = week, y = ymax, label = signif),
             size = 3, vjust = 0) +
   facet_grid(~ group) +
-  scale_x_discrete(name = "Training Day",
-                   breaks = 1:8, labels = seq(1, 36, 5)) +
   scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(300, 370, 10),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(308, 376), clip = "off") +
+  labs(x = "Week") +
   theme_bw(base_size = 6.5) +
   theme(text = element_text(color = "black"),
         axis.text = element_text(color = "black", size = 5.5),
@@ -201,27 +131,26 @@ ggsave("../../plots/weekly_body_mass_6M_male.png",
        height = 1.7, width = 3.8, dpi = 400)
 ```
 
-
+## 18M Female
 
 ```{r}
-WEIGHT_EMM %>% 
+WEEKLY_WEIGHT_EMM %>% 
   filter(age == "18M", sex == "Female") %>% 
   ggplot(aes(x = week, y = y)) +
   geom_crossbar(aes(ymin = ymin, ymax = ymax),
                 fatten = 1, color = "#ff6eff", 
                 width = 0.7, linewidth = 0.4) +
-  geom_text(data = left_join(WEIGHT_STATS, WEIGHT_EMM, 
+  geom_text(data = left_join(WEEKLY_WEIGHT_STATS, WEEKLY_WEIGHT_EMM, 
                              by = c("age", "sex", "group", "week")) %>% 
               filter(age == "18M", sex == "Female"), 
             aes(x = week, y = ymax, label = signif),
             size = 3, vjust = 0) +
   facet_grid(~ group) +
-  scale_x_discrete(name = "Training Day",
-                   breaks = 1:8, labels = seq(1, 36, 5)) +
   scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(220, 250, 10),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(220, 255), clip = "off") +
+  labs(x = "Week") +
   theme_bw(base_size = 6.5) +
   theme(text = element_text(color = "black"),
         axis.text = element_text(color = "black", size = 5.5),
@@ -237,26 +166,26 @@ ggsave("../../plots/weekly_body_mass_18M_female.png",
        height = 1.7, width = 3.8, dpi = 400)
 ```
 
+## 18M Male
 
 ```{r}
-WEIGHT_EMM %>% 
+WEEKLY_WEIGHT_EMM %>% 
   filter(age == "18M", sex == "Male") %>% 
   ggplot(aes(x = week, y = y)) +
   geom_crossbar(aes(ymin = ymin, ymax = ymax),
                 fatten = 1, color = "#5555ff", 
                 width = 0.7, linewidth = 0.4) +
-  geom_text(data = left_join(WEIGHT_STATS, WEIGHT_EMM, 
+  geom_text(data = left_join(WEEKLY_WEIGHT_STATS, WEEKLY_WEIGHT_EMM, 
                              by = c("age", "sex", "group", "week")) %>% 
               filter(age == "18M", sex == "Male"), 
             aes(x = week, y = ymax, label = signif),
             size = 3, vjust = 0) +
   facet_grid(~ group) +
-  scale_x_discrete(name = "Training Day",
-                   breaks = 1:8, labels = seq(1, 36, 5)) +
   scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(380, 440, 20),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(375, 450), clip = "off") +
+  labs(x = "Week") +
   theme_bw(base_size = 6.5) +
   theme(text = element_text(color = "black"),
         axis.text = element_text(color = "black", size = 5.5),
@@ -274,82 +203,42 @@ ggsave("../../plots/weekly_body_mass_18M_male.png",
 
 
 
-# Lactate
+# Lactate {.tabset}
 
-Blood lactate was recorded at the start and end of each week.
-
-```{r}
-ggplot(WEEKLY_MEASURES, aes(x = week, y = lactate, color = week_time)) + 
-  geom_point(na.rm = TRUE, shape = 16, 
-             position = position_dodge(width = 0.5)) +
-  facet_grid(group ~ age + sex) +
-  scale_color_manual(name = NULL,
-                     values = c("black", "red"),
-                     breaks = c("start", "end"),
-                     labels = c("Week start", "Week end")) +
-  theme_bw() +
-  theme(legend.position = "bottom",
-        legend.direction = "horizontal")
-```
-
+Blood lactate was recorded at the start (prior to any training) and end of each week. For the SED group, blood lactate was only recorded in 18M males, so we will not plot SED values.
 
 ```{r}
-x <- WEEKLY_MEASURES %>% 
+lact_df <- WEEKLY_MEASURES %>% 
   dplyr::select(pid, age, sex, group, week, week_time, lactate) %>% 
   distinct() %>% 
-  filter(!is.na(lactate)) %>% 
-  filter(age == "6M", sex == "Female", group == "8W") %>% 
+  filter(!is.na(lactate)) %>%  
+  filter(group != "SED") %>% 
   mutate(week_time = factor(week_time, levels = c("start", "end"),
                             labels = c("Start", "End")),
-         week = factor(week, levels = 1:8, labels = paste("Week", 1:8))) %>% 
-  droplevels.data.frame()
-
-ggplot(x, aes(x = week_time, y = lactate)) +
-  stat_summary(geom = "crossbar", fun.data = mean_cl_normal, 
-               fatten = 1, linewidth = 1, width = 0.7,
-               color = ifelse(unique(x$sex) == "Female", "#ff6eff", "#5555ff")) +
-  facet_grid(~ week, switch = "x") +
-  scale_y_continuous(name = "Lactate (mM)",
-                     breaks = seq(0, 6, 2),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(0, 7), clip = "off") +
-  labs(x = NULL) +
-  theme_minimal() +
-  theme(legend.position = "none",
-        strip.placement = "outside",
-        axis.text.x = element_text(color = "black",
-                                   angle = 90, hjust = 1, vjust = 0.5),
-        axis.line = element_line(color = "black"),
-        panel.grid = element_blank())
+         week = factor(week, levels = 1:8, labels = paste0("", 1:8))) %>% 
+  droplevels.data.frame() %>% 
+  group_by(age, sex, group, week, week_time) %>%
+  mutate(n = n()) %>% 
+  filter(week_time == "Start")
 ```
 
 ```{r}
-lact_df <- WEEKLY_MEASURES %>%
-  filter(week_time == "start", !is.na(lactate), group != "SED") %>% 
-  dplyr::select(pid, age, sex, group, week, day, lactate) %>% 
-  distinct() %>% 
-  group_by(age, sex, group, week) %>% 
-  filter(n() >= 5) %>% 
-  mutate(week = factor(week, levels = 1:8),
-         day = factor(day, levels = sort(unique(day))),
-         group_week = paste0(group, "_", week)) %>%
-  droplevels.data.frame()
-```
-
-
-```{r}
+# Reusable lactate plot code
 f1 <- function(x) {
-  ggplot(x, aes(x = day, y = lactate, color = sex)) +
+  ggplot() +
     stat_summary(geom = "crossbar", fun.data = mean_cl_normal, 
+                 data = filter(x, n >= 5),
+                 mapping = aes(x = week, y = lactate, color = sex),
                  width = 0.8, linewidth = 0.5, fatten = 1) +
+    geom_point(aes(x = week, y = lactate, color = sex),
+               data = filter(x, n < 5),
+               position = ggbeeswarm::position_beeswarm(cex = 2, 
+                                                        dodge.width = 0.7),
+               shape = 16, size = 0.5) + 
     facet_grid(~ group, space = "free", scales = "free") +
     scale_color_manual(values = c("#ff6eff", "#5555ff"),
                        breaks = c("Female", "Male")) +
-    # scale_y_continuous(name = "Lactate (mM)",
-    #                    expand = expansion(mult = 5e-3),
-    #                    breaks = seq(0, 12, 2)) +
-    # coord_cartesian(ylim = c(0, 12), clip = "off") +
-    labs(x = "Training Day") +
+    labs(x = "Week") +
     theme_bw() +
     theme(text = element_text(size = 6.5, color = "black"),
           line = element_line(linewidth = 0.3, color = "black"),
@@ -367,63 +256,65 @@ f1 <- function(x) {
           strip.background = element_blank(),
           strip.text = element_text(size = 7, color = "black",
                                     margin = margin(b = 2, t = 2)),
-          panel.spacing = unit(-1, "pt"),
+          panel.spacing = unit(3, "pt"),
           legend.position = "none"
     )
 }
 ```
 
+## 6M Female
+
 ```{r}
 # 6M Female
 lact_df %>% 
-  droplevels.data.frame() %>% 
   filter(age == "6M", sex == "Female") %>% 
   f1() + 
   scale_y_continuous(name = "Lactate (mM)",
                      expand = expansion(mult = 5e-3),
-                     breaks = seq(0, 7, 2)) +
-  coord_cartesian(ylim = c(0, 7), clip = "off")
+                     breaks = seq(0, 8, 2)) +
+  coord_cartesian(ylim = c(0, 8), clip = "off")
 
 ggsave("../../plots/weekly_lactate_6M_female.png", 
-       height = 1.7, width = 3, dpi = 400)
+       height = 1.7, width = 3.8, dpi = 400)
 ```
+
+## 6M Male
 
 ```{r}
 # 6M Male
 lact_df %>% 
-  droplevels.data.frame() %>% 
   filter(age == "6M", sex == "Male") %>% 
   f1() +
-  coord_cartesian(ylim = c(0, 11), clip = "off") +
+  coord_cartesian(ylim = c(0, 12), clip = "off") +
   scale_y_continuous(name = "Lactate (mM)",
-                     breaks = seq(0, 10, 2),
+                     breaks = seq(0, 12, 4),
                      expand = expansion(mult = 5e-3))
 
 ggsave("../../plots/weekly_lactate_6M_male.png", 
-       height = 1.7, width = 3, dpi = 400)
+       height = 1.7, width = 3.8, dpi = 400)
 ```
 
+## 18M Female
 
 ```{r}
 # 18M Female
 lact_df %>% 
-  droplevels.data.frame() %>% 
   filter(age == "18M", sex == "Female") %>% 
   f1() +
   coord_cartesian(ylim = c(0, 12), clip = "off") +
   scale_y_continuous(name = "Lactate (mM)",
-                     breaks = seq(0, 12, 2),
+                     breaks = seq(0, 12, 4),
                      expand = expansion(mult = 5e-3))
 
 ggsave("../../plots/weekly_lactate_18M_female.png", 
-       height = 1.7, width = 3, dpi = 400)
+       height = 1.7, width = 3.8, dpi = 400)
 ```
 
+## 18M Male
 
 ```{r}
 # 18M Male
 lact_df %>% 
-  droplevels.data.frame() %>% 
   filter(age == "18M", sex == "Male") %>% 
   f1() +
   coord_cartesian(ylim = c(0, 8), clip = "off") +
@@ -432,6 +323,6 @@ lact_df %>%
                      expand = expansion(mult = 5e-3))
 
 ggsave("../../plots/weekly_lactate_18M_male.png", 
-       height = 1.7, width = 3, dpi = 400)
+       height = 1.7, width = 3.8, dpi = 400)
 ```
 
