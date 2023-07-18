@@ -18,9 +18,9 @@ A \code{data.frame} containing common clinical analytes measured
 \tabular{lll}{
   \bold{Analyte} \tab \bold{Catalogue No.} \tab \bold{Company} \cr
   Corticosterone \tab 55-CORMS-E01 \tab Alpco (Salem, NH) \cr
-  Glucose \tab B24985 \tab Beckman (Brea, CA) \cr
-  Glycerol \tab 445850 \tab Beckman \cr
-  Lactate \tab A95550 \tab Beckman \cr
+  Glucose \tab B24985 \tab Beckman Coulter (Brea, CA) \cr
+  Glycerol \tab 445850 \tab Beckman Coulter \cr
+  Lactate \tab A95550 \tab Beckman Coulter \cr
   Total Ketones \tab 415-73301, 411-73401 \tab Fujifilm Wako (Osaka, Japan) \cr
   NEFA \tab 995-34791, 999-34691, 993-35191, 991-34891 \tab Fujifilm Wako \cr
   Glucagon \tab K1535YK \tab Meso Scale  Discovery (Rockville, MD) \cr

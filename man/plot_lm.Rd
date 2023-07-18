@@ -12,3 +12,9 @@ plot_lm(model)
 \description{
 Show all regression diagnostic plots
 }
+\examples{
+data("iris")
+fit <- lm(Sepal.Length ~ ., data = iris)
+plot_lm(fit)
+
+}

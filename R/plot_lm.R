@@ -4,6 +4,11 @@
 #'
 #' @importFrom graphics par
 #'
+#' @examples
+#' data("iris")
+#' fit <- lm(Sepal.Length ~ ., data = iris)
+#' plot_lm(fit)
+#'
 #' @export plot_lm
 
 plot_lm <- function(model) {
