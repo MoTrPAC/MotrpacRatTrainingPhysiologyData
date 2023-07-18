@@ -8,8 +8,6 @@
 
 <!-- badges: end -->
 
-***
-
 ## Table of Contents
 
 * [Overview](#overview)
@@ -28,7 +26,7 @@
 
 This package contains all input data, analysis steps (in the form of vignettes), and results for the MoTrPAC PASS1B Physiology manuscript. This includes data from both male and female Fischer 344 (F344) rats that were either sedentary or completed an endurance exercise training intervention. Training began at 6 or 18 months of age and lasted for a duration of 1, 2, 4, or 8 weeks.
 
-The [data-raw/](https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/tree/master/data-raw) directory contains R scripts that detail how most of the exported datasets were created. For data objects that end in `"_STATS"` or `"_EMM"`, please refer to the appropriate vignette. Vignettes contain all details of the statistical analyses while the online-only articles generate most of the figures in the manuscript.
+The [data-raw/](https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/tree/master/data-raw) directory contains R scripts that detail how most of the exported datasets were created. For data objects that end in `"_STATS"` or `"_EMM"`, please refer to the appropriate vignette. Vignettes contain all details of the statistical analyses while the online-only articles generate most of the manuscript figures. Vignettes and articles can be viewed on the [pkgdown website](https://pnnl-comp-mass-spec.github.io/MotrpacRatTrainingPhysiologyData/) under the "Articles" tab. This website also includes data and function documentation and news regarding new releases.
 
 **Vignettes:**
 
@@ -37,6 +35,7 @@ The [data-raw/](https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiol
 * Statistical analyses of muscle-specific measures 
 * Statistical analyses of plasma clinical analytes
 * Statistical analyses of post- vs. pre-training body composition and VO2max testing measures
+* Statistical analysis of weekly total body weight
 
 **Articles:**
 
@@ -45,6 +44,7 @@ The [data-raw/](https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiol
 * Plots of fiber area by muscle and fiber type
 * Plots of muscle measures
 * Plots of post - pre differences
+* Plots of tissue dissection times
 * Plots of weekly body weight and blood lactate
 
 

@@ -9,3 +9,4 @@
 ^vignettes/articles$
 ^.Rcache$
 ^\.github$
+^supplementary-tables$
