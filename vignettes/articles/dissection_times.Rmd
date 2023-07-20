@@ -1,0 +1,163 @@
+---
+title: "Plots of tissue dissection times"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  rmarkdown::html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 2
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 3.4,
+  fig.height = 2,
+  out.height = "70%",
+  out.width = "70%",
+  dpi = 400,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(dplyr)
+library(ggplot2)
+library(scales)
+```
+
+# Dissection Times {.tabset}
+
+```{r}
+# Custom plot theme
+t1 <- theme(axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1),
+            panel.grid.minor = element_blank(),
+            panel.grid.major.y = element_blank(),
+            axis.line = element_line(color = "black"),
+            axis.ticks = element_line(color = "black"),
+            legend.position = "none")
+```
+
+## 6M Female
+
+```{r}
+f6 <- DISSECTION_TIMES %>% 
+  filter(sex == "Female", age == "6M") %>%
+  droplevels.data.frame()
+
+ggplot(f6, aes(x = aliquotdescription, y = t_diff, color = sex)) +
+  stat_summary(geom = "crossbar", fatten = 1, linewidth = 0.5,
+               fun.data = ~ exp(mean_sdl(log(.x), mult = 2)),
+               width = 0.8) +
+  geom_vline(
+    xintercept = which(levels(f6$aliquotdescription) == "Cortex (right)") - 0.5,
+    lty = "dashed") +
+  # geom_text(aes(x = 5.4, y = 9 * 60, label = "Decapitation", 
+  #               angle = 90, vjust = 0), color = "grey20", size = 6 / .pt) +
+  scale_y_continuous(name = "Time Elapsed (min:sec)",
+                     trans = "hms",
+                     labels = label_time(format = "%M:%S"),
+                     expand = expansion(mult = 1e-2)) +
+  labs(x = "Dissection Order") +
+  coord_cartesian(ylim = c(0, 12 * 60)) +
+  scale_color_manual(values = c("#ff6eff", "#5555ff"),
+                     breaks = c("Female", "Male")) +
+  theme_minimal(base_size = 6.5) +
+  t1
+
+ggsave("../../plots/dissection_times_6M_female.png",
+       height = 2, width = 3.4, dpi = 400, bg = "white")
+```
+
+## 6M Male
+
+```{r}
+m6 <- DISSECTION_TIMES %>% 
+  filter(sex == "Male", age == "6M") %>%
+  droplevels.data.frame()
+
+ggplot(m6, aes(x = aliquotdescription, y = t_diff, color = sex)) +
+  stat_summary(geom = "crossbar", fatten = 1, linewidth = 0.5,
+               fun.data = ~ exp(mean_sdl(log(.x), mult = 2)),
+               width = 0.8) +
+  geom_vline(
+    xintercept = which(levels(m6$aliquotdescription) == "Cortex (right)") - 0.5,
+    lty = "dashed") +
+  scale_y_continuous(name = "Time Elapsed (min:sec)",
+                     trans = "hms",
+                     labels = label_time(format = "%M:%S"),
+                     expand = expansion(mult = 1e-2)) +
+  labs(x = "Dissection Order") +
+  coord_cartesian(ylim = c(0, 16 * 60)) +
+  scale_color_manual(values = c("#ff6eff", "#5555ff"),
+                     breaks = c("Female", "Male")) +
+  theme_minimal(base_size = 6.5) +
+  t1
+
+ggsave("../../plots/dissection_times_6M_male.png",
+       height = 2, width = 3.4, dpi = 400, bg = "white")
+```
+
+## 18M Female
+
+```{r}
+f18 <- DISSECTION_TIMES %>% 
+  filter(sex == "Female", age == "18M") %>%
+  droplevels.data.frame()
+
+ggplot(f18, aes(x = aliquotdescription, y = t_diff, color = sex)) +
+  stat_summary(geom = "crossbar", fatten = 1, linewidth = 0.5,
+               fun.data = ~ exp(mean_sdl(log(.x), mult = 2)),
+               width = 0.8) +
+  geom_vline(
+    xintercept = which(levels(f18$aliquotdescription) == "Cortex (right)") - 0.5,
+    lty = "dashed") +
+  scale_y_continuous(name = "Time Elapsed (min:sec)",
+                     trans = "hms",
+                     labels = label_time(format = "%M:%S"),
+                     expand = expansion(mult = 1e-2)) +
+  labs(x = "Dissection Order") +
+  coord_cartesian(ylim = c(0, 10 * 60)) +
+  scale_color_manual(values = c("#ff6eff", "#5555ff"),
+                     breaks = c("Female", "Male")) +
+  theme_minimal(base_size = 6.5) +
+  t1
+
+ggsave("../../plots/dissection_times_18M_female.png",
+       height = 2, width = 3.4, dpi = 400, bg = "white")
+```
+
+## 18M Male
+
+```{r}
+m18 <- DISSECTION_TIMES %>% 
+  filter(sex == "Male", age == "18M") %>%
+  droplevels.data.frame()
+
+ggplot(m18, aes(x = aliquotdescription, y = t_diff, color = sex)) +
+  stat_summary(geom = "crossbar", fatten = 1, linewidth = 0.5,
+               fun.data = ~ exp(mean_sdl(log(.x), mult = 2)),
+               width = 0.8) +
+  geom_vline(
+    xintercept = which(levels(m18$aliquotdescription) == "Cortex (right)") - 0.5,
+    lty = "dashed") +
+  scale_y_continuous(name = "Time Elapsed (min:sec)",
+                     trans = "hms",
+                     labels = label_time(format = "%M:%S"),
+                     expand = expansion(mult = 1e-2)) +
+  labs(x = "Dissection Order") +
+  coord_cartesian(ylim = c(0, 12 * 60)) +
+  scale_color_manual(values = c("#ff6eff", "#5555ff"),
+                     breaks = c("Female", "Male")) +
+  theme_minimal(base_size = 6.5) +
+  t1
+
+ggsave("../../plots/dissection_times_18M_male.png",
+       height = 2, width = 3.4, dpi = 400, bg = "white")
+```
+
