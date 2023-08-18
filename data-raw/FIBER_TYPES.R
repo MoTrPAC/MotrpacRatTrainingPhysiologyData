@@ -11,6 +11,21 @@ fiber_count_df <- file.path("data-raw", "fiber_type_counts.xlsx") %>%
   na.omit() %>%
   mutate(type = sub("Type ", "", type),
          type = gsub("([ABX])", "\\L\\1", type, perl = TRUE)) %>%
+
+  # Fix data entry errors
+  pivot_wider(id_cols = c(age, ID, muscle, sex, group),
+              names_from = type,
+              values_from = fiber_count) %>%
+  mutate(tmp = IIa,
+         swap = !is.na(IIa) & !is.na(IIb) & IIb < IIa &
+           muscle %in% c("LG", "MG") & sex == "Female",
+         IIa = ifelse(swap, IIb, IIa),
+         IIb = ifelse(swap, tmp, IIb)) %>%
+  dplyr::select(-c(tmp, swap)) %>%
+  pivot_longer(cols = c(I, IIa, IIb, IIx),
+               names_to = "type",
+               values_to = "fiber_count") %>%
+  filter(!is.na(fiber_count)) %>%
   group_by(age, sex, ID, muscle) %>%
   mutate(total_fiber_count = sum(fiber_count)) %>%
   ungroup()
@@ -30,9 +45,8 @@ FIBER_TYPES <- PHYSIO %>%
   filter(!is.na(fiber_area) | !is.na(fiber_count),
          group %in% c("SED", "8W")) %>%
   mutate(type = factor(type, levels = sort(unique(type))),
-         group = factor(group, levels = c("SED", "8W")))
-
-# 06F8T24 SOL IIa has 0 fiber count, but has a fiber area!!!
+         group = factor(group, levels = c("SED", "8W"))) %>%
+  select(-ID)
 
 usethis::use_data(FIBER_TYPES, internal = FALSE, overwrite = TRUE,
                   compress = "bzip2", version = 3)
