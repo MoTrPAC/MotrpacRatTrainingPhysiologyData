@@ -5,22 +5,18 @@ library(lubridate)
 ## 6-month data ================================================================
 sp6 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.6M_1.02_DS_MoTrPAC.PASS_Animal.Specimen.Processing.csv") %>%
   mutate(aliquotdescription = ifelse(grepl("Aorta", aliquotdescription),
-                                     "Vena Cava", aliquotdescription)) #%>%
-  # select(pid, contains("description"), starts_with("t_"))
+                                     "Vena Cava", aliquotdescription))
 
-sc6 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.6M_1.02_DS_MoTrPAC.PASS_Animal.Specimen.Collection.csv") #%>%
-  # select(pid, starts_with("t_"), -contains("uterus"))
+sc6 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.6M_1.02_DS_MoTrPAC.PASS_Animal.Specimen.Collection.csv")
 
 x6 <- full_join(sp6, sc6, by = "pid")
 
 unique(x6$aliquotdescription) # 25 descriptions, not all relevant
 
 ## 18-month data ===============================================================
-sp18 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.18M_1.00_DS_MoTrPAC.PASS_Animal.Specimen.Processing.csv") #%>%
-  # select(pid, contains("description"), starts_with("t_"))
+sp18 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.18M_1.00_DS_MoTrPAC.PASS_Animal.Specimen.Processing.csv")
 
-sc18 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.18M_1.00_DS_MoTrPAC.PASS_Animal.Specimen.Collection.csv") #%>%
-  # select(pid, starts_with("t_"), -contains("uterus"))
+sc18 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.18M_1.00_DS_MoTrPAC.PASS_Animal.Specimen.Collection.csv")
 
 x18 <- full_join(sp18, sc18, by = "pid")
 
@@ -47,21 +43,19 @@ dissection_order <- c(
   "Spleen" = "Spleen",
   "Brown Adipose" = "Brown Adipose",
   "Aorta" = "Aorta",
-  "Colon" = "Colon",
   "Small Intestine" = "Jejunum",
+  "Colon" = "Colon",
   "Feces" = "Feces",
   "Testes (left)" = "Testes (left)",
   "Ovaries (both)" = "Ovaries (both)",
   "Vastus Lateralis" = "Vastus Lateralis",
   "Tibia" = "Tibia",
-  "Femur" = "Femur"
-)
+  "Femur" = "Femur")
 
 # Subset to columns in common
 x6 <- x6[, colnames(x18)]
 
 DISSECTION_TIMES <- rbind(x6, x18) %>%
-  # select(pid:aliquotdescription, t_collection, t_freeze, t_death) %>%
   select(pid, techid, sampletypedescription,
          aliquotdescription, t_collection, t_freeze, t_death) %>%
   filter(t_collection != "",
@@ -73,12 +67,14 @@ DISSECTION_TIMES <- rbind(x6, x18) %>%
          aliquotdescription = factor(aliquotdescription,
                                      levels = unique(dissection_order)),
          across(c(t_collection, t_death, t_freeze), ~ seconds(hms(.x))),
+
          # Fix data-entry errors
          t_freeze = case_when(
            pid == "12626880" & aliquotdescription %in%
              c("Hippocampus", "Hypothalamus", "Kidney") ~ t_freeze + 3600,
            (pid == "11621443" & aliquotdescription == "Cortex (left)") |
-             (pid == "11464089" & aliquotdescription == "Liver") ~ t_freeze + 60,
+             (pid == "11464089" & aliquotdescription == "Liver") ~
+             t_freeze + 60,
            TRUE ~ t_freeze),
          t_death = ifelse(pid == "10059369" & aliquotdescription == "Heart",
                           t_collection, t_death),
