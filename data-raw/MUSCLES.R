@@ -7,7 +7,7 @@ MUSCLES <- PHYSIO %>%
          starts_with("meancc_"), starts_with("cs_")) %>%
   select(-term_weight) %>%
   rename_with(~ sub("_weight$", "", .x)) %>%
-  pivot_longer(cols = -c(pid, sex, group, age),
+  pivot_longer(cols = -c(pid, iowa_id, sex, group, age),
                names_to = c(".value", "muscle"),
                names_pattern = "(.*)_(.*)") %>%
   rename(term_weight = term,
