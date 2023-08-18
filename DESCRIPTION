@@ -21,7 +21,7 @@ Authors@R:
            role = "dtc"))
 Maintainer: Tyler Sagendorf <tyler.sagendorf@pnnl.gov>
 Description: Data and analyses for the MoTrPAC PASS1B rat physiology manuscript.
-License: GPL (>= 3)
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
 LazyDataCompression: bzip2
@@ -40,6 +40,7 @@ Imports:
     stats
 Suggests:
     emmeans,
+    Hmisc,
     knitr,
     latex2exp,
     lubridate,
