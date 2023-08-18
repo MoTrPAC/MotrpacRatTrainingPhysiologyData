@@ -1,0 +1,402 @@
+---
+title: "Plots of percentage of total fibers by muscle and fiber type"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 1.6,
+  fig.height = 2,
+  out.height = "50%",
+  out.width = "50%",
+  dpi = 500,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(purrr)
+```
+
+```{r}
+# Function to create pie charts (actually donut charts)
+fiber_piechart <- function(x) {
+  colors <- c("#75281C", "#F79485", "#FF5454", "#796C6A")
+  
+  x <- x %>%
+    group_by(pid) %>% 
+    mutate(fiber_pct = fiber_count / total_fiber_count) %>% 
+    group_by(group, type) %>% 
+    summarise(fiber_pct = 100 * mean(fiber_pct, na.rm = TRUE)) %>% 
+    mutate(type = factor(type, levels = c("I", "IIa", "IIb", "IIx"))) %>% 
+    ungroup()
+  
+  # Stacked bar graphs
+  p <- ggplot(x, aes(x = 2, y = fiber_pct, fill = type)) +
+    geom_bar(stat = "identity", width = 1, color = "white") 
+  
+  # Label percentages (no % sign to save space - include in main figure legend)
+  p <- p +
+    geom_text(aes(label = round(fiber_pct, 1), 
+                  x = 2.5 * 1.15),
+              position = position_stack(vjust = 0.5), 
+              size = 6.5 / .pt) 
+  
+  # Label donut holes with the group
+  p <- p +
+    geom_text(aes(x = 1, y = 0, label = "SED"),
+              data = filter(x, group == "SED"), size = 7 / .pt) +
+    geom_text(aes(x = 1, y = 0, label = "8W"),
+              data = filter(x, group == "8W"), size = 7 / .pt) 
+  
+  # Set axis limits (cartesian only) and then switch to polar coordinates to
+  # convert stacked bars to donuts
+  p <- p +
+    coord_cartesian(clip = "off", xlim = c(1, 2.5)) +
+    coord_polar("y", start = 0, direction = -1)
+  
+  # Modify appearance
+  p <- p +
+    facet_wrap(~ group, ncol = 1) +
+    scale_fill_manual(name = "Type",
+                      values = colors) +
+    theme_void() +
+    theme(strip.text = element_blank(),
+          panel.spacing.y = unit(-4, "pt"),
+          legend.position = "none",
+          legend.title = element_text(size = 6.5, color = "black"),
+          legend.text = element_text(size = 6, color = "black"),
+          legend.key.size = unit(10, "pt"))
+  
+  return(p)
+}
+```
+
+```{r, results='hide'}
+# Create and save all 16 plots
+foo <- FIBER_TYPES %>% 
+  nest(.by = c(age, sex, muscle)) %>% 
+  mutate(plots = map(.x = data, .f = fiber_piechart),
+         file_name = sprintf("../../plots/fiber_count_%s_%s_%s.png", 
+                             age, tolower(sex), muscle))
+
+map2(.x = foo$file_name, .y = foo$plots, 
+     .f = ~ ggsave(filename = .x, plot = .y, 
+                   height = 2, width = 1.3, # width = 1.6 with legend
+                   dpi = 400, units = "in", bg = "white"))
+```
+
+
+# 6M Female
+
+## LG
+
+```{r}
+foo %>% 
+  filter(age == "6M", sex == "Female", muscle == "LG") %>%
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## MG
+
+```{r}
+foo %>% 
+  filter(age == "6M", sex == "Female", muscle == "MG") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## PL
+
+```{r}
+foo %>% 
+  filter(age == "6M", sex == "Female", muscle == "PL") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## SOL
+
+```{r}
+foo %>% 
+  filter(age == "6M", sex == "Female", muscle == "SOL") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+
+# 6M Male
+
+## LG
+
+```{r}
+foo %>% 
+  filter(age == "6M", sex == "Male", muscle == "LG") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## MG
+
+```{r}
+foo %>% 
+  filter(age == "6M", sex == "Male", muscle == "MG") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## PL
+
+```{r}
+foo %>% 
+  filter(age == "6M", sex == "Male", muscle == "PL") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## SOL
+
+```{r}
+foo %>% 
+  filter(age == "6M", sex == "Male", muscle == "SOL") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+
+# 18M Female
+
+## LG
+
+```{r}
+foo %>% 
+  filter(age == "18M", sex == "Female", muscle == "LG") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## MG
+
+```{r}
+foo %>% 
+  filter(age == "18M", sex == "Female", muscle == "MG") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## PL
+
+```{r}
+foo %>% 
+  filter(age == "18M", sex == "Female", muscle == "PL") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## SOL
+
+```{r}
+foo %>% 
+  filter(age == "18M", sex == "Female", muscle == "SOL") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+
+# 18M Male
+
+## LG
+
+```{r}
+foo %>% 
+  filter(age == "18M", sex == "Male", muscle == "LG") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## MG
+
+```{r}
+foo %>% 
+  filter(age == "18M", sex == "Male", muscle == "MG") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## PL
+
+```{r}
+foo %>% 
+  filter(age == "18M", sex == "Male", muscle == "PL") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+## SOL
+
+```{r}
+foo %>% 
+  filter(age == "18M", sex == "Male", muscle == "SOL") %>% 
+  pull(plots) %>% 
+  .[[1]] +
+  theme(legend.position = "right")
+```
+
+
+
+# TESTING
+
+```{r}
+x <- FIBER_TYPES %>% 
+  mutate(muscle_type = paste0(muscle, "_", type)) %>% 
+  filter(!is.na(fiber_area))
+
+# fit1 <- glmer(fiber_area ~ 1 + (1 | pid),
+#               family = Gamma("log"),
+#               data = x)
+# plot(fit1)
+# 
+# fit2 <- lm(resid(fit1) ~ (age + sex + group + muscle_type) ^ 4,
+#            data = x)
+# plot_lm(fit2) # looks great!
+
+
+x2 <- FIBER_TYPES %>% 
+  mutate(muscle_type = paste0(muscle, "_", type)) %>% 
+  filter(!is.na(fiber_count))
+
+fit1 <- glmer(fiber_count ~ 1 + (1 | pid) + 
+                offset(log(total_fiber_count)),
+              family = poisson("log"),
+              data = x2)
+plot(fit1)
+
+fit2 <- lm(resid(fit1) ~ (age + sex + group + muscle_type) ^ 4 + 
+             offset(log(total_fiber_count)),
+           data = x2)
+plot_lm(fit2)
+```
+
+
+```{r}
+df1 <- FIBER_TYPES %>%
+  pivot_wider(id_cols = c(pid, age, sex, muscle, group, total_fiber_count),
+              names_from = type,
+              values_from = fiber_count)
+
+idx <- which(colnames(df1) %in% c("I", "IIa", "IIb", "IIx"))
+
+adata <- aplus(df1, 
+               parts = idx, 
+               total = df1$total_fiber_count, SZ = NULL)
+
+plot(adata) # two clusters in most cases
+
+df1[, idx] <- ilt(adata)
+
+df1 <- df1 %>% 
+  pivot_longer(cols = any_of(c("I", "IIa", "IIb", "IIx")),
+               names_to = "type",
+               values_to = "fiber_ilt") %>%
+  mutate(muscle_type = paste0(muscle, "_", type)) %>% 
+  filter(!(muscle == "SOL" & type %in% c("IIb", "IIx")))
+
+fit1 <- lm(fiber_ilt ~ (age + sex + group + muscle_type) ^ 4,
+           data = df1)
+plot_lm(fit1)
+```
+
+
+
+```{r, eval=FALSE, echo=FALSE}
+library(compositions)
+
+not_all_na <- function(x) any(!is.na(x))
+
+df1 <- FIBER_TYPES %>%
+  # mutate(fiber_prop = fiber_count / total_fiber_count) %>%
+  pivot_wider(id_cols = c(pid, age, sex, muscle, group, total_fiber_count),
+              names_from = type,
+              values_from = fiber_count) %>% 
+  nest(.by = pid) %>% 
+  mutate(data = map(.x = data, .f = function(d) {
+    d <- select(d, where(not_all_na))
+    
+    idx <- which(colnames(d) %in% c("I", "IIa", "IIb", "IIx"))
+    
+    # Replace proportions with additive log ratios
+    d[, idx] <- clr(d[, idx])
+    
+    return(d)
+  })) %>% 
+  unnest(cols = data) %>% 
+  pivot_longer(cols = any_of(c("I", "IIa", "IIb", "IIx")),
+               names_to = "type",
+               values_to = "fiber_clr") %>%
+  mutate(muscle_type = paste0(muscle, "_", type)) %>% 
+  filter(!(muscle == "SOL" & type %in% c("IIb", "IIx")))
+
+plot(density(df1$fiber_clr)) # bimodal
+```
+
+```{r}
+
+fit <- lm(fiber_clr ~ (sex + age + muscle_type + group) ^ 3,
+          weights = total_fiber_count,
+          data = df1)
+# summary(fit)
+
+fit2 <- lmer(fiber_prop_clr ~ (age + sex + group + muscle_type) ^ 4 + 
+               (1 | pid),
+             data = df1)
+
+fit3 <- MASS::glm.nb(fiber_count ~ (age + sex + group + muscle_type) ^ 4 + 
+                       offset(log(total_fiber_count)),
+                     data = FIBER_TYPES %>% 
+                       mutate(muscle_type = paste0(muscle, "_", type)))
+
+plot_lm(fit)
+plot(fit2)
+qqnorm(resid(fit2)); qqline(resid(fit2))
+```
+
+```{r}
+fit2 <- update(fit, formula = . ~ (age + sex + group + muscle_type) ^ 3)
+anova(fit, fit2, test = "F")
+plot_lm(fit2)
+```
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
