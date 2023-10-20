@@ -50,11 +50,13 @@ Since neither percentage fat mass nor percentage lean mass approach either of th
 If there are obvious problems with the model diagnostic plots, or the mean–variance relationship does not correspond to an exponential family distribution, we will include reciprocal group variances as weights in a log-link Gaussian GLM. Finally, we will remove insignificant predictors to achieve model parsimony based on ANOVA F-tests.
 
 
-## NMR Weight
+## Body Mass (NMR Day)
+
+Body mass recorded on the same day as the NMR body composition measures.
 
 ```{r, fig.height=3}
 # Plot points
-ggplot(NMR, aes(x = group, y = pre_weight)) +
+ggplot(NMR, aes(x = group, y = pre_body_mass)) +
   geom_point(position = position_jitter(width = 0.15, height = 0)) +
   facet_grid(~ age + sex) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
@@ -65,8 +67,8 @@ There are no obvious outlying values or other issues. We will check the mean–v
 ```{r}
 mv <- NMR %>% 
   group_by(sex, group, age) %>% 
-  summarise(mn = mean(pre_weight),
-            vr = var(pre_weight))
+  summarise(mn = mean(pre_body_mass),
+            vr = var(pre_body_mass))
 
 fit.mv <- lm(log(vr) ~ log(mn), data = mv)
 coef(fit.mv)
@@ -81,40 +83,40 @@ abline(coef(fit.mv), lwd = 2)
 The slope suggests a variance function approximately of the form $V(\mu) = \mu^{1.76}$. This is close to a gamma distribution, though the plot shows that the relationship is not exactly linear: the variance decreases in the group with the largest mean. Rather than fitting a gamma GLM, we will fit a weighted log-link Gaussian GLM.
 
 ```{r}
-wt.weight <- NMR %>% 
+wt.body_mass <- NMR %>% 
   group_by(age, sex, group) %>% 
-  mutate(1 / var(pre_weight, na.rm = TRUE)) %>% 
+  mutate(1 / var(pre_body_mass, na.rm = TRUE)) %>% 
   pull(-1)
 
-fit.weight <- glm(pre_weight ~ age * sex * group,
+fit.body_mass <- glm(pre_body_mass ~ age * sex * group,
                   family = gaussian("log"),
-                  weights = wt.weight,
+                  weights = wt.body_mass,
                   data = NMR)
-plot_lm(fit.weight)
+plot_lm(fit.body_mass)
 ```
 
 The diagnostic plots seem fine. We will try to simplify the model.
 
 ```{r}
-anova(fit.weight, test = "F")
+anova(fit.body_mass, test = "F")
 ```
 
 ```{r}
-fit.weight.1 <- update(fit.weight, formula = . ~ age * group + sex)
-anova(fit.weight.1, fit.weight, test = "F")
+fit.body_mass.1 <- update(fit.body_mass, formula = . ~ age * group + sex)
+anova(fit.body_mass.1, fit.body_mass, test = "F")
 ```
 
 There is no significant difference between the models, so we will use the simpler one.
 
 ```{r}
-fit.weight <- fit.weight.1
-plot_lm(fit.weight)
+fit.body_mass <- fit.body_mass.1
+plot_lm(fit.body_mass)
 ```
 
 The diagnostic plots still look fine.
 
 ```{r}
-summary(fit.weight)
+summary(fit.body_mass)
 ```
 
 
@@ -372,7 +374,7 @@ summary(fit.fat_pct)
 
 ## Absolute VO$_2$max
 
-Absolute VO2max is calculated by multiplying relative VO2max ($mL \cdot kg^{-1} \cdot min^{-1}$) by body weight (kg).
+Absolute VO2max is calculated by multiplying relative VO2max ($mL \cdot kg^{-1} \cdot min^{-1}$) by body mass (kg).
 
 ```{r, fig.height=3}
 # Plot points
@@ -387,11 +389,11 @@ There is a large outlying value in the 6M 2W male group. It is the largest value
 
 ```{r}
 filter(VO2MAX, age == "6M") %>% 
-  ggplot(aes(x = pre_weight, y = pre_vo2max_ml_min)) +
+  ggplot(aes(x = pre_body_mass, y = pre_vo2max_ml_min)) +
   geom_point(na.rm = TRUE, alpha = 0.5)
 ```
 
-That outlier has one of the highest weights, though it is not unusual. We will determine the mean–variance relationship.
+That outlier has one of the highest body masses, though it is not unusual. We will determine the mean–variance relationship.
 
 ```{r}
 mv <- VO2MAX %>% 
@@ -546,13 +548,13 @@ print.data.frame(head(speed_res))
 
 
 
-# Comparisons
+# Hypothesis Testing
 
 We will compare the means of each trained timepoint to those of their sex-matched sedentary controls within each age group using the Dunnett test. Only maximum run speed and the VO$_2$max measures will not use the Dunnett test. The former because it uses the nonparametric Wilcoxon Rank Sum test, and the latter because we concatenated age and group, so we will need to manually set up the correct contrasts.
 
 ```{r}
 # We will include the maximum run speed test results at the end
-model_list <- list("NMR Weight" = fit.weight,
+model_list <- list("NMR Body Mass" = fit.body_mass,
                    "NMR Lean Mass" = fit.lean,
                    "NMR Fat Mass" = fit.fat,
                    "NMR % Lean" = fit.lean_pct,

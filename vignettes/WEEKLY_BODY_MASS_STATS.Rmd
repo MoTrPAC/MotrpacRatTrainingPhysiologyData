@@ -1,0 +1,228 @@
+---
+title: "Statistical analysis of weekly body mass"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Statistical analysis of weekly body mass}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 3.5,
+  message = FALSE,
+  warning = FALSE, 
+  dpi = 400
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(dplyr)
+library(ggplot2)
+library(nlme)
+library(emmeans)
+library(latex2exp)
+theme_set(theme_bw()) # base plot theme
+```
+
+```{r}
+f1 <- function(model) {
+  standard_resid <- resid(model, type = "pearson", scaled=TRUE)
+  # par(mfrow = c(1, 2))
+  layout(matrix(1:2, nrow = 1))
+  plot(standard_resid ~ fitted(model),
+       xlab = "Fitted Values", ylab = "Standardized Pearson Residuals",
+       main = "Residuals vs. Fitted")
+  lines(loess.smooth(x = fitted(model),
+                     y = standard_resid, degree = 2),
+        col = "red", lwd = 2)
+  
+  qqnorm(standard_resid); qqline(standard_resid)
+  # par(mfrow = c(1, 1))
+  layout(matrix(1))
+}
+```
+
+
+# Overview
+
+For each rat in the SED, 1W, 4W, and 8W groups, body mass was measured at the start of weeks 1 through 7. That is, the measurement at week 1 was before the training protocol began, and the measurement at week 2 was after rats had been placed on the treadmills at a speed of 0 m/min for 15 min/day for 5 consecutive days (SED) or at a speed and duration determined by the training protocol for 5 consecutive days (1W, 2W, 4W, 8W). Therefore, we can reasonably assume that factors other than whether the rats received the training intervention were the same from week to week. This allows us to compare 8W-trained to SED animals at each week, which are the only two groups that we will focus on in this vignette.
+
+Since we are dealing with longitudinal data (each rat has a total of 8 measurements taken across time), we need to account for the lack of independence in the residuals for each rat. It is reasonable to assume that the body mass of a rat at any given week is influenced by the mass of the same rat at the previous week. That is, we do not expect a rat to weigh 400 grams if it only weighed 300 grams the previous week. Moreover, the body mass of any given rat does not influence the mass of another rat. This correlation structure corresponds to an auto-regressive process of order 1 (AR1) for each rat. We will use the `nlme::gls` function to fit a generalized least squares (GLS) model with this correlation structure.
+
+**Note:** While we create plots for weekly measures of blood lactate in the "Plots of weekly total body mass and blood lactate" article, we do not perform any statistical analyses of lactate.
+
+We will begin by modifying the data. Since we are only analyzing the body mass data, we will remove any rows with missing body masses. Also, since measures were made prior to the start of the week, we will subtract 1 from week to convert it to the number of weeks since the protocol began. For me, at least, this is easier to understand. This shift will only affect the week labels in the plots. We also create a categorical version of week (`fweek`) to be used in the GLS model formula, while the numeric version (`week`) is used to specify the correlation structure, since we need to preserve the order in the longitudinal data (this is lost in the categorical version of week).
+
+```{r}
+df <- WEEKLY_MEASURES %>% 
+  filter(group %in% c("SED", "8W"), !is.na(body_mass)) %>% 
+  droplevels.data.frame() %>% 
+  mutate(fweek = factor(week, levels = 1:8))
+print.data.frame(head(df))
+```
+
+```{r}
+ggplot(df, aes(x = week, y = body_mass)) + 
+  geom_line(aes(group = pid)) +
+  facet_grid(sex ~ age + group, scales = "free_y")
+```
+
+While individual variation is apparent, there appear to be overall trends in the different panels.
+
+
+# Regression Models
+
+We will now fit a GLS model with all main effects and interactions, though without the group weights to start. Since body_mass is strictly positive, and positive continuous data typically exhibits an increasing mean--variance relationship, we will apply a log transformation. We will need to ensure we back-transform the predictions for plotting later on.
+
+```{r}
+m1 <- gls(log(body_mass) ~ (age + sex + group + fweek) ^ 4,
+          data = df,
+          correlation = corAR1(form = ~ 1 | pid),
+          method = "ML")
+f1(m1)
+```
+
+The residuals vs. fitted plot and QQ-plot look fine. We will check for heteroscedasticity with boxplots of residuals vs. predictors.
+
+```{r}
+r <- resid(m1, type = "pearson", scaled = TRUE)
+
+par(mfrow = c(2, 2), mar = c(3, 3, 1.5, 0.5), mgp = c(2, 1, 0))
+boxplot(r ~ age, data = df, ylab = "")
+boxplot(r ~ sex, data = df, ylab = "")
+boxplot(r ~ group, data = df, ylab = "")
+boxplot(r ~ week, data = df, ylab = "")
+mtext("Standardized Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Residuals vs. Predictors", outer = TRUE, line = -1)
+par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
+```
+
+There appears to be differences in variability between the two age groups, with 18M animals being less variable. We will account for this in the model.
+
+```{r}
+m2 <- update(m1, weights = varIdent(form = ~ 1 | age))
+f1(m2)
+```
+
+The diagnostic plots appear almost identical. We will examine the boxplots again.
+
+```{r}
+r2 <- resid(m2, type = "pearson", scaled = TRUE)
+
+par(mfrow = c(2, 2), mar = c(3, 3, 1.5, 0.5), mgp = c(2, 1, 0))
+boxplot(r2 ~ age, data = df, ylab = "")
+boxplot(r2 ~ sex, data = df, ylab = "")
+boxplot(r2 ~ group, data = df, ylab = "")
+boxplot(r2 ~ week, data = df, ylab = "")
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Residuals vs. Predictors", outer = TRUE, line = -1)
+par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
+```
+
+The plots do not appear to change. We will compare the models.
+
+```{r}
+AIC(m1, m2)
+```
+
+Even though the AIC is marginally higher, we will use the model without weights, since their inclusion seems to have little effect on the results. Now, we will try to simplify the model formula.
+
+```{r}
+anova(m1)
+```
+
+While the `sex:group` interaction is not significant at the 0.05 level, the `sex:group:fweek` interaction is significant, so we need to retain all lower-order terms.
+
+```{r}
+m3 <- update(m1, model = . ~ . - age:sex:group -
+               age:group:week - age:sex:group:week)
+anova(m1, m3)
+```
+
+There is no difference between the models, so we will use the simpler one.
+
+```{r}
+m3 <- update(m3, method = "REML")
+f1(m3)
+```
+
+The diagnostic plots still look fine.
+
+```{r}
+# Calculate mean body_mass for each combination of factors
+df_pred <- df %>%
+  select(age, sex, group, fweek, week) %>%
+  distinct() %>%
+  arrange(age, sex, group, fweek) %>% 
+  mutate(body_mass_pred = exp(predict(object = m3, newdata = .)))
+
+ggplot(df, aes(x = week, y = body_mass)) +
+  geom_line(aes(group = pid)) +
+  facet_grid(sex ~ age + group, scales = "free_y") +
+  geom_line(aes(x = week, y = body_mass_pred),
+            data = df_pred, color = "red3",
+            linewidth = 1.2) +
+  labs(x = "Weeks Since Protocol Began") +
+  theme_bw()
+```
+
+```{r}
+summary(m3)
+```
+
+
+# Hypothesis Testing
+
+At each week, for each combination of age and sex, we will test whether the mean of the 8W group is different from the mean of the SED group. P-values will be Holm-adjusted across weeks within each combination of age and sex.
+
+```{r}
+WEEKLY_BODY_MASS_EMM <- emmeans(m3, specs = "group",
+                             by = c("age", "sex", "fweek"),
+                             mode = "df.error")
+
+WEEKLY_BODY_MASS_STATS <- WEEKLY_BODY_MASS_EMM %>% 
+  contrast(method = "trt.vs.ctrl",
+           infer = TRUE, type = "response") %>% 
+  as.data.frame() %>%
+  dplyr::rename(week = fweek) %>% 
+  arrange(sex, week, age) %>%
+  group_by(age, sex) %>%
+  mutate(p.adj = p.adjust(p.value, method = "holm"),
+         signif = ifelse(p.adj < 0.05, "*", ""),
+         response = "Weekly Body Mass") %>% 
+  relocate(response, .before = everything()) %>%
+  ungroup()
+```
+
+See `?WEEKLY_BODY_MASS_STATS` for details.
+
+```{r}
+print.data.frame(head(WEEKLY_BODY_MASS_STATS))
+```
+
+```{r, eval=FALSE, include=FALSE}
+# Save data
+usethis::use_data(WEEKLY_BODY_MASS_STATS, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+
+usethis::use_data(WEEKLY_BODY_MASS_EMM, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+```
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+

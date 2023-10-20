@@ -1,7 +1,9 @@
 ---
 title: "Plots of tissue dissection times"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
-  rmarkdown::html_vignette:
+  rmarkdown::html_document:
     toc: true
     toc_depth: 2
 ---
@@ -54,14 +56,17 @@ plot_dissection_times <- function(x, ymax = 12) {
     coord_cartesian(ylim = c(0, ymax * 60)) +
     # light blue for tissues collected under anesthesia, grey for tissues
     # collected post-mortem
-    scale_color_manual(values = c("#89CFF0", "grey50")) +
-    theme_minimal(base_size = 6.5) +
-    theme(axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1),
+    scale_color_manual(values = c("#89CFF0", "grey50"),
+                       labels = c("Under Anesthesia", "Post-Mortem")) +
+    theme_minimal(base_size = 7, base_line_size = 0.3) +
+    theme(axis.text = element_text(size = 7, color = "black"),
+          axis.text.x = element_text(angle = 60, hjust = 1, vjust = 1),
+          axis.title = element_text(size = 7.5, color = "black"),
+          legend.position = "none",
           panel.grid.minor = element_blank(),
           panel.grid.major.y = element_blank(),
           axis.line = element_line(color = "black"),
-          axis.ticks = element_line(color = "black"),
-          legend.position = "none")
+          axis.ticks = element_line(color = "black"))
   
   return(p)
 }
@@ -74,12 +79,12 @@ foo <- DISSECTION_TIMES %>%
   arrange(age, sex) %>% 
   mutate(ymax = c(12, 16, 10, 10),
          plots = map2(.x = data, .y = ymax, .f = plot_dissection_times)) %>% 
-  mutate(file_name = sprintf("../../plots/dissection_times_%s_%s.png", 
+  mutate(file_name = sprintf("../../plots/dissection_times_%s_%s.pdf", 
                              age, tolower(sex)))
 
 map2(.x = foo$file_name, .y = foo$plots, 
      .f = ~ ggsave(filename = .x, plot = .y, 
-                   height = 2, width = 3.4, dpi = 400, bg = "white"))
+                   height = 2, width = 3.1, family = "ArialMT"))
 ```
 
 

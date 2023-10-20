@@ -32,92 +32,92 @@ library(latex2exp)
 ```
 
 
-# NMR Weight {.tabset}
+# NMR Body Mass
 
 ## 6M Female
 
 ```{r}
-# 6M Female NMR Weight
+# 6M Female NMR Body Mass
 plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"), 
-              pre = "pre_weight", post = "post_weight", 
-              stats = filter(PRE_POST_STATS, response == "NMR Weight", 
+              pre = "pre_body_mass", post = "post_body_mass", 
+              stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
                              age == "6M", sex == "Female"),
               scale = 1.15) +
-  scale_y_continuous(name = "NMR Body Mass (g)",
+  scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(160, 240, 20),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(157, 240), clip = "off")
 
-ggsave("../../plots/NMR_weight_6M_female.png", 
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_body_mass_6M_female.pdf", 
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 6M Male
 
 ```{r}
-# 6M Male NMR Weight
+# 6M Male NMR Body Mass
 plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"), 
-              pre = "pre_weight", post = "post_weight", 
-              stats = filter(PRE_POST_STATS, response == "NMR Weight", 
+              pre = "pre_body_mass", post = "post_body_mass", 
+              stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
                              age == "6M", sex == "Male"),
               scale = 1.15) +
-  scale_y_continuous(name = "NMR Body Mass (g)",
+  scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(260, 400, 40),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(260, 405), clip = "off")
 
-ggsave("../../plots/NMR_weight_6M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_body_mass_6M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Female
 
 ```{r}
-# 18M Female NMR Weight
+# 18M Female NMR Body Mass
 plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"), 
-              pre = "pre_weight", post = "post_weight", 
-              stats = filter(PRE_POST_STATS, response == "NMR Weight", 
+              pre = "pre_body_mass", post = "post_body_mass", 
+              stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
                              age == "18M", sex == "Female"),
               scale = 1.15) +
-  scale_y_continuous(name = "NMR Body Mass (g)",
+  scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(200, 280, 20),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(200, 280), clip = "off")
 
-ggsave("../../plots/NMR_weight_18M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_body_mass_18M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Male
 
 ```{r}
-# 18M Male NMR Weight
+# 18M Male NMR Body Mass
 plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"), 
-              pre = "pre_weight", post = "post_weight", 
-              stats = filter(PRE_POST_STATS, response == "NMR Weight", 
+              pre = "pre_body_mass", post = "post_body_mass", 
+              stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
                              age == "18M", sex == "Male"),
               scale = 1.15) +
-  scale_y_continuous(name = "NMR Body Mass (g)",
+  scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(360, 460, 20),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(356, 475), clip = "off")
 
-ggsave("../../plots/NMR_weight_18M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_body_mass_18M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 
-# 1W, 2W: Terminal - Pre NMR Weight {.tabset}
+# 1W, 2W: Terminal - Pre NMR Body Mass
 
 ## 6M Female
 
 ```{r, fig.width=1.8}
-# 6M Female terminal - NMR Weight
-plot_pre_post(x = filter(WEIGHTS, age == "6M", sex == "Female",
+# 6M Female terminal - NMR Body Mass
+plot_pre_post(x = filter(BODY_MASSES, age == "6M", sex == "Female",
                          group %in% c("1W", "2W")), 
-              pre = "nmr_pre_weight", post = "term_weight", 
+              pre = "nmr_pre_body_mass", post = "term_body_mass", 
               stats = filter(PRE_POST_STATS, 
-                             response == "Term - NMR Pre Weight", 
+                             response == "Term - NMR Pre Body Mass", 
                              age == "6M", sex == "Female"),
               scale = 1.15) +
   scale_y_continuous(name = "Body Mass (g)",
@@ -125,19 +125,19 @@ plot_pre_post(x = filter(WEIGHTS, age == "6M", sex == "Female",
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(170, 210), clip = "off")
 
-ggsave("../../plots/terminal_NMR_weight_6M_female.png",
-       height = 1.6, width = 1.8, dpi = 400)
+ggsave("../../plots/terminal_NMR_body_mass_6M_female.pdf",
+       height = 1.6, width = 1.8, family = "ArialMT")
 ```
 
 ## 6M Male
 
 ```{r, fig.width=1.8}
-# 6M Male terminal - NMR Weight
-plot_pre_post(x = filter(WEIGHTS, age == "6M", sex == "Male",
+# 6M Male terminal - NMR Body Mass
+plot_pre_post(x = filter(BODY_MASSES, age == "6M", sex == "Male",
                          group %in% c("1W", "2W")), 
-              pre = "nmr_pre_weight", post = "term_weight", 
+              pre = "nmr_pre_body_mass", post = "term_body_mass", 
               stats = filter(PRE_POST_STATS, 
-                             response == "Term - NMR Pre Weight", 
+                             response == "Term - NMR Pre Body Mass", 
                              age == "6M", sex == "Male"),
               scale = 1.15) +
   scale_y_continuous(name = "Body Mass (g)",
@@ -145,19 +145,19 @@ plot_pre_post(x = filter(WEIGHTS, age == "6M", sex == "Male",
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(295, 440), clip = "off")
 
-ggsave("../../plots/terminal_NMR_weight_6M_male.png",
-       height = 1.6, width = 1.8, dpi = 400)
+ggsave("../../plots/terminal_NMR_body_mass_6M_male.pdf",
+       height = 1.6, width = 1.8, family = "ArialMT")
 ```
 
 ## 18M Female
 
 ```{r, fig.width=1.8}
-# 18M Female terminal - NMR Weight
-plot_pre_post(x = filter(WEIGHTS, age == "18M", sex == "Female",
+# 18M Female terminal - NMR Body Mass
+plot_pre_post(x = filter(BODY_MASSES, age == "18M", sex == "Female",
                          group %in% c("1W", "2W")), 
-              pre = "nmr_pre_weight", post = "term_weight", 
+              pre = "nmr_pre_body_mass", post = "term_body_mass", 
               stats = filter(PRE_POST_STATS, 
-                             response == "Term - NMR Pre Weight", 
+                             response == "Term - NMR Pre Body Mass", 
                              age == "18M", sex == "Female"),
               scale = 1.15) +
   scale_y_continuous(name = "Body Mass (g)",
@@ -165,19 +165,19 @@ plot_pre_post(x = filter(WEIGHTS, age == "18M", sex == "Female",
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(194, 274), clip = "off")
 
-ggsave("../../plots/terminal_NMR_weight_18M_female.png",
-       height = 1.6, width = 1.8, dpi = 400)
+ggsave("../../plots/terminal_NMR_body_mass_18M_female.pdf",
+       height = 1.6, width = 1.8, family = "ArialMT")
 ```
 
 ## 18M Male
 
 ```{r, fig.width=1.8}
-# 18M Male terminal - NMR Weight
-plot_pre_post(x = filter(WEIGHTS, age == "18M", sex == "Male",
+# 18M Male terminal - NMR Body Mass
+plot_pre_post(x = filter(BODY_MASSES, age == "18M", sex == "Male",
                          group %in% c("1W", "2W")), 
-              pre = "nmr_pre_weight", post = "term_weight", 
+              pre = "nmr_pre_body_mass", post = "term_body_mass", 
               stats = filter(PRE_POST_STATS, 
-                             response == "Term - NMR Pre Weight", 
+                             response == "Term - NMR Pre Body Mass", 
                              age == "18M", sex == "Male"),
               scale = 1.15) +
   scale_y_continuous(name = "Body Mass (g)",
@@ -185,13 +185,13 @@ plot_pre_post(x = filter(WEIGHTS, age == "18M", sex == "Male",
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(355, 472), clip = "off")
 
-ggsave("../../plots/terminal_NMR_weight_18M_male.png",
-       height = 1.6, width = 1.8, dpi = 400)
+ggsave("../../plots/terminal_NMR_body_mass_18M_male.pdf",
+       height = 1.6, width = 1.8, family = "ArialMT")
 ```
 
 
 
-# NMR Fat {.tabset}
+# NMR Fat
 
 ## 6M Female
 
@@ -207,8 +207,8 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(10, 37), clip = "off")
 
-ggsave("../../plots/NMR_fat_6M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_fat_6M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 
@@ -226,8 +226,8 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(18, 80), clip = "off")
 
-ggsave("../../plots/NMR_fat_6M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_fat_6M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -244,8 +244,8 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(28, 64), clip = "off")
 
-ggsave("../../plots/NMR_fat_18M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_fat_18M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -262,12 +262,12 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(40, 105), clip = "off")
 
-ggsave("../../plots/NMR_fat_18M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_fat_18M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 
-# NMR Lean {.tabset}
+# NMR Lean
 
 ## 6M Female
 
@@ -283,8 +283,8 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(90, 135), clip = "off")
 
-ggsave("../../plots/NMR_lean_6M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_lean_6M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -298,8 +298,8 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
               scale = 1.15) +
   scale_y_continuous(name = "NMR Lean Mass (g)")
 
-ggsave("../../plots/NMR_lean_6M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_lean_6M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -313,8 +313,8 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
               scale = 1.15) +
   scale_y_continuous(name = "NMR Lean Mass (g)")
 
-ggsave("../../plots/NMR_lean_18M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_lean_18M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -328,12 +328,12 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
               scale = 1.15) +
   scale_y_continuous(name = "NMR Lean Mass (g)")
 
-ggsave("../../plots/NMR_lean_18M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_lean_18M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 
-# NMR % Fat {.tabset}
+# NMR % Fat
 
 ## 6M Female
 
@@ -349,8 +349,8 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(6, 18), clip = "off")
 
-ggsave("../../plots/NMR_pct_fat_6M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_pct_fat_6M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -367,8 +367,8 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(6, 20.5), clip = "off")
 
-ggsave("../../plots/NMR_pct_fat_6M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_pct_fat_6M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -385,8 +385,8 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(13.7, 24), clip = "off")
 
-ggsave("../../plots/NMR_pct_fat_18M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_pct_fat_18M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -403,12 +403,12 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(11.5, 22.2), clip = "off")
 
-ggsave("../../plots/NMR_pct_fat_18M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_pct_fat_18M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 
-# NMR % Lean {.tabset}
+# NMR % Lean
 
 ## 6M Female
 
@@ -424,8 +424,8 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(51.9, 64), clip = "off")
 
-ggsave("../../plots/NMR_pct_lean_6M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_pct_lean_6M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -442,8 +442,8 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(52, 64), clip = "off")
 
-ggsave("../../plots/NMR_pct_lean_6M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_pct_lean_6M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -460,8 +460,8 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(50, 60), clip = "off")
 
-ggsave("../../plots/NMR_pct_lean_18M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_pct_lean_18M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -479,13 +479,13 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
                      labels = seq(50, 57, 1)) +
   coord_cartesian(ylim = c(49.5, 57), clip = "off")
 
-ggsave("../../plots/NMR_pct_lean_18M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/NMR_pct_lean_18M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 
 
-# Absolute VO2max {.tabset}
+# Absolute VO2max
 
 ## 6M Female
 
@@ -502,8 +502,8 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(10, 18), clip = "off")
 
-ggsave("../../plots/absolute_VO2max_6M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/absolute_VO2max_6M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -521,8 +521,8 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Male"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(17.8, 27), clip = "off")
 
-ggsave("../../plots/absolute_VO2max_6M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/absolute_VO2max_6M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -540,8 +540,8 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Female"),
         legend.direction = "vertical",
         legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
 
-ggsave("../../plots/absolute_VO2max_18M_female.png",
-       height = 1.4, width = 2.1, dpi = 400)
+ggsave("../../plots/absolute_VO2max_18M_female.pdf",
+       height = 1.4, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -562,12 +562,12 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Male"),
         legend.direction = "vertical",
         legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
 
-ggsave("../../plots/absolute_VO2max_18M_male.png",
-       height = 1.4, width = 2.1, dpi = 400)
+ggsave("../../plots/absolute_VO2max_18M_male.pdf",
+       height = 1.4, width = 2.1, family = "ArialMT")
 ```
 
 
-# Relative VO2max {.tabset}
+# Relative VO2max
 
 ## 6M Female
 
@@ -584,8 +584,8 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Female"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(60, 91), clip = "off")
 
-ggsave("../../plots/relative_VO2max_6M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/relative_VO2max_6M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -603,8 +603,8 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Male"),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(50, 85), clip = "off")
 
-ggsave("../../plots/relative_VO2max_6M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/relative_VO2max_6M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -622,8 +622,8 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Female"),
         legend.direction = "vertical",
         legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
 
-ggsave("../../plots/relative_VO2max_18M_female.png",
-       height = 1.4, width = 2.1, dpi = 400)
+ggsave("../../plots/relative_VO2max_18M_female.pdf",
+       height = 1.4, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -644,12 +644,12 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Male"),
         legend.direction = "vertical",
         legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
 
-ggsave("../../plots/relative_VO2max_18M_male.png",
-       height = 1.4, width = 2.1, dpi = 400)
+ggsave("../../plots/relative_VO2max_18M_male.pdf",
+       height = 1.4, width = 2.1, family = "ArialMT")
 ```
 
 
-# Maximum Run Speed {.tabset}
+# Maximum Run Speed
 
 ## 6M Female
 
@@ -663,8 +663,8 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Female"),
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
                      breaks = seq(21.6, 36, 3.6))
 
-ggsave("../../plots/max_run_speed_6M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/max_run_speed_6M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 
@@ -680,8 +680,8 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Male"),
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
                      breaks = seq(18, 36, 3.6))
 
-ggsave("../../plots/max_run_speed_6M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/max_run_speed_6M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -696,8 +696,8 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Female"),
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
                      breaks = seq(16.2, 36, 3.6))
 
-ggsave("../../plots/max_run_speed_18M_female.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/max_run_speed_18M_female.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -712,8 +712,8 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Male"),
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
                      breaks = seq(12.6, 36, 3.6))
 
-ggsave("../../plots/max_run_speed_18M_male.png",
-       height = 1.6, width = 2.1, dpi = 400)
+ggsave("../../plots/max_run_speed_18M_male.pdf",
+       height = 1.6, width = 2.1, family = "ArialMT")
 ```
 
 

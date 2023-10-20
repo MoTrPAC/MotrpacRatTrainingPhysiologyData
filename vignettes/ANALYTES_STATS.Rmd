@@ -629,7 +629,7 @@ summary(fit.nefa)
 ```
 
 
-# Comparisons
+# Hypothesis Testing
 
 We will compare the means of each trained timepoint to those of their sex-matched sedentary controls within each age group using the Dunnett test. If the response had been transformed, tests and interpretation will be done on the transformed scale to avoid introducing bias when back-transforming.
 
@@ -677,7 +677,7 @@ model_df <- model_list %>%
 # Results
 ANALYTES_STATS <- ANALYTES_EMM %>% 
   map(function(emm_i) {
-    contrast(emm_i, method = "dunnett") %>% 
+    contrast(emm_i, method = "trt.vs.ctrl") %>% 
       summary(infer = TRUE) %>% 
       as.data.frame() %>% 
       rename(any_of(c(lower.CL = "asymp.LCL",

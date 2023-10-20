@@ -43,14 +43,16 @@ theme_set(theme_bw()) # base plot theme
 We will fit linear regression models with age, sex, group, and their interactions as predictors of the differences between post- and pre-training values for different measures of body composition and VO$_2$max. If heteroscedasticity is observed, we will include reciprocal group variances as weights. Certain observations may be removed if their inclusion substantially affects the model fit. Model parsimony will be achieved through ANOVA F-tests.
 
 
-## NMR Weight
+## Body Mass (NMR Day)
+
+Body mass recorded on the same day as the NMR body composition measures.
 
 ```{r, fig.height=3}
 # Plot points
 NMR %>% 
-  filter(!is.na(post_weight)) %>% 
+  filter(!is.na(post_body_mass)) %>% 
   droplevels.data.frame() %>% 
-  ggplot(aes(x = group, y = post_weight - pre_weight)) +
+  ggplot(aes(x = group, y = post_body_mass - pre_body_mass)) +
   geom_point(position = position_jitter(width = 0.15, height = 0),
              na.rm = TRUE, alpha = 0.5) +
   facet_wrap(~ sex + age, nrow = 1) +
@@ -61,42 +63,42 @@ NMR %>%
 There is one negative outlying value in the 6M SED male group that may affect the model fit. We will start with a WLS model, since we observe different group variances.
 
 ```{r}
-wt.weight <- NMR %>% 
+wt.body_mass <- NMR %>% 
   group_by(age, sex, group) %>% 
-  mutate(1 / var(post_weight - pre_weight, na.rm = TRUE)) %>% 
+  mutate(1 / var(post_body_mass - pre_body_mass, na.rm = TRUE)) %>% 
   pull(-1)
 
-fit.weight <- lm(I(post_weight - pre_weight) ~ age * sex * group,
-                 weights = wt.weight,
-                 data = NMR)
-plot_lm(fit.weight)
+fit.body_mass <- lm(I(post_body_mass - pre_body_mass) ~ age * sex * group,
+                    weights = wt.body_mass,
+                    data = NMR)
+plot_lm(fit.body_mass)
 ```
 
 The diagnostic plots appear fine. We will try to simplify the model.
 
 ```{r}
-anova(fit.weight, test = "F")
+anova(fit.body_mass, test = "F")
 ```
 
 The 3-way interaction is not significant, so we will remove it.
 
 ```{r}
-fit.weight <- update(fit.weight, formula = . ~ . - age:sex:group)
-plot_lm(fit.weight)
+fit.body_mass <- update(fit.body_mass, formula = . ~ . - age:sex:group)
+plot_lm(fit.body_mass)
 ```
 
 ```{r}
-summary(fit.weight)
+summary(fit.body_mass)
 ```
 
 
-## 1W, 2W: Terminal - Pre NMR Weight
+## 1W, 2W: Terminal - Pre NMR Body Mass
 
 ```{r, fig.height=3}
-term_nmr_df <- WEIGHTS %>% 
+term_nmr_df <- BODY_MASSES %>% 
   filter(group %in% c("1W", "2W")) %>% 
-  select(pid, iowa_id, age, sex, group, term_weight, nmr_pre_weight) %>% 
-  mutate(diff = term_weight - nmr_pre_weight) %>% 
+  select(pid, iowa_id, age, sex, group, term_body_mass, nmr_pre_body_mass) %>% 
+  mutate(diff = term_body_mass - nmr_pre_body_mass) %>% 
   na.omit()
 
 # Plot points
@@ -104,7 +106,7 @@ p_term <- ggplot(term_nmr_df, aes(x = group, y = diff)) +
   geom_point(position = position_jitter(width = 0.15, height = 0),
              alpha = 0.5) +
   facet_grid(~ sex + age) +
-  labs(y = "terminal - NMR weight (pre)") +
+  labs(y = "terminal - NMR body mass (pre)") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 
 p_term
@@ -113,7 +115,7 @@ p_term
 There is an extreme observation in both 6M Male groups.
 
 ```{r, fig.height=3, fig.width=4}
-ggplot(term_nmr_df, aes(x = nmr_pre_weight, y = term_weight)) +
+ggplot(term_nmr_df, aes(x = nmr_pre_body_mass, y = term_body_mass)) +
   geom_point(na.rm = TRUE, alpha = 0.5) +
   stat_smooth(method = "lm", formula = y ~ x, se = FALSE, na.rm = TRUE)
 ```
@@ -132,13 +134,13 @@ Nearly every group has at least one outlying sample, and the groups have differe
 out.term_nmr <- which(term_nmr_df$diff < -50) # 58
 
 wt.term_nmr <- term_nmr_df %>%
-  mutate(term_weight = ifelse(1:n() %in% out.term_nmr, 
-                              NA, term_weight)) %>% 
+  mutate(term_body_mass = ifelse(1:n() %in% out.term_nmr, 
+                                 NA, term_body_mass)) %>% 
   group_by(age, sex, group) %>% 
-  mutate(1 / var(term_weight - nmr_pre_weight, na.rm = TRUE)) %>% 
+  mutate(1 / var(term_body_mass - nmr_pre_body_mass, na.rm = TRUE)) %>% 
   pull(-1)
 
-fit.term_nmr <- lm(I(term_weight - nmr_pre_weight) ~ age * sex * group,
+fit.term_nmr <- lm(I(term_body_mass - nmr_pre_body_mass) ~ age * sex * group,
                    weights = wt.term_nmr,
                    subset = -out.term_nmr,
                    data = term_nmr_df)
@@ -556,14 +558,14 @@ speed_res <- VO2MAX %>%
 
 
 
-# Comparisons
+# Hypothesis Testing
 
 We will test if group means are different from 0 and adjust p-values using the Holm procedure within each combination of sex and age.
 
 ```{r}
 # We will include the maximum run speed test results at the end
-model_list <- list("NMR Weight" = fit.weight,
-                   "Term - NMR Pre Weight" = fit.term_nmr,
+model_list <- list("NMR Body Mass" = fit.body_mass,
+                   "Term - NMR Pre Body Mass" = fit.term_nmr,
                    "NMR Lean Mass" = fit.lean,
                    "NMR Fat Mass" = fit.fat,
                    "NMR % Lean" = fit.lean_pct,
@@ -586,7 +588,7 @@ model_df <- model_list %>%
                           "reciprocal group variances", NA)) %>% 
   dplyr::select(-model) %>% 
   mutate(obs_removed = case_when(
-    response == "Term - NMR Pre Weight" ~ NMR$iowa_id[58],
+    response == "Term - NMR Pre Body Mass" ~ NMR$iowa_id[58],
     response == "NMR % Fat" ~ paste(NMR$iowa_id[c(136, 138, 218)],
                                     collapse = ", ")
   ))

@@ -1,5 +1,5 @@
 ---
-title: "Plots of weekly total body mass and blood lactate"
+title: "Plots of weekly body mass and blood lactate"
 author: Tyler Sagendorf
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -30,51 +30,27 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(emmeans)
+library(latex2exp)
 ```
 
 
-# Body Weight {.tabset}
+# Weekly Body Mass
 
-Body weight was measured at the start of each week prior to training.
-
-```{r include=FALSE, eval=FALSE, echo=FALSE}
-# WEEKLY_MEASURES %>% 
-#   filter(age == "6M", group == "SED", omics_analysis) %>% 
-#   ggplot(aes(x = as.factor(week), y = weight)) + 
-#   geom_line(aes(group = pid), lty = "dashed", linewidth = 0.3, alpha = 0.7) +
-#   geom_point(na.rm = TRUE, size = 1.5, shape = 16, aes(color = sex),
-#              position = ggbeeswarm::position_beeswarm(cex = 2, 
-#                                                       dodge.width = 0.1)) +
-#   scale_color_manual(values = c("#ff6eff", "#5555ff"),
-#                      breaks = c("Female", "Male")) +
-#   guides(color = guide_none()) +
-#   facet_wrap(~ sex, scales = "free", ncol = 1, strip.position = "right") +
-#   labs(x = "Week", 
-#        y = "Body Mass (g)") +
-#   theme_bw() +
-#   theme(strip.background = element_blank(),
-#         axis.ticks.x = element_blank(),
-#         panel.grid.major.x = element_blank())
-# 
-# ggsave("../../plots/6M_SED_weekly_body_weight_omics.png", 
-#        height = 3, width = 5, dpi = 400, bg = "white")
-```
-
+Body mass (g) was measured at the start of each week prior to training.
 
 ## 6M Female
 
 ```{r}
-WEEKLY_WEIGHT_EMM %>% 
+WEEKLY_BODY_MASS_EMM %>% 
+  summary(type = "response", infer = TRUE) %>% 
+  as.data.frame() %>% 
+  dplyr::rename(week = fweek, 
+                response_mean = response) %>% 
   filter(age == "6M", sex == "Female") %>% 
-  ggplot(aes(x = week, y = y)) +
-  geom_crossbar(aes(ymin = ymin, ymax = ymax),
+  ggplot(aes(x = week, y = response_mean)) +
+  geom_crossbar(aes(ymin = lower.CL, ymax = upper.CL),
                 fatten = 1, color = "#ff6eff", 
                 width = 0.7, linewidth = 0.4) +
-  geom_text(data = left_join(WEEKLY_WEIGHT_STATS, WEEKLY_WEIGHT_EMM, 
-                             by = c("age", "sex", "group", "week")) %>% 
-              filter(age == "6M", sex == "Female"), 
-            aes(x = week, y = ymax, label = signif),
-            size = 3, vjust = 0) +
   facet_grid(~ group) +
   scale_y_continuous(name = "Body Mass (g)",
                      expand = expansion(mult = 5e-3),
@@ -92,24 +68,23 @@ WEEKLY_WEIGHT_EMM %>%
         panel.spacing = unit(-1, "pt"),
         panel.grid = element_blank())
 
-ggsave("../../plots/weekly_body_mass_6M_female.png",
-       height = 1.7, width = 3.8, dpi = 400)
+ggsave("../../plots/weekly_body_mass_6M_female.pdf",
+       height = 1.7, width = 3.8, family = "ArialMT")
 ```
 
 ## 6M Male
 
 ```{r}
-WEEKLY_WEIGHT_EMM %>% 
+WEEKLY_BODY_MASS_EMM %>% 
+  summary(type = "response", infer = TRUE) %>% 
+  as.data.frame() %>% 
   filter(age == "6M", sex == "Male") %>% 
-  ggplot(aes(x = week, y = y)) +
-  geom_crossbar(aes(ymin = ymin, ymax = ymax),
+  dplyr::rename(week = fweek,
+                response_mean = response) %>% 
+  ggplot(aes(x = week, y = response_mean)) +
+  geom_crossbar(aes(ymin = lower.CL, ymax = upper.CL),
                 fatten = 1, color = "#5555ff", 
                 width = 0.7, linewidth = 0.4) +
-  geom_text(data = left_join(WEEKLY_WEIGHT_STATS, WEEKLY_WEIGHT_EMM, 
-                             by = c("age", "sex", "group", "week")) %>% 
-              filter(age == "6M", sex == "Male"), 
-            aes(x = week, y = ymax, label = signif),
-            size = 3, vjust = 0) +
   facet_grid(~ group) +
   scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(300, 370, 10),
@@ -127,24 +102,23 @@ WEEKLY_WEIGHT_EMM %>%
         panel.spacing = unit(-1, "pt"),
         panel.grid = element_blank())
 
-ggsave("../../plots/weekly_body_mass_6M_male.png",
-       height = 1.7, width = 3.8, dpi = 400)
+ggsave("../../plots/weekly_body_mass_6M_male.pdf",
+       height = 1.7, width = 3.8, family = "ArialMT")
 ```
 
 ## 18M Female
 
 ```{r}
-WEEKLY_WEIGHT_EMM %>% 
+WEEKLY_BODY_MASS_EMM %>% 
+  summary(type = "response", infer = TRUE) %>% 
+  as.data.frame() %>% 
   filter(age == "18M", sex == "Female") %>% 
-  ggplot(aes(x = week, y = y)) +
-  geom_crossbar(aes(ymin = ymin, ymax = ymax),
+  dplyr::rename(week = fweek,
+                response_mean = response) %>% 
+  ggplot(aes(x = week, y = response_mean)) +
+  geom_crossbar(aes(ymin = lower.CL, ymax = upper.CL),
                 fatten = 1, color = "#ff6eff", 
                 width = 0.7, linewidth = 0.4) +
-  geom_text(data = left_join(WEEKLY_WEIGHT_STATS, WEEKLY_WEIGHT_EMM, 
-                             by = c("age", "sex", "group", "week")) %>% 
-              filter(age == "18M", sex == "Female"), 
-            aes(x = week, y = ymax, label = signif),
-            size = 3, vjust = 0) +
   facet_grid(~ group) +
   scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(220, 250, 10),
@@ -162,24 +136,23 @@ WEEKLY_WEIGHT_EMM %>%
         panel.spacing = unit(-1, "pt"),
         panel.grid = element_blank())
 
-ggsave("../../plots/weekly_body_mass_18M_female.png",
-       height = 1.7, width = 3.8, dpi = 400)
+ggsave("../../plots/weekly_body_mass_18M_female.pdf",
+       height = 1.7, width = 3.8, family = "ArialMT")
 ```
 
 ## 18M Male
 
 ```{r}
-WEEKLY_WEIGHT_EMM %>% 
+WEEKLY_BODY_MASS_EMM %>% 
+  summary(type = "response", infer = TRUE) %>% 
+  as.data.frame() %>% 
+  dplyr::rename(week = fweek, 
+                response_mean = response) %>% 
   filter(age == "18M", sex == "Male") %>% 
-  ggplot(aes(x = week, y = y)) +
-  geom_crossbar(aes(ymin = ymin, ymax = ymax),
+  ggplot(aes(x = week, y = response_mean)) +
+  geom_crossbar(aes(ymin = lower.CL, ymax = upper.CL),
                 fatten = 1, color = "#5555ff", 
                 width = 0.7, linewidth = 0.4) +
-  geom_text(data = left_join(WEEKLY_WEIGHT_STATS, WEEKLY_WEIGHT_EMM, 
-                             by = c("age", "sex", "group", "week")) %>% 
-              filter(age == "18M", sex == "Male"), 
-            aes(x = week, y = ymax, label = signif),
-            size = 3, vjust = 0) +
   facet_grid(~ group) +
   scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(380, 440, 20),
@@ -197,13 +170,62 @@ WEEKLY_WEIGHT_EMM %>%
         panel.spacing = unit(-1, "pt"),
         panel.grid = element_blank())
 
-ggsave("../../plots/weekly_body_mass_18M_male.png",
-       height = 1.7, width = 3.8, dpi = 400)
+ggsave("../../plots/weekly_body_mass_18M_male.pdf",
+       height = 1.7, width = 3.8, family = "ArialMT")
 ```
 
 
+## Plot Analysis Results
 
-# Lactate {.tabset}
+```{r}
+WEEKLY_BODY_MASS_STATS %>%
+  mutate(age = factor(age, levels = c("6M", "18M"),
+                      labels = c("Adult", "Aged"))) %>% 
+  ggplot(aes(x = week, y = ratio, color = sex)) +
+  geom_line(aes(x = week, group = sex),
+            position = position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL,
+                    color = sex), width = 0.6, linewidth = 0.5,
+                position = position_dodge(width = 0.5)) +
+  geom_point(aes(group = sex, shape = signif),
+             position = position_dodge(width = 0.5),
+             size = 1.5, fill = "white") +
+  facet_grid(~ age) +
+  geom_hline(yintercept = 1, lty = "dashed") +
+  scale_color_manual(values = c("#ff6eff", "#556eff")) +
+  scale_shape_manual(name = "Holm-Adjusted P-value:",
+                     values = c(21, 16),
+                     labels = c(latex2exp::TeX("$\\geq 0.05$"), "< 0.05")) +
+  guides(color = guide_none()) +
+  scale_y_continuous(limits = c(0.85, 1.05),
+                     breaks = seq(0.85, 1.05, 0.05),
+                     expand = expansion(mult = 5e-3)) +
+  labs(x = "Week", y = "8W / SED") +
+  theme_bw(base_size = 6.5) +  
+  theme(panel.border = element_rect(color = NA),
+        panel.grid = element_blank(),
+        axis.line = element_line(color = "black"),
+        text = element_text(color = "black"),
+        legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.margin = margin(t = -2, b = 0), 
+        legend.key.size = unit(5, "pt"),
+        axis.text = element_text(color = "black", size = 5.5),
+        axis.title = element_text(color = "black", size = 6),
+        axis.ticks = element_line(color = "black"),
+        strip.text = element_text(color = "black", size = 7),
+        strip.background = element_blank())
+
+ggsave(filename = "../../plots/weekly_body_mass_tests.pdf",
+       height = 2.4, width = 3.8, family = "ArialMT")
+```
+
+Importantly, both males and females responded the same to the exercise intervention regardless of whether they were 6 or 18 months old at the beginning of the protocol. This can be seen in `WEEKLY_BODY_MASS_STATS` where the results are the same for 6M and 18M animals. 
+
+Both sexes lose a significant amount of body mass after 3 weeks of exercise. While males continue to lose body mass throughout the protocol, female body mass appears to stabilize starting after 4 weeks of exercise. That is, they experience an initial decrease in body mass that is maintained with training.
+
+
+# Lactate
 
 Blood lactate was recorded at the start (prior to any training) and end of each week. For the SED group, blood lactate was only recorded in 18M males, so we will not plot SED values.
 
@@ -274,8 +296,8 @@ lact_df %>%
                      breaks = seq(0, 8, 2)) +
   coord_cartesian(ylim = c(0, 8), clip = "off")
 
-ggsave("../../plots/weekly_lactate_6M_female.png", 
-       height = 1.7, width = 3.8, dpi = 400)
+ggsave("../../plots/weekly_lactate_6M_female.pdf", 
+       height = 1.7, width = 3.8, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -290,8 +312,8 @@ lact_df %>%
                      breaks = seq(0, 12, 4),
                      expand = expansion(mult = 5e-3))
 
-ggsave("../../plots/weekly_lactate_6M_male.png", 
-       height = 1.7, width = 3.8, dpi = 400)
+ggsave("../../plots/weekly_lactate_6M_male.pdf", 
+       height = 1.7, width = 3.8, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -306,8 +328,8 @@ lact_df %>%
                      breaks = seq(0, 12, 4),
                      expand = expansion(mult = 5e-3))
 
-ggsave("../../plots/weekly_lactate_18M_female.png", 
-       height = 1.7, width = 3.8, dpi = 400)
+ggsave("../../plots/weekly_lactate_18M_female.pdf", 
+       height = 1.7, width = 3.8, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -322,7 +344,7 @@ lact_df %>%
                      breaks = seq(0, 8, 2),
                      expand = expansion(mult = 5e-3))
 
-ggsave("../../plots/weekly_lactate_18M_male.png", 
-       height = 1.7, width = 3.8, dpi = 400)
+ggsave("../../plots/weekly_lactate_18M_male.pdf", 
+       height = 1.7, width = 3.8, family = "ArialMT")
 ```
 

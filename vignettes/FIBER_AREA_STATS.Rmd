@@ -1,0 +1,260 @@
+---
+title: "Statistical analysis of mean fiber area by muscle and fiber type"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  rmarkdown::html_document:
+    toc: true
+bibliography: ./references.bib
+csl: ./apa-numeric-superscript-brackets.csl
+link-citations: yes
+vignette: >
+  %\VignetteIndexEntry{Statistical analyses of mean fiber area by muscle and fiber type}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(ggplot2)
+library(MASS)
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(purrr)
+library(emmeans)
+library(nlme)
+library(stats)
+theme_set(theme_bw()) # base plot theme
+```
+
+
+# Plots
+
+We will look at plots of mean fiber area.
+
+## MG
+
+```{r, fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "MG") %>% 
+  ggplot(aes(x = group, y = fiber_area)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type)
+```
+
+## LG
+
+```{r, fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "LG") %>% 
+  ggplot(aes(x = group, y = fiber_area)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type)
+```
+
+## PL
+
+```{r, fig.height=3.5, fig.width=5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "PL") %>% 
+  ggplot(aes(x = group, y = fiber_area)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type)
+```
+
+## SOL
+
+```{r, fig.height=3.5, fig.width=3.5}
+# Plot points
+FIBER_TYPES %>% 
+  filter(muscle == "SOL") %>% 
+  ggplot(aes(x = group, y = fiber_area)) +
+  geom_point(na.rm = TRUE, alpha = 0.5,
+             position = position_jitter(width = 0.1, height = 0)) +
+  facet_grid(age + sex ~ type)
+```
+
+
+# Regression Models
+
+We will check the mean-variance relationship.
+
+```{r}
+mv <- FIBER_TYPES %>% 
+  group_by(sex, group, age, muscle, type) %>% 
+  summarise(mn = mean(fiber_area, na.rm = TRUE),
+            vr = var(fiber_area, na.rm = TRUE))
+
+fit.mv <- lm(log(vr) ~ log(mn), data = mv)
+coef(fit.mv)
+```
+
+```{r, fig.height=4, fig.width=5}
+plot(log(vr) ~ log(mn), data = mv, las = 1, pch = 19, 
+     xlab = "log(group means)", ylab = "log(group variances)")
+abline(coef(fit.mv), lwd = 2)
+```
+
+The slope of the line is close to 2, which suggests a gamma distribution or log transformation may be appropriate. Since SOL only consists of type I and IIa fibers, we can not include an interaction between `muscle` and `type`, since it will be inestimable for SOL type IIb and IIx. Instead, we will create a new `muscle_type` variable by concatenating `muscle` and `type`.
+
+```{r}
+FIBER_TYPES <- mutate(FIBER_TYPES, muscle_type = paste0(muscle, ".", type))
+
+fit.area <- lme(
+  fixed = log(fiber_area) ~ age * sex * group * muscle_type,
+  random = ~ 1 | pid,
+  data = FIBER_TYPES,
+  na.action = na.exclude)
+```
+
+```{r fig.height=5, fig.width=6}
+r <- resid(fit.area, scaled = TRUE, type = "pearson")
+
+par(mfrow = c(2, 2))
+# Standardized residuals vs. fitted plot
+plot(x = fitted(fit.area), y = r, 
+     ylab = "Standardized residuals", xlab = "Fitted values")
+lines(loess.smooth(x = fitted(fit.area), y = r, degree = 2),
+      col = "red", lwd = 2)
+
+# Scale-location plot
+plot(x = fitted(fit.area), y = sqrt(abs(r)),
+     ylab = "sqrt(|standardized residuals|)", xlab = "Fitted values")
+lines(loess.smooth(x = fitted(fit.area), y = sqrt(abs(r)), degree = 2),
+      col = "red", lwd = 2)
+
+# Normal Q-Q plot
+qqnorm(r); qqline(r, col = "red")
+par(mfrow = c(1, 1))
+```
+
+```{r}
+# Residuals vs. predictor levels
+par(mfrow = c(2, 3), mar = c(5, 3, 0.5, 0.5))
+boxplot(r ~ age, data = FIBER_TYPES, ylab = "")
+boxplot(r ~ group, data = FIBER_TYPES, ylab = "")
+boxplot(r ~ sex, data = FIBER_TYPES, ylab = "")
+boxplot(r ~ muscle, data = FIBER_TYPES, ylab = "")
+boxplot(r ~ type, data = FIBER_TYPES, ylab = "")
+mtext("Standardized residuals", side = 2, line = -1, outer = TRUE)
+par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
+```
+
+The diagnostic plots look fine. We will try to simplify the model.
+
+```{r}
+anova(fit.area)
+```
+
+```{r}
+fit.area.1 <- update(fit.area, 
+                     fixed = . ~ (age + sex + group + muscle_type) ^ 3 -
+                       sex:group:muscle_type)
+anova(fit.area, fit.area.1)
+```
+
+Removal of the 4-way interaction and the least significant 3-way interaction leads to a significant difference (P = 0.13) between the full and reduced models, so we will not remove any terms.
+
+```{r}
+VarCorr(fit.area)
+```
+
+
+# Hypothesis Testing
+
+We will compare the 8W trained to the sedentary control group within each age, sex, and muscle. We will then adjust p-values across fiber types within each age, sex, and muscle group using the Holm method.
+
+```{r}
+# Estimated marginal means
+FIBER_AREA_EMM <- emmeans(fit.area, specs = "group", 
+                          by = c("age", "sex", "muscle_type"),
+                          type = "response", infer = TRUE)
+```
+
+```{r}
+# Extract model info
+model_df <- data.frame(response = "Mean Fiber Area",
+                       model = paste(deparse(fit.area[["call"]]), 
+                                     collapse = "")) %>% 
+  mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
+         model.type = "lme",
+         fixed = sub(".*fixed = ([^,]+),.*", "\\1", model),
+         random = "~ 1 | pid") %>% 
+  dplyr::select(-model)
+
+FIBER_AREA_STATS <- FIBER_AREA_EMM %>% 
+  contrast(method = "trt.vs.ctrl") %>% 
+  summary(infer = TRUE) %>% 
+  as.data.frame() %>% 
+  rename(any_of(c(lower.CL = "asymp.LCL",
+                  upper.CL = "asymp.UCL"))) %>% 
+  separate_wider_delim(cols = muscle_type, delim = ".", 
+                       names = c("muscle", "type")) %>%
+  mutate(muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL")),
+         type = factor(type, levels = c("I", "IIa", "IIx", "IIb"))) %>% 
+  # Holm-adjust p-values across fiber types
+  group_by(age, sex, muscle) %>% 
+  mutate(p.adj = p.adjust(p.value, method = "holm"),
+         signif = ifelse(p.adj < 0.05, "*", "")) %>%
+  ungroup() %>% 
+  mutate(response = "Mean Fiber Area") %>% 
+  left_join(model_df, by = "response") %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic.type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  mutate(across(.cols = c(ratio, lower.CL, upper.CL, statistic), 
+                .fns = ~ round(.x, digits = 2)),
+         across(.cols = c(SE, p.value, p.adj),
+                .fns = ~ signif(.x, digits = 2))) %>% 
+  relocate(c(starts_with("statistic"), p.value), .before = p.adj) %>% 
+  relocate(signif, .after = p.adj) %>% 
+  relocate(response, .before = everything()) %>% 
+  relocate(contrast, .before = ratio) %>% 
+  arrange(response, age, sex, muscle, type)
+```
+
+See `?FIBER_AREA_STATS` for details.
+
+```{r}
+print.data.frame(head(FIBER_AREA_STATS))
+```
+
+```{r, eval=FALSE, include=FALSE}
+# Save data
+usethis::use_data(FIBER_AREA_EMM, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+
+usethis::use_data(FIBER_AREA_STATS, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+```
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
+
+# References
+

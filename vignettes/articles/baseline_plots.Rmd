@@ -70,53 +70,53 @@ conf_df <- map(BASELINE_EMM, function(emm_i) {
 ## 6M Female
 
 ```{r}
-plot_baseline(x = NMR, response = "pre_weight",
-              conf = filter(conf_df, response == "NMR Weight"),
-              stats = filter(BASELINE_STATS, response == "NMR Weight"),
+plot_baseline(x = NMR, response = "pre_body_mass",
+              conf = filter(conf_df, response == "NMR Body Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Body Mass"),
               sex = "Female", age = "6M", y_position = 207) +
-  labs(y  = "NMR Body Mass (g)")
+  labs(y  = "Body Mass (g)")
 
-ggsave("../../plots/baseline_NMR_weight_6M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_body_mass_6M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 6M Male
 
 ```{r}
-plot_baseline(x = NMR, response = "pre_weight",
-              conf = filter(conf_df, response == "NMR Weight"),
-              stats = filter(BASELINE_STATS, response == "NMR Weight"),
+plot_baseline(x = NMR, response = "pre_body_mass",
+              conf = filter(conf_df, response == "NMR Body Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Body Mass"),
               sex = "Male", age = "6M", y_position = 415) +
-  labs(y  = "NMR Body Mass (g)")
+  labs(y  = "Body Mass (g)")
 
-ggsave("../../plots/baseline_NMR_weight_6M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_body_mass_6M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Female
 
 ```{r}
-plot_baseline(x = NMR, response = "pre_weight",
-              conf = filter(conf_df, response == "NMR Weight"),
-              stats = filter(BASELINE_STATS, response == "NMR Weight"),
+plot_baseline(x = NMR, response = "pre_body_mass",
+              conf = filter(conf_df, response == "NMR Body Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Body Mass"),
               sex = "Female", age = "18M", y_position = 265) +
-  labs(y  = "NMR Body Mass (g)")
+  labs(y  = "Body Mass (g)")
 
-ggsave("../../plots/baseline_NMR_weight_18M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_body_mass_18M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Male
 
 ```{r}
-plot_baseline(x = NMR, response = "pre_weight",
-              conf = filter(conf_df, response == "NMR Weight"),
-              stats = filter(BASELINE_STATS, response == "NMR Weight"),
+plot_baseline(x = NMR, response = "pre_body_mass",
+              conf = filter(conf_df, response == "NMR Body Mass"),
+              stats = filter(BASELINE_STATS, response == "NMR Body Mass"),
               sex = "Male", age = "18M") +
-  labs(y  = "NMR Body Mass (g)")
+  labs(y  = "Body Mass (g)")
 
-ggsave("../../plots/baseline_NMR_weight_18M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_body_mass_18M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 # NMR Lean Mass {.tabset}
@@ -130,8 +130,8 @@ plot_baseline(x = NMR, response = "pre_lean",
               sex = "Female", age = "6M", y_position = 123) +
   labs(y  = "NMR Lean Mass (g)")
 
-ggsave("../../plots/baseline_NMR_lean_6M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_lean_6M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -143,8 +143,8 @@ plot_baseline(x = NMR, response = "pre_lean",
               sex = "Male", age = "6M") +
   labs(y  = "NMR Lean Mass (g)")
 
-ggsave("../../plots/baseline_NMR_lean_6M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_lean_6M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -156,8 +156,8 @@ plot_baseline(x = NMR, response = "pre_lean",
               sex = "Female", age = "18M", y_position = 146) +
   labs(y  = "NMR Lean Mass (g)")
 
-ggsave("../../plots/baseline_NMR_lean_18M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_lean_18M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -169,8 +169,8 @@ plot_baseline(x = NMR, response = "pre_lean",
               sex = "Male", age = "18M") +
   labs(y  = "NMR Lean Mass (g)")
 
-ggsave("../../plots/baseline_NMR_lean_18M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_lean_18M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 
@@ -185,8 +185,8 @@ plot_baseline(x = NMR, response = "pre_fat",
               sex = "Female", age = "6M") +
   labs(y  = "NMR Fat Mass (g)")
 
-ggsave("../../plots/baseline_NMR_fat_6M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_fat_6M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -198,8 +198,8 @@ plot_baseline(x = NMR, response = "pre_fat",
               sex = "Male", age = "6M") +
   labs(y  = "NMR Fat Mass (g)")
 
-ggsave("../../plots/baseline_NMR_fat_6M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_fat_6M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 
@@ -212,8 +212,8 @@ plot_baseline(x = NMR, response = "pre_fat",
               sex = "Female", age = "18M", y_position = 57) +
   labs(y  = "NMR Fat Mass (g)")
 
-ggsave("../../plots/baseline_NMR_fat_18M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_fat_18M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 
@@ -226,8 +226,8 @@ plot_baseline(x = NMR, response = "pre_fat",
               sex = "Male", age = "18M") +
   labs(y  = "NMR Fat Mass (g)")
 
-ggsave("../../plots/baseline_NMR_fat_18M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_fat_18M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 
@@ -242,8 +242,8 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
               sex = "Female", age = "6M") +
   labs(y  = "NMR % Lean Mass")
 
-ggsave("../../plots/baseline_NMR_pct_lean_6M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_pct_lean_6M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -255,8 +255,8 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
               sex = "Male", age = "6M") +
   labs(y  = "NMR % Lean Mass")
 
-ggsave("../../plots/baseline_NMR_pct_lean_6M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_pct_lean_6M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -268,8 +268,8 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
               sex = "Female", age = "18M", y_position = 57.4) +
   labs(y  = "NMR % Lean Mass")
 
-ggsave("../../plots/baseline_NMR_pct_lean_18M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_pct_lean_18M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -281,8 +281,8 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
               sex = "Male", age = "18M", y_position = 55.7) +
   labs(y  = "NMR % Lean Mass")
 
-ggsave("../../plots/baseline_NMR_pct_lean_18M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_pct_lean_18M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 
@@ -297,8 +297,8 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
               sex = "Female", age = "6M") +
   labs(y  = "NMR % Fat Mass")
 
-ggsave("../../plots/baseline_NMR_pct_fat_6M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_pct_fat_6M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -310,8 +310,8 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
               sex = "Male", age = "6M") +
   labs(y  = "NMR % Fat Mass")
 
-ggsave("../../plots/baseline_NMR_pct_fat_6M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_pct_fat_6M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -323,8 +323,8 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
               sex = "Female", age = "18M") +
   labs(y  = "NMR % Fat Mass")
 
-ggsave("../../plots/baseline_NMR_pct_fat_18M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_pct_fat_18M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -336,8 +336,8 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
               sex = "Male", age = "18M") +
   labs(y  = "NMR % Fat Mass")
 
-ggsave("../../plots/baseline_NMR_pct_fat_18M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_NMR_pct_fat_18M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 
@@ -352,8 +352,8 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
               sex = "Female", age = "6M") +
   labs(y  = TeX("VO$_2$max (mL/min)"))
 
-ggsave("../../plots/baseline_absolute_VO2max_6M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_absolute_VO2max_6M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -365,8 +365,8 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
               sex = "Male", age = "6M", y_position = 26) +
   labs(y  = TeX("VO$_2$max (mL/min)"))
 
-ggsave("../../plots/baseline_absolute_VO2max_6M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_absolute_VO2max_6M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -378,8 +378,8 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
               sex = "Female", age = "18M") +
   labs(y  = TeX("VO$_2$max (mL/min)"))
 
-ggsave("../../plots/baseline_absolute_VO2max_18M_female.png",
-       height = 1.8, width = 1, dpi = 400)
+ggsave("../../plots/baseline_absolute_VO2max_18M_female.pdf",
+       height = 1.8, width = 1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -391,8 +391,8 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
               sex = "Male", age = "18M") +
   labs(y  = TeX("VO$_2$max (mL/min)"))
 
-ggsave("../../plots/baseline_absolute_VO2max_18M_male.png",
-       height = 1.8, width = 1, dpi = 400)
+ggsave("../../plots/baseline_absolute_VO2max_18M_male.pdf",
+       height = 1.8, width = 1, family = "ArialMT")
 ```
 
 # Relative VO$_2$max {.tabset}
@@ -406,8 +406,8 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
               sex = "Female", age = "6M") +
   labs(y  = TeX("VO$_2$max (mL/kg/min)"))
 
-ggsave("../../plots/baseline_relative_VO2max_6M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_relative_VO2max_6M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -419,8 +419,8 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
               sex = "Male", age = "6M") +
   labs(y  = TeX("VO$_2$max (mL/kg/min)"))
 
-ggsave("../../plots/baseline_relative_VO2max_6M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_relative_VO2max_6M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 
@@ -433,8 +433,8 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
               sex = "Female", age = "18M") +
   labs(y  = TeX("VO$_2$max (mL/kg/min)"))
 
-ggsave("../../plots/baseline_relative_VO2max_18M_female.png",
-       height = 1.8, width = 1, dpi = 400)
+ggsave("../../plots/baseline_relative_VO2max_18M_female.pdf",
+       height = 1.8, width = 1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -446,8 +446,8 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
               sex = "Male", age = "18M") +
   labs(y  = TeX("VO$_2$max (mL/kg/min)"))
 
-ggsave("../../plots/baseline_relative_VO2max_18M_male.png",
-       height = 1.8, width = 1, dpi = 400)
+ggsave("../../plots/baseline_relative_VO2max_18M_male.pdf",
+       height = 1.8, width = 1, family = "ArialMT")
 ```
 
 # Maximum Run Speed {.tabset}
@@ -498,8 +498,8 @@ VO2MAX %>%
   theme_bw(base_size = 6) +
   t1
 
-ggsave("../../plots/baseline_max_run_speed_6M_female.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_max_run_speed_6M_female.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 
@@ -528,8 +528,8 @@ VO2MAX %>%
   t1 +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
-ggsave("../../plots/baseline_max_run_speed_6M_male.png",
-       height = 1.8, width = 1.5, dpi = 400)
+ggsave("../../plots/baseline_max_run_speed_6M_male.pdf",
+       height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -548,8 +548,8 @@ VO2MAX %>%
   theme_bw(base_size = 6) +
   t1
 
-ggsave("../../plots/baseline_max_run_speed_18M_female.png",
-       height = 1.8, width = 1.2, dpi = 400)
+ggsave("../../plots/baseline_max_run_speed_18M_female.pdf",
+       height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -568,6 +568,6 @@ VO2MAX %>%
   theme_bw(base_size = 6) +
   t1
 
-ggsave("../../plots/baseline_max_run_speed_18M_male.png",
-       height = 1.8, width = 1.2, dpi = 400)
+ggsave("../../plots/baseline_max_run_speed_18M_male.pdf",
+       height = 1.8, width = 1.2, family = "ArialMT")
 ```

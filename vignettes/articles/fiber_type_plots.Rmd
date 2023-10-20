@@ -33,27 +33,22 @@ library(tidyr)
 library(tibble)
 library(purrr)
 
-conf_df <- FIBER_TYPES_EMM %>% 
-  map(function(emm_i) {
-    out <- summary(emm_i) %>% 
-      as.data.frame() %>% 
-      rename(any_of(c(lower.CL = "asymp.LCL",
-                      upper.CL = "asymp.UCL",
-                      response_mean = "response",
-                      response_mean = "rate"))) %>% 
-      mutate(muscle = sub("_.*", "", muscle_type),
-             type = sub(".*_", "", muscle_type),
-             muscle_type = NULL)
-    
-    return(out)
-  }) %>% 
-  enframe(name = "response") %>% 
-  unnest(value)
+conf_df <- FIBER_AREA_EMM %>% 
+  summary() %>% 
+  as.data.frame() %>% 
+  rename(any_of(c(lower.CL = "asymp.LCL",
+                  upper.CL = "asymp.UCL",
+                  response_mean = "response",
+                  response_mean = "rate"))) %>% 
+  separate(col = muscle_type, into = c("muscle", "type"), sep = "\\.") %>% 
+  mutate(response = "Fiber CSA")
+
+FIBER_AREA_STATS <- mutate(FIBER_AREA_STATS, response = "Fiber CSA")
 ```
 
 
 
-# LG {.tabset}
+# LG
 
 ## 6M Female
 
@@ -62,7 +57,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "6M", sex = "Female", muscle = "LG",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA")) + 
   scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 3000, 500),
                      expand = expansion(mult = 5e-3)) +
@@ -80,7 +75,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "6M", sex = "Male", muscle = "LG",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA")) + 
   scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
                      breaks = 1000 * 1:5,
                      expand = expansion(mult = 5e-3)) +
@@ -100,7 +95,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "18M", sex = "Female", muscle = "LG",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 150) + 
   scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 3000, 500),
@@ -120,7 +115,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "18M", sex = "Male", muscle = "LG",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 120) + 
   scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 3500, 500),
@@ -133,7 +128,7 @@ ggsave(filename = "../../plots/fiber_CSA_LG_18M_male.png",
 ```
 
 
-# MG {.tabset}
+# MG
 
 ## 6M Female
 
@@ -142,7 +137,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "6M", sex = "Female", muscle = "MG",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 100) + 
   scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
                      breaks = seq(800, 2800, 400),
@@ -161,7 +156,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "6M", sex = "Male", muscle = "MG",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA")) + 
   scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
                      breaks = 1000 * 1:5,
                      expand = expansion(mult = 5e-3)) +
@@ -181,7 +176,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "18M", sex = "Female", muscle = "MG",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 120) + 
   scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 3000, 500),
@@ -201,7 +196,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "18M", sex = "Male", muscle = "MG",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 120) + 
   scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 3500, 500),
@@ -214,7 +209,7 @@ ggsave(filename = "../../plots/fiber_CSA_MG_18M_male.png",
 ```
 
 
-# PL {.tabset}
+# PL
 
 ## 6M Female
 
@@ -223,12 +218,12 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "6M", sex = "Female", muscle = "PL",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 100) + 
   scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
                      breaks = seq(500, 2500, 500),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 2600), clip = "off") +
+  coord_cartesian(ylim = c(500, 2650), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
 ggsave(filename = "../../plots/fiber_CSA_PL_6M_female.png", 
@@ -242,7 +237,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "6M", sex = "Male", muscle = "PL",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA")) + 
   scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
                      breaks = 1000 * 1:5,
                      expand = expansion(mult = 5e-3)) +
@@ -260,7 +255,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "18M", sex = "Female", muscle = "PL",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 150) + 
   scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 3000, 500),
@@ -279,7 +274,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "18M", sex = "Male", muscle = "PL",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 140) + 
   scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 4000, 1000),
@@ -293,7 +288,7 @@ ggsave(filename = "../../plots/fiber_CSA_PL_18M_male.png",
 
 
 
-# SOL {.tabset}
+# SOL
 
 ## 6M Female
 
@@ -302,7 +297,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "6M", sex = "Female", muscle = "SOL",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 100) + 
   scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
                      breaks = seq(800, 1800, 200),
@@ -321,7 +316,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "6M", sex = "Male", muscle = "SOL",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA")) + 
   scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
                      breaks = seq(1200, 2200, 200),
                      expand = expansion(mult = 5e-3)) +
@@ -339,7 +334,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "18M", sex = "Female", muscle = "SOL",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA"),
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA"),
                 bracket.nudge.y = 90) + 
   scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
                      breaks = seq(800, 2000, 200),
@@ -358,7 +353,7 @@ plot_fiber_type(x = FIBER_TYPES,
                 response = "fiber_area",
                 age = "18M", sex = "Male", muscle = "SOL",
                 conf = filter(conf_df, response == "Fiber CSA"),
-                stats = filter(FIBER_TYPES_STATS, response == "Fiber CSA")) + 
+                stats = filter(FIBER_AREA_STATS, response == "Fiber CSA")) + 
   scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 3000, 500),
                      expand = expansion(mult = 5e-3)) +

@@ -1,0 +1,309 @@
+---
+title: "Statistical analysis of fiber counts by muscle and fiber type"
+author: Tyler Sagendorf
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Statistical analysis of fiber counts by muscle and fiber type}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
+link-citations: yes
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 5,
+  fig.height = 4,
+  message = FALSE,
+  warning = FALSE,
+  res = 300
+)
+```
+
+```{r setup}
+# Required packages
+library(MotrpacRatTrainingPhysiologyData)
+library(compositions)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(tibble)
+library(ggplot2)
+library(emmeans)
+# base plot theme
+theme_set(theme_bw() + theme(panel.grid.minor = element_blank()))
+```
+
+
+# Compositional Data Analysis
+
+[@aitchison_compositional_1982; @boogaart_compositional_2013]
+
+```{r}
+x <- FIBER_TYPES %>% 
+  # Relevel fiber types for ilr later
+  mutate(type = factor(type, levels = rev(levels(type)))) %>%
+  arrange(type) %>% 
+  nest(data = c(everything(), -muscle), .by = muscle) %>% 
+  deframe() %>% 
+  map(.f = function(xi) {
+    xi %>% 
+      # total fiber count is only included for illustrative purposes. It is not
+      # necessary
+      pivot_wider(id_cols = c(pid, age, sex, group, total_fiber_count),
+                  names_from = type,
+                  names_prefix = "t",
+                  values_from = fiber_count) %>% 
+      as.data.frame() %>% 
+      `rownames<-`(.$pid)
+  })
+# x is a named list of data.frames - one per muscle
+
+map(x, ~ head(.x))
+```
+
+We will look at the first 6 rows of the fiber count matrix for each muscle. The fiber counts are elements of the positive orthant $\mathbb{P}^4$ (LG, MG, PL) or $\mathbb{P}^2$ (SOL). The orthant is "the analogue in n-dimensional Euclidean space of a quadrant in the plane or an octant in three dimensions. In two dimensions, there are four orthants (called quadrants)" (Wikipedia - Orthant).
+
+```{r}
+Y <- map(x, .f = function(yi) {
+  yi %>% 
+    dplyr::select(starts_with("tI")) %>% 
+    as.matrix()
+})
+
+map(Y, head)
+```
+
+If we close the compositions (scale the fiber counts in each row so they sum to 1, rather than their total fiber count), we end up with fiber type proportions. These are elements of the positive simplex $\mathbb{S}^4$ (LG, MG, PL) or $\mathbb{S}^2$ (SOL). Note that this closure operation is not required by the transformation in the next code chunk. These proportions are just for investigative purposes. We will use the `compositions::clo` function.
+
+```{r}
+Y_clo <- map(Y, clo) # close the compositions (convert to proportions)
+
+map(Y_clo, ~ round(head(.x), digits = 3))
+```
+
+Now, we use the `compositions::ilr` function to perform the isometric log-ratio (ilr) transformation and convert the proportions to elements in $\mathbb{R}^3$ (LG, MG, PL) or $\mathbb{R}$ (SOL) according to the sequential binary partition (SBP) \{I ||| IIa || IIx | IIb\}. That is, we can represent the data in 3-dimensional real space or as values on the real number line. These coordinates are called balances, which are defined as "the natural logarithm of the ratio of geometric means of the parts in each group, normalised by a coefficient to guarantee unit length of the vectors of the basis"[@coda_dendro_2016].
+
+The following balances are generated
+
+- $b1 = \frac{1}{\sqrt{2}} log \left( \frac{I}{g(IIa, IIx, IIb)} \right)$ or $b1 = log \left( \frac{I}{IIa} \right)$ (SOL)
+- $b2 = \sqrt{\frac{2}{3}} log \left( \frac{IIa}{g(IIx, IIb)} \right)$
+- $b3 = log \left( \frac{IIx}{IIb} \right)$
+
+where $g(\cdot)$ is the geometric mean (the $n$th root of the product of $n$ values). This is also referred to as the "center" of the group of fiber types.
+
+```{r}
+Y_ilr <- map(Y_clo, function(y) {
+  nc <- ncol(y)
+  
+  # Reverse the columns of the basis V to create the above SBPs
+  V <- ilrBase(D = nc)[, (nc - 1):1]
+  y_ilr <- ilr(y, V = V)
+  
+  # Remove the "rmult" class, or rstandard will not work for SOL
+  class(y_ilr) <- NULL
+  
+  y_ilr <- as.matrix(y_ilr)
+  
+  return(y_ilr)
+})
+# List of matrices containing ilr-transformed coordinates
+
+map(Y_ilr, ~ round(head(.x), digits = 3))
+```
+
+Now that we have multivariate Normal data, we can use multivariate multiple regression. Here, each response is a column of the matrices shown above. We will include categorical predictors age, sex, group, and their interactions to start.
+
+```{r}
+# Multivariate multiple regression models for each muscle
+fit.count <- map2(.x = x, .y = Y_ilr, .f = function(x, y) {
+  lm(y ~ age * sex * group, data = x)
+})
+# map(fit.count, summary) # lm model summary for each ilr column and muscle
+```
+
+For each model, we have measurements from 48 animals (6 biological replicates per group). We lose 1 degree of freedom to estimate the intercept (mean of SED 6M Female group), 3 degrees of freedom to estimate each of the main effects, another 3 to estimate the 2-way interactions, and 1 to estimate the 3-way interaction. Therefore, we have 48 - 8 = 40 residual degrees of freedom.
+
+We will check the model diagnostic plots. First, we will check for homoscedasticity.
+
+We will first look at boxplots of the standardized residuals to check for Normality of the residuals for each response (fiber type). We are using an `rstandard.mlm` method from https://stackoverflow.com/a/39768104 included in this package to calculate the standardized residuals.
+
+Since I prefer the `ggplot2` package to base plotting, we will transform the data to a longer format and then stack the data for all four muscles.
+
+```{r}
+# Standardized residuals and fitted values
+resid_list <- map(fit.count[1:3], rstandard.mlm)
+fitted_list <- map(fit.count[1:3], fitted)
+
+# Prepare data for plotting
+plot_df <- list("resid" = resid_list,
+                "fitted" = fitted_list) %>% 
+  list_transpose() %>% 
+  map(.f = function(.x) {
+    map(names(.x), .f = function(name_i) {
+      .x[[name_i]] %>%
+        as.data.frame() %>%
+        rownames_to_column("pid") %>%
+        pivot_longer(cols = -pid,
+                     names_to = "balance",
+                     values_to = name_i)
+    }) %>% 
+      purrr::reduce(.f = left_join, by = c("pid", "balance")) %>%
+      mutate(across(.cols = c(fitted, resid), 
+                    .f = ~ signif(as.numeric(.x), 3)))
+  }) %>% 
+  enframe(name = "muscle") %>% 
+  unnest(value) %>% 
+  mutate(balance = sub("V", "b", balance),
+         balance = ifelse(!grepl("b", balance), "b1", balance))
+```
+
+```{r fig.height=7, fig.width=7}
+# Plot residuals vs. fitted for each muscle and fiber type
+ggplot(plot_df, aes(x = fitted, y = resid)) +
+  geom_point(shape = 21, size = 2) +
+  stat_smooth(method = "loess", formula = y ~ x,
+              method.args = list(degree = 2),
+              se = FALSE, col = 2) +
+  # Empirical rule: ~99.7% of data should be within 3 SD of the mean
+  geom_hline(yintercept = c(-3, +3), lty = "dashed") +
+  facet_wrap(~ muscle + balance, scales = "free", ncol = 3) +
+  labs(x = "Fitted Values", y = "Standardized Residuals",
+       title = "Residuals vs. Fitted") +
+  theme(plot.title = element_text(hjust = 0.5, size = rel(1.6)))
+```
+
+There is an outlier in the MG $b1$ panel, and the MG $b3$ panel seems to display non-constant variance of the residuals. We will check the scale-location plots.
+
+```{r fig.height=7, fig.width=7, eval=FALSE}
+# Plot scale vs. location plot for each muscle and fiber type
+ggplot(plot_df, aes(x = fitted, y = sqrt(abs(resid)))) +
+  geom_point(shape = 21, size = 2) +
+  stat_smooth(method = "loess", formula = y ~ x,
+              method.args = list(degree = 2),
+              se = TRUE, col = 2) +
+  facet_wrap(~ muscle + balance, scales = "free", ncol = 3) +
+  labs(x = "Fitted", y = "sqrt(|Standardized Residuals|)",
+       title = "Scale-Location") +
+  coord_cartesian(ylim = c(0, NA), expand = 5e-3) +
+  theme(plot.title = element_text(hjust = 0.5, size = rel(1.6)))
+```
+
+There is increasing variance in the $b3$ panels of the MG and PL. Keep in mind that there are only 6 samples per group.
+
+We will check the Normality of the residuals with Q-Q plots.
+
+```{r, fig.height=7, fig.width=7, eval=FALSE}
+ggplot(plot_df, aes(sample = resid)) +
+  geom_qq(shape = 21, size = 2) +
+  geom_qq_line(lty = 2, col = 2, linewidth = 1) +
+  facet_wrap(~ muscle + balance, scales = "free", ncol = 3) +
+  labs(x = "Theoretical Quantiles", y = "Sample Quantiles",
+       title = "Normal Q-Q Plot")
+```
+
+There are a few outliers, though they should not affect the results too much. We will continue with hypothesis testing.
+
+
+# Hypothesis Testing
+
+```{r}
+## Estimated marginal means
+FIBER_COUNT_EMM <- map(fit.count[1:4], function(mod_i) {
+  by <- c("age", "sex")
+  mult.name <- NULL
+  
+  if ("mlm" %in% class(mod_i)) {
+    mult.name <- "balance"
+    by <- c(by, mult.name)
+  }
+  
+  emmeans(object = mod_i, specs = "group", by = by, 
+          mult.name = mult.name, infer = TRUE)
+})
+```
+
+The values in the `emmean` column are the estimated marginal means of the ilr coordinates (balances) for each sequential binary partition (SBP):
+
+- $b1$: $\frac{1}{\sqrt2} log \left( \frac{I}{g(IIa, IIx, IIb)} \right)$ or $\frac{1}{\sqrt2} log \left( \frac{I}{IIa} \right)$ (SOL)
+- $b2$: $\sqrt{\frac{2}{3}} log \left( \frac{IIa}{g(IIx, IIb)} \right)$
+- $b3$: $log \left( \frac{IIx}{IIb} \right)$
+
+The P-values are testing whether the means of the groups are different from 0, which is not of interest, in this case. We want to know if there are differences between the 8W and SED groups. 
+
+```{r}
+FIBER_COUNT_MVT <- map(FIBER_COUNT_EMM, function(emm_i) {
+  
+  if ("balance" %in% colnames(attr(emm_i, "grid"))) {
+    out <- mvcontrast(object = emm_i, method = "trt.vs.ctrl", 
+                      mult.name = "balance")
+  } else {
+    out <- contrast(object = emm_i, method = "trt.vs.ctrl")
+  }
+  
+  out %>% 
+    as.data.frame()
+}) %>%
+  enframe(name = "muscle") %>% 
+  unnest(value) %>% 
+  group_by(age, sex) %>% 
+  mutate(p.adj = p.adjust(p.value, method = "holm"),
+         signif = ifelse(p.adj < 0.05, "*", ""),
+         across(.cols = c(contains("ratio"), T.square, estimate, SE), 
+                .f = ~ round(.x, digits = 2)),
+         across(.cols = c(p.value, p.adj), .f = ~ signif(.x, digits = 2)))
+```
+
+We will proceed with specific comparisons of the subcompositions.
+
+```{r}
+## Trained vs. SED comparisons by age, sex, muscle, and fiber type
+FIBER_COUNT_STATS <- map(FIBER_COUNT_EMM, function(emm_i) {
+  contrast(object = emm_i, method = "trt.vs.ctrl", infer = TRUE) %>% 
+    as.data.frame()
+}) %>%
+  enframe(name = "muscle") %>% 
+  unnest(value) %>%
+  arrange(age, sex, muscle, balance) %>%
+  relocate(contrast, .before = estimate) %>% 
+  relocate(muscle, balance, .before = contrast) %>% 
+  group_by(age, sex, muscle) %>% 
+  mutate(p.adj = p.adjust(p.value, method = "holm")) %>% 
+  ungroup() %>% 
+  mutate(across(.cols = c(estimate, SE, lower.CL, upper.CL, t.ratio), 
+                .f = ~ round(.x, digits = 2)),
+         # Mark significant comparisons (adjusted p-value < 0.05)
+         signif = ifelse(p.adj < 0.05, "*", ""),
+         across(.cols = c(p.value, p.adj), 
+                .f = ~ signif(.x, digits = 2))) %>%
+  mutate(muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL")))
+```
+
+```{r eval=FALSE, include=FALSE}
+# Save data
+usethis::use_data(FIBER_COUNT_EMM, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+
+usethis::use_data(FIBER_COUNT_MVT, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+
+usethis::use_data(FIBER_COUNT_STATS, internal = FALSE, overwrite = TRUE,
+                  compress = "bzip2", version = 3)
+```
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
+
+# References
+
