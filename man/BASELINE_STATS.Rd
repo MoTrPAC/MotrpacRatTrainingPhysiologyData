@@ -5,21 +5,59 @@
 \alias{BASELINE_STATS}
 \title{Statistical analysis results of baseline (pre-training) measures}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 112 rows and 24 columns.
+An object of class \code{data.frame} with 112 rows and 23 columns:
+
+\describe{
+\item{response}{character; the measurement being tested.}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{contrast}{character; the comparison between groups. Either ratios or
+differences between trained and sedentary group means.}
+\item{estimate_type}{character; interpretation of the value in the
+\code{estimate} column. Either "ratio" (ratio between means) or "location
+shift" (difference of signed mean ranks).}
+\item{null}{numeric; the value of the estimate under the null hypothesis.}
+\item{estimate}{numeric; ratio or difference between the means of the
+groups as specified by \code{contrast}.}
+\item{SE}{numeric; the standard error of the estimate.}
+\item{lower.CL}{numeric; lower bound of the 95\% confidence interval.}
+\item{upper.CL}{numeric; upper bound of the 95\% confidence interval.}
+\item{statistic_type}{character; the type of statistical test. Either "t"
+(Student's t-statistic), "z" (Z-statistic), or "W" (Wilcox's W-statistic).}
+\item{statistic}{numeric; the value of the test statistic.}
+\item{n_SED}{integer; the number of samples in the SED (sedentary) group.}
+\item{n_trained}{integer; the number of samples in the trained group
+(specified by \code{contrast}).}
+\item{df}{numeric; the number of residual degrees of freedom.}
+\item{p.value}{numeric; the p-value associated with the statistical
+test.}
+\item{p.adj}{numeric; the adjusted p-value.}
+\item{signif}{logical; \code{TRUE} if \code{p.adj} < 0.05.}
+\item{model_type}{character; the statistical model used for testing.}
+\item{family}{character; the probability distribution and link function for
+the generalized linear model.}
+\item{formula}{character; the model formula. Includes the response
+variable, any transformations, and predictors.}
+\item{weights}{character; if reciprocal group variances were used as
+weights to account for heteroscedasticity (nonconstant residual variance),
+this is noted here.}
+\item{obs_removed}{character; if any observations were omitted during the
+analysis, they are listed here.}
+}
 }
 \usage{
 BASELINE_STATS
 }
 \description{
-A \code{data.frame} containing statistical analysis results of
-  baseline (pre-training) measures: NMR mass, lean mass, fat mass, %% lean
-  mass, %% fat mass; absolute VO\eqn{_2}max; relative VO\eqn{_2}max; and
-  maximum run speed.
+Statistical analysis results of baseline (pre-training)
+measures: NMR mass, lean mass, fat mass, \% lean mass, \% fat mass; absolute
+VO\eqn{_2}max; relative VO\eqn{_2}max; and maximum run speed.
 }
 \examples{
 unique(BASELINE_STATS$response) # available measures
 
-print.data.frame(head(BASELINE_STATS))
+head(BASELINE_STATS)
 
 }
 \seealso{

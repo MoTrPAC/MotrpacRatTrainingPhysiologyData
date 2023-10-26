@@ -27,6 +27,9 @@ knitr::opts_chunk$set(
 # Required packages
 library(MotrpacRatTrainingPhysiologyData)
 library(dplyr)
+library(purrr)
+library(tidyr)
+library(tibble)
 library(ggplot2)
 library(nlme)
 library(emmeans)
@@ -161,7 +164,7 @@ The diagnostic plots still look fine.
 ```{r}
 # Calculate mean body_mass for each combination of factors
 df_pred <- df %>%
-  select(age, sex, group, fweek, week) %>%
+  dplyr::select(age, sex, group, fweek, week) %>%
   distinct() %>%
   arrange(age, sex, group, fweek) %>% 
   mutate(body_mass_pred = exp(predict(object = m3, newdata = .)))
@@ -186,36 +189,64 @@ summary(m3)
 At each week, for each combination of age and sex, we will test whether the mean of the 8W group is different from the mean of the SED group. P-values will be Holm-adjusted across weeks within each combination of age and sex.
 
 ```{r}
+model_df <- list("Weekly Body Mass" = m3) %>% 
+  map_chr(.f = ~ paste(deparse(.x[["call"]]), collapse = "")) %>% 
+  enframe(name = "response", 
+          value = "model") %>% 
+  mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
+         model_type = sub("^([^\\(]+).*", "\\1", model),
+         formula = sub(".*model = ([^,]+),.*", "\\1", model),
+         formula = gsub("fweek", "week", formula),
+         correlation = sub(".*correlation = ([^,]+),?.*", "\\1", model)) %>% 
+  dplyr::select(-model)
+```
+
+```{r}
 WEEKLY_BODY_MASS_EMM <- emmeans(m3, specs = "group",
-                             by = c("age", "sex", "fweek"),
-                             mode = "df.error")
+                                by = c("age", "sex", "fweek"),
+                                mode = "df.error")
 
 WEEKLY_BODY_MASS_STATS <- WEEKLY_BODY_MASS_EMM %>% 
   contrast(method = "trt.vs.ctrl",
            infer = TRUE, type = "response") %>% 
   as.data.frame() %>%
-  dplyr::rename(week = fweek) %>% 
-  arrange(sex, week, age) %>%
-  group_by(age, sex) %>%
-  mutate(p.adj = p.adjust(p.value, method = "holm"),
-         signif = ifelse(p.adj < 0.05, "*", ""),
+  dplyr::rename(week = fweek) %>%
+  mutate(response = "Weekly Body Mass") %>% 
+  group_by(response, age, sex) %>%
+  # Benjamini-Yekutieli does not require independence of hypothesis tests
+  mutate(p.adj = p.adjust(p.value, method = "BY"),
+         signif = p.adj < 0.05,
          response = "Weekly Body Mass") %>% 
-  relocate(response, .before = everything()) %>%
-  ungroup()
+  pivot_longer(cols = ratio, 
+               names_to = "estimate_type", 
+               values_to = "estimate", 
+               values_drop_na = TRUE) %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  mutate(statistic_type = sub("\\.ratio", "", statistic_type),
+         statistic_type = ifelse(statistic_type == "W", "wilcox.test", 
+                                 statistic_type)) %>%
+  left_join(model_df, by = "response") %>% 
+  dplyr::select(response, age, sex, week, contrast, estimate_type, null, 
+                estimate, SE, lower.CL, upper.CL, statistic_type, statistic, 
+                df, p.value, p.adj, signif, everything()) %>% 
+  arrange(age, sex, week)
 ```
 
 See `?WEEKLY_BODY_MASS_STATS` for details.
 
 ```{r}
-print.data.frame(head(WEEKLY_BODY_MASS_STATS))
+print.data.frame(head(WEEKLY_BODY_MASS_STATS, 10))
 ```
 
 ```{r, eval=FALSE, include=FALSE}
 # Save data
-usethis::use_data(WEEKLY_BODY_MASS_STATS, internal = FALSE, overwrite = TRUE,
+usethis::use_data(WEEKLY_BODY_MASS_EMM, internal = FALSE, overwrite = TRUE,
                   compress = "bzip2", version = 3)
 
-usethis::use_data(WEEKLY_BODY_MASS_EMM, internal = FALSE, overwrite = TRUE,
+usethis::use_data(WEEKLY_BODY_MASS_STATS, internal = FALSE, overwrite = TRUE,
                   compress = "bzip2", version = 3)
 ```
 

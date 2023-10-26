@@ -19,11 +19,11 @@ names(ANALYTES_EMM) # clinical analytes
 str(ANALYTES_EMM)
 
 # Print one of the emmGrid objects
-ANALYTES_EMM[["Corticosterone"]]
+summary(ANALYTES_EMM[["Corticosterone"]])
 
 }
 \seealso{
 \code{\link{ANALYTES}}, \code{\link{ANALYTES_STATS}},
-  \code{\link[emmeans]{emmeans}}
+\code{\link[emmeans]{emmeans}}
 }
 \keyword{datasets}

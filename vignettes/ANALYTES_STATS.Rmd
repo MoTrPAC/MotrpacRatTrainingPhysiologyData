@@ -662,12 +662,11 @@ ANALYTES_EMM <- map(model_list, function(mod_i) {
 # Extract model info
 model_df <- model_list %>% 
   map_chr(.f = ~ paste(deparse(.x[["call"]]), collapse = "")) %>% 
-  enframe(name = "response", 
-          value = "model") %>% 
+  enframe(name = "response", value = "model") %>% 
   mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
          model_type = sub("^([^\\(]+).*", "\\1", model),
-         formula = sub(".*formula = ([^,]+),.*", "\\1", model),
          family = sub(".*family = ([^\\)]+\\)),.*", "\\1", model),
+         formula = sub(".*formula = ([^,]+),.*", "\\1", model),
          family = ifelse(model_type == "lm", "gaussian", family),
          # if weights were used, they were inverse group variances
          weights = ifelse(grepl("weights = ", model), 
@@ -685,20 +684,32 @@ ANALYTES_STATS <- ANALYTES_EMM %>%
   }) %>%
   enframe(name = "response") %>% 
   unnest(value) %>%
-  mutate(signif = cut(p.value, 
-                      breaks = c(0, 0.001, 0.01, 0.05, 1),
-                      labels = c("***", "**", "*", ""),
-                      include.lowest = TRUE, right = FALSE,
-                      ordered_result = TRUE)) %>% 
-  left_join(model_df, by = "response") %>% 
+  mutate(age = ifelse(is.na(age), "6M, 18M", as.character(age)),
+         sex = ifelse(is.na(sex), "Female, Male", as.character(sex))) %>% 
+  separate_longer_delim(cols = c(age, sex), delim = ", ") %>%
+  pivot_longer(cols = ratio,
+               names_to = "estimate_type",
+               values_to = "estimate", 
+               values_drop_na = TRUE) %>% 
   pivot_longer(cols = contains(".ratio"), 
                names_to = "statistic_type", 
                values_to = "statistic", 
                values_drop_na = TRUE) %>% 
-  relocate(age, .before = sex) %>% 
-  relocate(starts_with("statistic"), .before = p.value) %>% 
-  relocate(signif, .after = p.value) %>% 
-  relocate(ends_with("CL", ignore.case = FALSE), .before = null)
+  # p-values are actually Dunnett p-values (already adjusted)
+  dplyr::rename(p.adj = p.value) %>% 
+  mutate(statistic_type = sub("\\.ratio", "", statistic_type),
+         age = factor(age, levels = c("6M", "18M")),
+         sex = factor(sex, levels = c("Female", "Male")),
+         p.value = 2 * pt(q = estimate, df = df, lower.tail = FALSE),
+         signif = p.adj < 0.05) %>% 
+  left_join(model_df, by = "response") %>% 
+  # Reorder columns
+  dplyr::select(response, age, sex, contrast, estimate_type, null, estimate, SE,
+                lower.CL, upper.CL, statistic_type, statistic, df, p.value, 
+                p.adj, signif, model_type, family, formula, weights,
+                everything()) %>% 
+  arrange(response, age, sex, contrast) %>% 
+  as.data.frame()
 ```
 
 See `?ANALYTES_STATS` for details.
@@ -709,10 +720,10 @@ print.data.frame(head(ANALYTES_STATS, 10))
 
 ```{r, eval=FALSE, include=FALSE}
 # Save data
-usethis::use_data(ANALYTES_STATS, internal = FALSE, overwrite = TRUE,
+usethis::use_data(ANALYTES_EMM, internal = FALSE, overwrite = TRUE,
                   compress = "bzip2", version = 3)
 
-usethis::use_data(ANALYTES_EMM, internal = FALSE, overwrite = TRUE,
+usethis::use_data(ANALYTES_STATS, internal = FALSE, overwrite = TRUE,
                   compress = "bzip2", version = 3)
 ```
 

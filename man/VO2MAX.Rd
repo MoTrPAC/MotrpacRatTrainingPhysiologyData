@@ -5,22 +5,75 @@
 \alias{VO2MAX}
 \title{VO2max test measures}
 \format{
-An object of class \code{data.frame} with 234 rows and 27 columns.
+An object of class \code{data.frame} with 234 rows and 27 columns:
+
+\describe{
+\item{pid}{character; randomly generated 8-digit identifier used in
+linkage to phenotypic data. All samples from the same animal have the same
+PID.}
+\item{iowa_id}{character; unique ID used for each rat at the Iowa PASS.}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{group}{factor; exercise training group. Either "SED" (sedentary) or
+the number of weeks of training ("1W", "2W", "4W", "8W").}
+\item{pre_body_mass}{numeric; body mass (g) recorded on the same day as
+the VO\eqn{_2}max test (pre-training).}
+\item{pre_t_start}{POSIXct, POSIXt; date and time of the VO\eqn{_2}max test
+start (pre-training).}
+\item{pre_blactate_begin}{numeric; blood lactate (mmol/L) recorded at the
+start of the test (pre-training).}
+\item{pre_vo2max_ml_kg_min}{numeric; maximum relative VO\eqn{_2}max
+(mL/kg body mass/min) reached during the test (pre-training).}
+\item{pre_vo2max_ml_min}{numeric; maximum absolute VO\eqn{_2}max
+(mL/kg/min) reached during the test (pre-training).}
+\item{pre_vco2_max}{numeric; maximum VCO\eqn{_2} reached during the
+VO\eqn{_2}max test (pre-training).}
+\item{pre_rer_max}{numeric; maximum respiratory exchange rate (RER) reached
+during the VO\eqn{_2}max test (pre-training).}
+\item{pre_speed_max}{numeric; maximum run speed (m/min) reached during the
+VO\eqn{_2}max test (pre-training).}
+\item{pre_t_complete}{POSIXct, POSIXt; date and time of the VO\eqn{_2}max
+test end (pre-training).}
+\item{pre_blactate_end}{numeric; blood lactate (mmol/L) recorded at the end
+of the test (pre-training).}
+\item{pre_comments}{character; comments regarding the pre-training
+VO\eqn{_2}max test.}
+\item{post_body_mass}{numeric; body mass (g) recorded on the same day as
+the VO\eqn{_2}max test (post-training).}
+\item{post_t_start}{POSIXct, POSIXt; date and time of the VO\eqn{_2}max
+test start (post-training).}
+\item{post_blactate_begin}{numeric; blood lactate (mmol/L) recorded at the
+start of the test (post-training).}
+\item{post_vo2max_ml_kg_min}{numeric; maximum relative VO\eqn{_2}max
+(mL/kg body mass/min) reached during the test (post-training).}
+\item{post_vo2max_ml_min}{numeric; maximum absolute VO\eqn{_2}max
+(mL/kg/min) reached during the test (post-training).}
+\item{post_vco2_max}{numeric; maximum VCO\eqn{_2} reached during the
+VO\eqn{_2}max test (post-training).}
+\item{post_rer_max}{numeric; maximum respiratory exchange rate (RER)
+reached during the VO\eqn{_2}max test (post-training).}
+\item{post_speed_max}{numeric; maximum run speed (m/min) reached during the
+VO\eqn{_2}max test (post-training).}
+\item{post_t_complete}{POSIXct, POSIXt; date and time of the VO\eqn{_2}max
+test end (post-training).}
+\item{post_blactate_end}{numeric; blood lactate (mmol/L) recorded at the
+end of the test (post-training).}
+\item{post_comments}{character; comments regarding the post-training
+VO\eqn{_2}max test.}
+}
 }
 \usage{
 VO2MAX
 }
 \description{
-A \code{data.frame} containing measures from the pre- and
-  post-training VO\eqn{_2}max tests: total body mass, absolute and relative
-  VO\eqn{_2}max, respiratory exchange rate (RER), VCO\eqn{_2}, maximum run
-  speed, blood lactate, and test duration.
+Measures from the pre- and post-training VO\eqn{_2}max tests:
+total body mass, absolute and relative VO\eqn{_2}max, respiratory exchange
+rate (RER), VCO\eqn{_2}, maximum run speed, blood lactate, and test
+duration.
 }
 \examples{
-print.data.frame(head(VO2MAX))
+head(VO2MAX)
 
-}
-\seealso{
-\code{\link{PHYSIO}}
 }
 \keyword{datasets}

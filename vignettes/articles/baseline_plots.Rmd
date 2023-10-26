@@ -13,7 +13,7 @@ output:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 1.5,
+  fig.width = 1.1,
   fig.height = 1.8,
   out.height = "50%",
   out.width = "50%",
@@ -65,7 +65,7 @@ conf_df <- map(BASELINE_EMM, function(emm_i) {
 ```
 
 
-# NMR Body Mass {.tabset}
+# NMR Body Mass
 
 ## 6M Female
 
@@ -77,7 +77,7 @@ plot_baseline(x = NMR, response = "pre_body_mass",
   labs(y  = "Body Mass (g)")
 
 ggsave("../../plots/baseline_NMR_body_mass_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -90,7 +90,7 @@ plot_baseline(x = NMR, response = "pre_body_mass",
   labs(y  = "Body Mass (g)")
 
 ggsave("../../plots/baseline_NMR_body_mass_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -103,7 +103,7 @@ plot_baseline(x = NMR, response = "pre_body_mass",
   labs(y  = "Body Mass (g)")
 
 ggsave("../../plots/baseline_NMR_body_mass_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -116,10 +116,10 @@ plot_baseline(x = NMR, response = "pre_body_mass",
   labs(y  = "Body Mass (g)")
 
 ggsave("../../plots/baseline_NMR_body_mass_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
-# NMR Lean Mass {.tabset}
+# NMR Lean Mass
 
 ## 6M Female
 
@@ -131,7 +131,7 @@ plot_baseline(x = NMR, response = "pre_lean",
   labs(y  = "NMR Lean Mass (g)")
 
 ggsave("../../plots/baseline_NMR_lean_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -144,7 +144,7 @@ plot_baseline(x = NMR, response = "pre_lean",
   labs(y  = "NMR Lean Mass (g)")
 
 ggsave("../../plots/baseline_NMR_lean_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -157,7 +157,7 @@ plot_baseline(x = NMR, response = "pre_lean",
   labs(y  = "NMR Lean Mass (g)")
 
 ggsave("../../plots/baseline_NMR_lean_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -170,11 +170,11 @@ plot_baseline(x = NMR, response = "pre_lean",
   labs(y  = "NMR Lean Mass (g)")
 
 ggsave("../../plots/baseline_NMR_lean_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
-# NMR Fat Mass {.tabset}
+# NMR Fat Mass
 
 ## 6M Female
 
@@ -186,7 +186,7 @@ plot_baseline(x = NMR, response = "pre_fat",
   labs(y  = "NMR Fat Mass (g)")
 
 ggsave("../../plots/baseline_NMR_fat_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -199,7 +199,7 @@ plot_baseline(x = NMR, response = "pre_fat",
   labs(y  = "NMR Fat Mass (g)")
 
 ggsave("../../plots/baseline_NMR_fat_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
@@ -213,7 +213,7 @@ plot_baseline(x = NMR, response = "pre_fat",
   labs(y  = "NMR Fat Mass (g)")
 
 ggsave("../../plots/baseline_NMR_fat_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
@@ -227,11 +227,11 @@ plot_baseline(x = NMR, response = "pre_fat",
   labs(y  = "NMR Fat Mass (g)")
 
 ggsave("../../plots/baseline_NMR_fat_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
-# NMR % Lean {.tabset}
+# NMR % Lean
 
 ## 6M Female
 
@@ -243,7 +243,7 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
   labs(y  = "NMR % Lean Mass")
 
 ggsave("../../plots/baseline_NMR_pct_lean_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -256,7 +256,7 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
   labs(y  = "NMR % Lean Mass")
 
 ggsave("../../plots/baseline_NMR_pct_lean_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -269,7 +269,7 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
   labs(y  = "NMR % Lean Mass")
 
 ggsave("../../plots/baseline_NMR_pct_lean_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -282,11 +282,11 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
   labs(y  = "NMR % Lean Mass")
 
 ggsave("../../plots/baseline_NMR_pct_lean_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
-# NMR % Fat {.tabset}
+# NMR % Fat
 
 ## 6M Female
 
@@ -298,7 +298,7 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
   labs(y  = "NMR % Fat Mass")
 
 ggsave("../../plots/baseline_NMR_pct_fat_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -311,7 +311,7 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
   labs(y  = "NMR % Fat Mass")
 
 ggsave("../../plots/baseline_NMR_pct_fat_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -324,7 +324,7 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
   labs(y  = "NMR % Fat Mass")
 
 ggsave("../../plots/baseline_NMR_pct_fat_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -337,11 +337,11 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
   labs(y  = "NMR % Fat Mass")
 
 ggsave("../../plots/baseline_NMR_pct_fat_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
-# Absolute VO$_2$max {.tabset}
+# Absolute VO$_2$max
 
 ## 6M Female
 
@@ -353,7 +353,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
   labs(y  = TeX("VO$_2$max (mL/min)"))
 
 ggsave("../../plots/baseline_absolute_VO2max_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -366,7 +366,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
   labs(y  = TeX("VO$_2$max (mL/min)"))
 
 ggsave("../../plots/baseline_absolute_VO2max_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -395,7 +395,7 @@ ggsave("../../plots/baseline_absolute_VO2max_18M_male.pdf",
        height = 1.8, width = 1, family = "ArialMT")
 ```
 
-# Relative VO$_2$max {.tabset}
+# Relative VO$_2$max
 
 ## 6M Female
 
@@ -407,7 +407,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
   labs(y  = TeX("VO$_2$max (mL/kg/min)"))
 
 ggsave("../../plots/baseline_relative_VO2max_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -420,7 +420,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
   labs(y  = TeX("VO$_2$max (mL/kg/min)"))
 
 ggsave("../../plots/baseline_relative_VO2max_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
@@ -450,32 +450,32 @@ ggsave("../../plots/baseline_relative_VO2max_18M_male.pdf",
        height = 1.8, width = 1, family = "ArialMT")
 ```
 
-# Maximum Run Speed {.tabset}
+# Maximum Run Speed
 
 ```{r}
 # Custom theme for maximum run speed plots
-t1 <- theme(text = element_text(size = 6.5, color = "black"),
+t1 <- theme(text = element_text(size = 7, color = "black"),
             line = element_line(linewidth = 0.3, color = "black"),
             axis.ticks = element_line(linewidth = 0.3, color = "black"),
             panel.grid = element_blank(),
             panel.border = element_blank(),
             axis.ticks.x = element_blank(),
-            axis.text = element_text(size = 5,
+            axis.text = element_text(size = 7,
                                      color = "black"),
-            axis.text.x = element_text(size = 6.5, angle = 90, hjust = 1,
+            axis.text.x = element_text(size = 7, angle = 90, hjust = 1,
                                        vjust = 0.5),
-            axis.title = element_text(size = 6.5, margin = margin(),
+            axis.title = element_text(size = 7, margin = margin(),
                                       color = "black"),
             axis.line = element_line(linewidth = 0.3),
             strip.background = element_blank(),
             strip.text = element_blank(),
             panel.spacing = unit(-1, "pt"),
             plot.title = element_text(size = 7, color = "black"),
-            plot.subtitle = element_text(size = 6, color = "black"),
+            plot.subtitle = element_text(size = 7, color = "black"),
             legend.position = "bottom",
             legend.direction = "horizontal",
             legend.title.align = 0.5,
-            legend.key.size = unit(4, "pt"), 
+            legend.key.size = unit(7, "pt"), 
             legend.box.spacing = unit(0, "pt"),
             legend.box.margin = margin(t = 0, b = 0, unit = "pt"),
             strip.placement = "outside"
@@ -495,11 +495,11 @@ VO2MAX %>%
                      breaks = seq(19.8, 36, 1.8),
                      limits = c(19.8, 28.8)) +
   labs(x = NULL) +
-  theme_bw(base_size = 6) +
+  theme_bw(base_size = 7) +
   t1
 
 ggsave("../../plots/baseline_max_run_speed_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
@@ -515,9 +515,9 @@ VO2MAX %>%
     data = data.frame(y.position = c(23.4, 25.2) + 0.5,
                       group1 = rep("SED", 2),
                       group2 = c("1W", "2W"),
-                      label = c("         Wilcoxon p = 0.002", 
-                                "   Wilcoxon p = 0.001")),
-    label.size = 5 / .pt, vjust = -0.25
+                      label = c("Wilcoxon p = 0.002", 
+                                "Wilcoxon p = 0.001")),
+    label.size = 7 / .pt, vjust = -0.25
   ) +
   scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
@@ -529,7 +529,7 @@ VO2MAX %>%
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/baseline_max_run_speed_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -545,7 +545,7 @@ VO2MAX %>%
                      limits = c(16.2, 21.6),
                      breaks = seq(16.2, 21.6, 1.8)) +
   labs(x = NULL) +
-  theme_bw(base_size = 6) +
+  theme_bw(base_size = 7) +
   t1
 
 ggsave("../../plots/baseline_max_run_speed_18M_female.pdf",
@@ -565,7 +565,7 @@ VO2MAX %>%
                      limits = c(12.6, 18),
                      breaks = seq(12.6, 18, 1.8)) +
   labs(x = NULL) +
-  theme_bw(base_size = 6) +
+  theme_bw(base_size = 7) +
   t1
 
 ggsave("../../plots/baseline_max_run_speed_18M_male.pdf",

@@ -5,20 +5,44 @@
 \alias{FIBER_TYPES}
 \title{Fiber-type-specific measures}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 672 rows and 11 columns.
+An object of class \code{data.frame} with 672 rows and 10 columns:
+
+\describe{
+\item{pid}{character; randomly generated 8-digit identifier used in
+linkage to phenotypic data. All samples from the same animal have the same
+PID.}
+\item{iowa_id}{character; unique ID used for each rat at the Iowa PASS.}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{group}{factor; exercise training group. Either "SED" (sedentary) or
+the number of weeks of training ("1W", "2W", "4W", "8W").}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{muscle}{factor; the muscle that was sampled with levels "LG" (lateral
+gastrocnemius), "MG" (medial gastrocnemius), "PL" (plantaris), and "SOL"
+(soleus).}
+\item{type}{factor; the muscle fiber type with levels "I", "IIa", "IIx",
+and "IIb".}
+\item{fiber_area}{numeric; muscle fiber cross-sectional area (\eqn{\mu
+  m^2}).}
+\item{fiber_count}{integer; number of muscle fibers by fiber type.}
+\item{total_fiber_count}{integer; total number of muscle fibers across
+fiber types.}
+}
 }
 \usage{
 FIBER_TYPES
 }
 \description{
-A \code{data.frame} containing fiber-type-specific measures:
-  fiber type cross-sectional area (CSA) and fiber count.
+Fiber-type-specific measures: fiber cross-sectional area (CSA)
+and fiber count.
 }
 \examples{
 print.data.frame(head(FIBER_TYPES))
 
 }
 \seealso{
-\code{\link{FIBER_TYPES_EMM}}, \code{\link{FIBER_TYPES_STATS}}
+\code{\link{FIBER_AREA_EMM}}, \code{\link{FIBER_AREA_STATS}},
+\code{\link{FIBER_COUNT_EMM}}, \code{\link{FIBER_COUNT_STATS}},
+\code{\link{FIBER_COUNT_MVT}}
 }
 \keyword{datasets}

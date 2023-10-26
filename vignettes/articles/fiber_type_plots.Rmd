@@ -64,8 +64,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = c(700, 3300), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_LG_6M_female.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_LG_6M_female.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -82,8 +82,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = 1000 * c(1, 5), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_LG_6M_male.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_LG_6M_male.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -103,8 +103,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = 1000 * c(1, 3.25), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_LG_18M_female.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_LG_18M_female.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -123,8 +123,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = 1000 * c(1, 3.7), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_LG_18M_male.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_LG_18M_male.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -145,8 +145,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = c(800, 2800), clip = "off") +
   theme(plot.margin = margin(t = 8, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_MG_6M_female.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_MG_6M_female.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -163,8 +163,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = 1000 * c(1, 5), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_MG_6M_male.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_MG_6M_male.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -184,8 +184,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = 1000 * c(1, 3.2), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_MG_18M_female.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_MG_18M_female.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -204,8 +204,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = 1000 * c(1, 3.6), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_MG_18M_male.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_MG_18M_male.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -226,8 +226,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = c(500, 2650), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_PL_6M_female.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_PL_6M_female.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -244,8 +244,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = 1000 * c(0.7, 5), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_PL_6M_male.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_PL_6M_male.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -263,8 +263,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = 1000 * c(0.75, 3.2), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_PL_18M_female.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_PL_18M_female.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -282,8 +282,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = c(800, 4050), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_PL_18M_male.png", 
-       height = 1.7, width = 2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_PL_18M_male.pdf", 
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -305,8 +305,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = c(800, 1840), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_SOL_6M_female.png", 
-       height = 1.7, width = 1.2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_SOL_6M_female.pdf", 
+       height = 1.7, width = 1.2, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -323,8 +323,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = c(1200, 2200), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_SOL_6M_male.png", 
-       height = 1.7, width = 1.2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_SOL_6M_male.pdf", 
+       height = 1.7, width = 1.2, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -342,8 +342,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = c(790, 2000), clip = "off") +
   theme(plot.margin = margin(t = 6, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_SOL_18M_female.png",
-       height = 1.7, width = 1.2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_SOL_18M_female.pdf",
+       height = 1.7, width = 1.2, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -360,8 +360,8 @@ plot_fiber_type(x = FIBER_TYPES,
   coord_cartesian(ylim = c(1000, 3000), clip = "off") +
   theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
 
-ggsave(filename = "../../plots/fiber_CSA_SOL_18M_male.png", 
-       height = 1.7, width = 1.2, units = "in", dpi = 400)
+ggsave(filename = "../../plots/fiber_CSA_SOL_18M_male.pdf", 
+       height = 1.7, width = 1.2, family = "ArialMT")
 ```
 
 

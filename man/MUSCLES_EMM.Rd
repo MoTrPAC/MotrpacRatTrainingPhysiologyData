@@ -12,8 +12,8 @@ MUSCLES_EMM
 }
 \description{
 A list of \code{emmGrid} objects, one for each muscle-specific
-  measures: terminal muscle mass, mean cross-sectional area (CSA), glycogen,
-  capillary contacts, and citrate synthase.
+measures: terminal muscle mass, mean cross-sectional area (CSA), glycogen,
+capillary contacts, and citrate synthase.
 }
 \examples{
 names(MUSCLES_EMM) # available measures
@@ -26,6 +26,6 @@ MUSCLES_EMM[["Glycogen"]]
 }
 \seealso{
 \code{\link{MUSCLES}}, \code{\link{MUSCLES_STATS}},
-  \code{\link[emmeans]{emmeans}}
+\code{\link[emmeans]{emmeans}}
 }
 \keyword{datasets}

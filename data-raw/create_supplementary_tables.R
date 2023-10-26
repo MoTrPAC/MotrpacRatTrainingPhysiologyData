@@ -4,51 +4,15 @@ library(purrr)
 library(tibble)
 library(tidyr)
 library(writexl)
+library(emmeans)
 
-## Table S4: trained vs. SED comparisons =======================================
-s4 <- list(
-  "NMR & VO2MAX measures" = BASELINE_STATS,
-  "Plasma analytes" = ANALYTES_STATS,
-  "Muscle measures" = MUSCLES_STATS %>%
-    mutate(response = ifelse(response == "Glycogen",
-                             "Muscle Glycogen", response),
-           response = sub("Terminal Weight",
-                          "Terminal Muscle Mass", response))
-) %>%
-  map(function(xi) {
-    xi %>%
-      mutate(pct_change = 100 * (ratio - 1),
-             age = ifelse(is.na(age), "6M, 18M", as.character(age))) %>%
-      separate_rows(age, sep = ", ") %>%
-      relocate(pct_change, .after = ratio) %>%
-      relocate(contrast, model_type, any_of(c("estimate")), .after = sex) %>%
-      dplyr::select(response:pct_change, p.value, signif) %>%
-      mutate(model_type = ifelse(model_type == "Wilcoxon",
-                                 "wilcox.test", model_type),
-             age = factor(age, levels = c("6M", "18M")),
-             sex = factor(sex, levels = c("Female", "Male")),
-             response = sub("Weight", "Mass", response),
-             response = ifelse(response == "NMR Mass",
-                               "NMR Body Mass", response),
-             response = factor(response, levels = unique(response)),
-             across(any_of(c("estimate", "pct_change")), round),
-             ratio = round(ratio, digits = 2),
-             p.value = signif(p.value, digits = 3)) %>%
-      arrange(response, age, sex, contrast) %>%
-      dplyr::rename(any_of(c("mean_rank_diff" = "estimate")),
-                    contrast_ratio = ratio)
-  })
-
-write_xlsx(s4, path = "./supplementary-tables/supplementary-table-4.xlsx",
-           col_names = TRUE, format_headers = TRUE)
-
-
-## Table S5: post - pre training differences ===================================
+## Supplementary Table 2: post - pre training differences ======================
+# Get pre-training means to calculate % change
 x <- BASELINE_EMM %>%
   map(function(.x) {
     out <- summary(.x) %>%
-      dplyr::rename(any_of(c("pre_emmean" = "response",
-                             "pre_emmean" = "rate")))
+      dplyr::rename(any_of(c("pre_mean" = "response",
+                             "pre_mean" = "rate")))
     if ("age_group" %in% colnames(out)) {
       out <- mutate(out,
                     age = sub("_.*", "", age_group),
@@ -59,36 +23,71 @@ x <- BASELINE_EMM %>%
   }) %>%
   enframe(name = "response") %>%
   unnest(value) %>%
-  dplyr::select(response, group, age, sex, pre_emmean)
+  dplyr::select(response, group, age, sex, pre_mean)
 
-x2 <- filter(x, response == "NMR Weight") %>%
-  mutate(response = "Term - NMR Pre Weight")
+x2 <- filter(x, response == "NMR Body Mass") %>%
+  mutate(response = "Term - NMR Pre Body Mass")
 
 x <- rbind(x, x2)
 
-s5 <- PRE_POST_STATS %>%
-  mutate(sex = ifelse(is.na(sex), "Female, Male", as.character(sex))) %>%
-  separate_rows(sex, sep = ", ") %>%
-  left_join(x, by = c("response", "group", "age", "sex")) %>%
-  mutate(pct_change = 100 * emmean / pre_emmean,
-         across(c(where(is.numeric), -p.value), ~ round(.x, digits = 0)),
-         p.value = signif(p.value, digits = 3),
+s2 <- PRE_POST_STATS %>%
+  left_join(x, by = c("response", "age", "sex", "group")) %>%
+  mutate(pct_change = 100 * estimate / pre_mean,
+         across(.cols = c(where(is.numeric), -starts_with("p.")),
+                .fn = ~ round(.x, digits = 2)),
+         pct_change = round(pct_change, digits = 0),
+         across(.cols = starts_with("p."),
+                .fn = ~ signif(.x, digits = 2)),
          age = factor(age, levels = c("6M", "18M")),
          sex = factor(sex, levels = c("Female", "Male")),
          group = factor(group, levels = c("SED", paste0(2 ^ (0:3), "W"))),
-         model_type = ifelse(model_type == "Wilcoxon",
-                             "wilcox.test", model_type),
          response = sub("Term ", "Terminal ", response),
-         response = sub("Weight", "Mass", response),
-         response = ifelse(response == "NMR Mass", "NMR Body Mass", response),
          response = factor(response, levels = unique(response))) %>%
-  relocate(pre_emmean, pct_change, p.value, signif, .after = emmean) %>%
-  relocate(model_type, estimate, .after = group) %>%
-  dplyr::rename(`mean_post-pre_diff` = emmean, pre_mean = pre_emmean,
-                mean_rank_diff = estimate) %>%
-  dplyr::select(response:signif) %>%
+  relocate(pre_mean, pct_change, .after = estimate) %>%
   arrange(response, age, sex, group)
 
-write_xlsx(s5, path = "./supplementary-tables/supplementary-table-5.xlsx",
-           col_names = TRUE, format_headers = TRUE)
+# # Save
+# write_xlsx(s2, path = "./supplementary-tables/supplementary_table_2.xlsx",
+#            col_names = TRUE, format_headers = TRUE)
+
+
+## Supplementary Table 3: trained vs. SED comparisons ==========================
+s3 <- list(
+  "NMR & VO2max" = BASELINE_STATS,
+  "Plasma Analytes" = ANALYTES_STATS,
+  "Muscle Measures" = mutate(MUSCLES_STATS,
+                             response = ifelse(response == "Glycogen",
+                                               "Muscle Glycogen", response)),
+  "Mean Fiber Area" = FIBER_AREA_STATS,
+  "Fiber Count" = FIBER_COUNT_STATS
+) %>%
+  map(function(xi) {
+
+    if ("ratio" %in% colnames(xi)) {
+      xi <- mutate(xi, pct_change = 100 * (ratio - 1))
+    }
+
+    xi %>%
+      mutate(pct_change = ifelse(estimate_type == "ratio",
+                                 100 * (1 - estimate), NA)) %>%
+      mutate(response = factor(response, levels = unique(response)),
+             pct_change = round(pct_change, digits = 0),
+             across(.cols = c(where(is.numeric), -starts_with("p.")),
+                    .fn = ~ round(.x, digits = 2)),
+             across(.cols = starts_with("p."),
+                    .fn = ~ signif(.x, digits = 2))) %>%
+      relocate(pct_change, .after = estimate) %>%
+      {if ("muscle" %in% colnames(.)) {
+        arrange(., response, age, sex, muscle, contrast)
+      } else {
+        arrange(., response, age, sex, contrast)
+      }} %>%
+      # arrange(response, age, sex, across(muscle), contrast) %>%
+      # Remove columns with all missing values
+      dplyr::select(where(fn = ~ !all(is.na(.x))))
+  })
+
+# # Save
+# write_xlsx(s3, path = "./supplementary-tables/supplementary_table_3.xlsx",
+#            col_names = TRUE, format_headers = TRUE)
 

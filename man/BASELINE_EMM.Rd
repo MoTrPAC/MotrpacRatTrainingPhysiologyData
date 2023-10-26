@@ -12,8 +12,8 @@ BASELINE_EMM
 }
 \description{
 A list of \code{emmGrid} objects: NMR mass, lean mass, fat mass,
-  %% lean mass, %% fat mass; absolute VO\eqn{_2}max; and relative
-  VO\eqn{_2}max.
+\% lean mass, \% fat mass; absolute VO\eqn{_2}max; and relative
+VO\eqn{_2}max.
 }
 \examples{
 names(BASELINE_EMM) # available measures
@@ -21,7 +21,7 @@ names(BASELINE_EMM) # available measures
 str(BASELINE_EMM)
 
 # Print one of the emmGrid objects
-BASELINE_EMM[["NMR Weight"]]
+summary(BASELINE_EMM[["NMR Body Mass"]])
 
 }
 \seealso{

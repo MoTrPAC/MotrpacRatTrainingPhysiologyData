@@ -215,7 +215,7 @@ There are a few outliers, though they should not affect the results too much. We
 
 ```{r}
 ## Estimated marginal means
-FIBER_COUNT_EMM <- map(fit.count[1:4], function(mod_i) {
+FIBER_COUNT_EMM <- map(fit.count, function(mod_i) {
   by <- c("age", "sex")
   mult.name <- NULL
   
@@ -238,6 +238,18 @@ The values in the `emmean` column are the estimated marginal means of the ilr co
 The P-values are testing whether the means of the groups are different from 0, which is not of interest, in this case. We want to know if there are differences between the 8W and SED groups. 
 
 ```{r}
+model_df <- fit.count %>% 
+  map_chr(.f = ~ paste(deparse(.x[["call"]]), collapse = "")) %>% 
+  enframe(name = "muscle", value = "model") %>% 
+  mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
+         model_type = "mlm",
+         formula = sub(".*formula = ([^,]+),.*", "\\1", model),
+         formula = sub("y", "ilr(cbind(tI, tIIa, tIIx, tIIb))", formula)) %>% 
+  select(-model)
+```
+
+
+```{r}
 FIBER_COUNT_MVT <- map(FIBER_COUNT_EMM, function(emm_i) {
   
   if ("balance" %in% colnames(attr(emm_i, "grid"))) {
@@ -254,10 +266,31 @@ FIBER_COUNT_MVT <- map(FIBER_COUNT_EMM, function(emm_i) {
   unnest(value) %>% 
   group_by(age, sex) %>% 
   mutate(p.adj = p.adjust(p.value, method = "holm"),
-         signif = ifelse(p.adj < 0.05, "*", ""),
-         across(.cols = c(contains("ratio"), T.square, estimate, SE), 
-                .f = ~ round(.x, digits = 2)),
-         across(.cols = c(p.value, p.adj), .f = ~ signif(.x, digits = 2)))
+         signif = p.adj < 0.05) %>% 
+  ungroup() %>% 
+  pivot_longer(cols = c(T.square, estimate),
+               names_to = "estimate_type",
+               values_to = "estimate", 
+               values_drop_na = TRUE) %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  pivot_longer(cols = c(df, df2),
+               names_to = NULL,
+               values_to = "df2",
+               values_drop_na = TRUE) %>% 
+  mutate(statistic_type = sub("\\.ratio", "", statistic_type),
+         estimate_type = ifelse(estimate_type == "estimate", 
+                                "difference of means", estimate_type),
+         response = "Fiber Count") %>% 
+  left_join(model_df, by = "muscle") %>% 
+  dplyr::select(response, age, sex, muscle, contrast, estimate_type, estimate, 
+                SE, statistic_type, statistic, df1, df2, p.value, p.adj,
+                signif, everything()) %>% 
+  mutate(muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL"))) %>% 
+  arrange(age, sex, muscle) %>% 
+  as.data.frame()
 ```
 
 We will proceed with specific comparisons of the subcompositions.
@@ -270,19 +303,31 @@ FIBER_COUNT_STATS <- map(FIBER_COUNT_EMM, function(emm_i) {
 }) %>%
   enframe(name = "muscle") %>% 
   unnest(value) %>%
-  arrange(age, sex, muscle, balance) %>%
-  relocate(contrast, .before = estimate) %>% 
-  relocate(muscle, balance, .before = contrast) %>% 
   group_by(age, sex, muscle) %>% 
   mutate(p.adj = p.adjust(p.value, method = "holm")) %>% 
   ungroup() %>% 
-  mutate(across(.cols = c(estimate, SE, lower.CL, upper.CL, t.ratio), 
-                .f = ~ round(.x, digits = 2)),
-         # Mark significant comparisons (adjusted p-value < 0.05)
-         signif = ifelse(p.adj < 0.05, "*", ""),
-         across(.cols = c(p.value, p.adj), 
-                .f = ~ signif(.x, digits = 2))) %>%
-  mutate(muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL")))
+  pivot_longer(cols = estimate,
+               names_to = "estimate_type",
+               values_to = "estimate", 
+               values_drop_na = TRUE) %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  mutate(statistic_type = sub("\\.ratio", "", statistic_type),
+         estimate_type = ifelse(estimate_type == "estimate", 
+                                "difference of means", estimate_type),
+         signif = p.adj < 0.05,
+         muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL")),
+         response = "Fiber Count",
+         balance = ifelse(is.na(balance), 1, balance)) %>% 
+  left_join(model_df, by = "muscle") %>% 
+  dplyr::select(response, age, sex, muscle, balance, contrast, estimate_type,
+                estimate, SE, lower.CL, upper.CL, statistic_type, statistic, df,
+                p.value, p.adj, everything()) %>%
+  mutate(muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL"))) %>%
+  arrange(age, sex, muscle, balance) %>% 
+  as.data.frame()
 ```
 
 ```{r eval=FALSE, include=FALSE}

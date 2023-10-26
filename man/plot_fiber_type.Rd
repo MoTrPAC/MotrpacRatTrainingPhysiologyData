@@ -16,13 +16,14 @@ plot_fiber_type(
 )
 }
 \arguments{
-\item{x}{`data.frame` with columns "response", "type", "group", "muscle",
-"age", "sex", and the column given by \code{response}.}
+\item{x}{a \code{data.frame} with columns \code{"response"}, \code{"type"},
+\code{"group"}, \code{"muscle"}, \code{"age"}, \code{"sex"}, and the column
+given by \code{response}.}
 
 \item{response}{character; name of a column in \code{x}. Used to plot
 individual data points.}
 
-\item{conf}{\code{data.frame} with columns "muscle", "age", "sex", "group",
+\item{conf}{a \code{data.frame} with columns "muscle", "age", "sex", "group",
 "response_mean", "lower.CL", and "upper.CL".}
 
 \item{stats}{\code{data.frame} with columns "muscle", "type", "age", "sex",

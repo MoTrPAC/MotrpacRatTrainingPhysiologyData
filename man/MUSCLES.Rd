@@ -5,19 +5,43 @@
 \alias{MUSCLES}
 \title{Muscle-specific measures}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1116 rows and 11 columns.
+An object of class \code{data.frame} with 1116 rows and 11 columns:
+
+\describe{
+\item{pid}{character; randomly generated 8-digit identifier used in
+linkage to phenotypic data. All samples from the same animal have the same
+PID.}
+\item{iowa_id}{character; unique ID used for each rat at the Iowa PASS.}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{group}{factor; exercise training group. Either "SED" (sedentary) or
+the number of weeks of training ("1W", "2W", "4W", "8W").}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{muscle}{factor; the muscle that was sampled with levels "LG" (lateral
+gastrocnemius), "MG" (medial gastrocnemius), "PL" (plantaris), and "SOL"
+(soleus).}
+\item{term_muscle_mass}{numeric; terminal muscle mass (mg).}
+\item{mean_CSA}{numeric; mean fiber cross-sectional area (CSA; \eqn{\mu
+  m^2}).}
+\item{glycogen}{numeric; muscle glycogen (\eqn{ng/\mu L \text{
+  supernatant}/mg \text{ tissue}}).}
+\item{capillary_contacts}{numeric; capillary contacts (number of
+capillaries per fiber).}
+\item{citrate_synthase}{numeric; citrate synthase (\eqn{U / \mu g \text{
+  protein} \times 10^3}).}
+}
 }
 \usage{
 MUSCLES
 }
 \description{
-A \code{data.frame} containing muscle-type specific measures
-  taken from medial gastrocnemius (MG), lateral gastroc (LG), plantaris (PL),
-  and soleus (SOL): terminal muscle mass, mean cross-sectional area (CSA),
-  glycogen, capillary contacts, and citrate synthase.
+Muscle-specific measures taken from medial gastrocnemius (MG),
+lateral gastroc (LG), plantaris (PL), and soleus (SOL): terminal muscle
+mass, mean cross-sectional area (CSA), glycogen, capillary contacts, and
+citrate synthase.
 }
 \examples{
-print.data.frame(head(MUSCLES))
+head(MUSCLES)
 
 }
 \seealso{

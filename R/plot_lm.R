@@ -1,4 +1,4 @@
-#' @title Show all regression diagnostic plots
+#' @title Regression diagnostic plots
 #'
 #' @param model output of \code{lm} or \code{glm}.
 #'

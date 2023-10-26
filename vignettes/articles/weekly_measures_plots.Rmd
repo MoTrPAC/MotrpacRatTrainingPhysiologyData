@@ -57,10 +57,10 @@ WEEKLY_BODY_MASS_EMM %>%
                      breaks = seq(180, 210, 10)) +
   coord_cartesian(ylim = c(175, 210), clip = "off") +
   labs(x = "Week") +
-  theme_bw(base_size = 6.5) +
+  theme_bw(base_size = 7) +
   theme(text = element_text(color = "black"),
-        axis.text = element_text(color = "black", size = 5.5),
-        axis.title = element_text(color = "black", size = 6),
+        axis.text = element_text(color = "black", size = 7),
+        axis.title = element_text(color = "black", size = 7),
         axis.ticks = element_line(color = "black"),
         axis.ticks.x = element_blank(),
         strip.text = element_text(color = "black", size = 7),
@@ -69,7 +69,7 @@ WEEKLY_BODY_MASS_EMM %>%
         panel.grid = element_blank())
 
 ggsave("../../plots/weekly_body_mass_6M_female.pdf",
-       height = 1.7, width = 3.8, family = "ArialMT")
+       height = 1.7, width = 3, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -91,10 +91,10 @@ WEEKLY_BODY_MASS_EMM %>%
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(308, 376), clip = "off") +
   labs(x = "Week") +
-  theme_bw(base_size = 6.5) +
+  theme_bw(base_size = 7) +
   theme(text = element_text(color = "black"),
-        axis.text = element_text(color = "black", size = 5.5),
-        axis.title = element_text(color = "black", size = 6),
+        axis.text = element_text(color = "black", size = 7),
+        axis.title = element_text(color = "black", size = 7),
         axis.ticks = element_line(color = "black"),
         axis.ticks.x = element_blank(),
         strip.text = element_text(color = "black", size = 7),
@@ -103,7 +103,7 @@ WEEKLY_BODY_MASS_EMM %>%
         panel.grid = element_blank())
 
 ggsave("../../plots/weekly_body_mass_6M_male.pdf",
-       height = 1.7, width = 3.8, family = "ArialMT")
+       height = 1.7, width = 3, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -125,10 +125,10 @@ WEEKLY_BODY_MASS_EMM %>%
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(220, 255), clip = "off") +
   labs(x = "Week") +
-  theme_bw(base_size = 6.5) +
+  theme_bw(base_size = 7) +
   theme(text = element_text(color = "black"),
-        axis.text = element_text(color = "black", size = 5.5),
-        axis.title = element_text(color = "black", size = 6),
+        axis.text = element_text(color = "black", size = 7),
+        axis.title = element_text(color = "black", size = 7),
         axis.ticks = element_line(color = "black"),
         axis.ticks.x = element_blank(),
         strip.text = element_text(color = "black", size = 7),
@@ -137,7 +137,7 @@ WEEKLY_BODY_MASS_EMM %>%
         panel.grid = element_blank())
 
 ggsave("../../plots/weekly_body_mass_18M_female.pdf",
-       height = 1.7, width = 3.8, family = "ArialMT")
+       height = 1.7, width = 3, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -159,10 +159,10 @@ WEEKLY_BODY_MASS_EMM %>%
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(375, 450), clip = "off") +
   labs(x = "Week") +
-  theme_bw(base_size = 6.5) +
+  theme_bw(base_size = 7) +
   theme(text = element_text(color = "black"),
-        axis.text = element_text(color = "black", size = 5.5),
-        axis.title = element_text(color = "black", size = 6),
+        axis.text = element_text(color = "black", size = 7),
+        axis.title = element_text(color = "black", size = 7),
         axis.ticks = element_line(color = "black"),
         axis.ticks.x = element_blank(),
         strip.text = element_text(color = "black", size = 7),
@@ -171,7 +171,7 @@ WEEKLY_BODY_MASS_EMM %>%
         panel.grid = element_blank())
 
 ggsave("../../plots/weekly_body_mass_18M_male.pdf",
-       height = 1.7, width = 3.8, family = "ArialMT")
+       height = 1.7, width = 3, family = "ArialMT")
 ```
 
 
@@ -201,7 +201,7 @@ WEEKLY_BODY_MASS_STATS %>%
                      breaks = seq(0.85, 1.05, 0.05),
                      expand = expansion(mult = 5e-3)) +
   labs(x = "Week", y = "8W / SED") +
-  theme_bw(base_size = 6.5) +  
+  theme_bw(base_size = 7) +  
   theme(panel.border = element_rect(color = NA),
         panel.grid = element_blank(),
         axis.line = element_line(color = "black"),
@@ -209,9 +209,11 @@ WEEKLY_BODY_MASS_STATS %>%
         legend.position = "bottom",
         legend.direction = "horizontal",
         legend.margin = margin(t = -2, b = 0), 
-        legend.key.size = unit(5, "pt"),
-        axis.text = element_text(color = "black", size = 5.5),
-        axis.title = element_text(color = "black", size = 6),
+        legend.key.size = unit(7, "pt"),
+        legend.text = element_text(color = "black", size = 7),
+        legend.title = element_text(color = "black", size = 7),  
+        axis.text = element_text(color = "black", size = 7),
+        axis.title = element_text(color = "black", size = 7),
         axis.ticks = element_line(color = "black"),
         strip.text = element_text(color = "black", size = 7),
         strip.background = element_blank())
@@ -246,7 +248,7 @@ lact_df <- WEEKLY_MEASURES %>%
 
 ```{r}
 # Reusable lactate plot code
-f1 <- function(x) {
+plot_lactate <- function(x) {
   ggplot() +
     stat_summary(geom = "crossbar", fun.data = mean_cl_normal, 
                  data = filter(x, n >= 5),
@@ -261,8 +263,8 @@ f1 <- function(x) {
     scale_color_manual(values = c("#ff6eff", "#5555ff"),
                        breaks = c("Female", "Male")) +
     labs(x = "Week") +
-    theme_bw() +
-    theme(text = element_text(size = 6.5, color = "black"),
+    theme_bw(base_size = 7) +
+    theme(text = element_text(size = 7, color = "black"),
           line = element_line(linewidth = 0.3, color = "black"),
           axis.ticks = element_line(linewidth = 0.3, color = "black"),
           panel.grid = element_blank(),
@@ -270,9 +272,8 @@ f1 <- function(x) {
           panel.border = element_rect(color = "black", fill = NA, 
                                       linewidth = 0.3),
           axis.ticks.x = element_blank(),
-          axis.text = element_text(size = 5,
-                                   color = "black"),
-          axis.title = element_text(size = 6.5, margin = margin(),
+          axis.text = element_text(size = 7, color = "black"),
+          axis.title = element_text(size = 7, margin = margin(),
                                     color = "black"),
           # axis.line = element_line(color = "black", linewidth = 0.3),
           strip.background = element_blank(),
@@ -290,14 +291,14 @@ f1 <- function(x) {
 # 6M Female
 lact_df %>% 
   filter(age == "6M", sex == "Female") %>% 
-  f1() + 
+  plot_lactate() + 
   scale_y_continuous(name = "Lactate (mM)",
                      expand = expansion(mult = 5e-3),
                      breaks = seq(0, 8, 2)) +
   coord_cartesian(ylim = c(0, 8), clip = "off")
 
 ggsave("../../plots/weekly_lactate_6M_female.pdf", 
-       height = 1.7, width = 3.8, family = "ArialMT")
+       height = 1.7, width = 3, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -306,14 +307,14 @@ ggsave("../../plots/weekly_lactate_6M_female.pdf",
 # 6M Male
 lact_df %>% 
   filter(age == "6M", sex == "Male") %>% 
-  f1() +
+  plot_lactate() +
   coord_cartesian(ylim = c(0, 12), clip = "off") +
   scale_y_continuous(name = "Lactate (mM)",
                      breaks = seq(0, 12, 4),
                      expand = expansion(mult = 5e-3))
 
 ggsave("../../plots/weekly_lactate_6M_male.pdf", 
-       height = 1.7, width = 3.8, family = "ArialMT")
+       height = 1.7, width = 3, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -322,14 +323,14 @@ ggsave("../../plots/weekly_lactate_6M_male.pdf",
 # 18M Female
 lact_df %>% 
   filter(age == "18M", sex == "Female") %>% 
-  f1() +
+  plot_lactate() +
   coord_cartesian(ylim = c(0, 12), clip = "off") +
   scale_y_continuous(name = "Lactate (mM)",
                      breaks = seq(0, 12, 4),
                      expand = expansion(mult = 5e-3))
 
 ggsave("../../plots/weekly_lactate_18M_female.pdf", 
-       height = 1.7, width = 3.8, family = "ArialMT")
+       height = 1.7, width = 3, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -338,13 +339,13 @@ ggsave("../../plots/weekly_lactate_18M_female.pdf",
 # 18M Male
 lact_df %>% 
   filter(age == "18M", sex == "Male") %>% 
-  f1() +
+  plot_lactate() +
   coord_cartesian(ylim = c(0, 8), clip = "off") +
   scale_y_continuous(name = "Lactate (mM)",
                      breaks = seq(0, 8, 2),
                      expand = expansion(mult = 5e-3))
 
 ggsave("../../plots/weekly_lactate_18M_male.pdf", 
-       height = 1.7, width = 3.8, family = "ArialMT")
+       height = 1.7, width = 3, family = "ArialMT")
 ```
 

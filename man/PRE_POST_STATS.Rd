@@ -5,25 +5,58 @@
 \alias{PRE_POST_STATS}
 \title{Statistical analysis results of post - pre training differences}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 90 rows and 20 columns.
+An object of class \code{data.frame} with 90 rows and 21 columns:
+
+\describe{
+\item{response}{character; the measurement being tested.}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{group}{factor; exercise training group. Either "SED" (sedentary) or
+the number of weeks of training ("1W", "2W", "4W", "8W").}
+\item{estimate_type}{character; interpretation of the value in the
+\code{estimate} column. Either "(post - pre) mean" (mean of the paired
+(post - pre) differences) or "signed mean (post - pre) rank" (the signed
+mean ranks of the (post - pre) differences).}
+\item{estimate}{numeric; the value of the estimate, as described by
+\code{estimate_type}.}
+\item{SE}{numeric; the standard error of the estimate.}
+\item{lower.CL}{numeric; lower bound of the 95\% confidence interval.}
+\item{upper.CL}{numeric; upper bound of the 95\% confidence interval.}
+\item{statistic_type}{character; the type of statistical test. Either "t"
+(Student's t-statistic) or "W" (Wilcox's W-statistic).}
+\item{statistic}{numeric; the value of the test statistic.}
+\item{p.value}{numeric; the p-value associated with the statistical
+test.}
+\item{p.adj}{numeric; the Holm-adjusted p-value.}
+\item{signif}{logical; \code{TRUE} if \code{p.adj} < 0.05.}
+\item{model_type}{character; the statistical model used for testing. Either
+"lm" (linear regression) or "wilcox.test" (Wilcoxon test).}
+\item{formula}{character; the model formula. Includes the response
+variable, any transformations, and predictors.}
+\item{family}{character; the probability distribution and link function for
+the generalized linear model.}
+\item{weights}{character; if reciprocal group variances were used as
+weights to account for heteroscedasticity (nonconstant residual variance),
+this is noted here.}
+\item{obs_removed}{character; if any observations were omitted during the
+analysis, they are listed here.}
+}
 }
 \usage{
 PRE_POST_STATS
 }
 \description{
-A \code{data.frame} containing statistical analysis results of
-  post - pre training differences: NMR body mass, lean mass, fat mass, %% lean
-  mass, %% fat mass; difference between terminal and pre-training NMR mass at
-  1W and 2W of endurance training; absolute VO\eqn{_2}max; relative
-  VO\eqn{_2}max; and maximum run speed.
+Statistical analysis results of post - pre training differences:
+NMR body mass, lean mass, fat mass, \% lean mass, \% fat mass; difference
+between terminal and pre-training NMR mass at 1W and 2W of endurance
+training; absolute VO\eqn{_2}max; relative VO\eqn{_2}max; and maximum run
+speed.
 }
 \examples{
 unique(PRE_POST_STATS$response)
 
-print.data.frame(head(PRE_POST_STATS))
+head(PRE_POST_STATS)
 
-}
-\seealso{
-\code{\link{PHYSIO}}
 }
 \keyword{datasets}

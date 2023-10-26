@@ -5,30 +5,57 @@
 \alias{ANALYTES}
 \title{Plasma clinical analytes}
 \format{
-An object of class \code{data.frame} with 282 rows and 20 columns.
+An object of class \code{data.frame} with 282 rows and 20 columns:
+
+\describe{
+\item{pid}{character; randomly generated 8-digit identifier used in
+linkage to phenotypic data. All samples from the same animal have the same
+PID.}
+\item{iowa_id}{character; unique ID used for each rat at the Iowa PASS.}
+\item{omics_analysis}{logical; whether the sample was selected for -omics
+analysis.}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{group}{factor; exercise training group. Either "SED" (sedentary) or
+the number of weeks of training ("1W", "2W", "4W", "8W").}
+\item{runseq}{integer; run order for 6M animals (1--146).}
+\item{corticosterone}{integer; corticosterone (ng/mL).}
+\item{glucagon}{numeric; glucagon (pM).}
+\item{glucose}{integer; glucose (mg/dL).}
+\item{glycerol}{numeric; glycerol (mg/dL).}
+\item{insulin}{integer; insulin (pg/mL).}
+\item{insulin_iu}{numeric; insulin (\eqn{\mu}IU/mL) using the
+conversion 1 pg/mL = 0.023 \eqn{\mu}IU/mL provided in the package insert.}
+\item{insulin_pm}{numeric; insulin (pM).}
+\item{ketones}{integer; total ketone bodies (\eqn{\mu}mol/L).}
+\item{lactate}{numeric; lactate (mmol/L).}
+\item{leptin}{integer; leptin (pg/mL).}
+\item{nefa}{numeric; non-esterified fatty acids (NEFA) (mmol/L).}
+}
 }
 \usage{
 ANALYTES
 }
 \description{
-A \code{data.frame} containing common clinical analytes measured
-  in plasma.
+Common clinical analytes measured in plasma. There are
+measurements for 10--20 rats per experimental group.
 }
 \details{
 \tabular{lll}{
-  \bold{Analyte} \tab \bold{Catalogue No.} \tab \bold{Company} \cr
-  Corticosterone \tab 55-CORMS-E01 \tab Alpco (Salem, NH) \cr
-  Glucose \tab B24985 \tab Beckman Coulter (Brea, CA) \cr
-  Glycerol \tab 445850 \tab Beckman Coulter \cr
-  Lactate \tab A95550 \tab Beckman Coulter \cr
-  Total Ketones \tab 415-73301, 411-73401 \tab Fujifilm Wako (Osaka, Japan) \cr
-  NEFA \tab 995-34791, 999-34691, 993-35191, 991-34891 \tab Fujifilm Wako \cr
-  Glucagon \tab K1535YK \tab Meso Scale  Discovery (Rockville, MD) \cr
-  Insulin, Leptin \tab K15158C (multiplex assay) \tab Meso Scale Discovery \cr
+\bold{Analyte} \tab \bold{Catalogue No.} \tab \bold{Company} \cr
+Corticosterone \tab 55-CORMS-E01 \tab Alpco (Salem, NH) \cr
+Glucose \tab B24985 \tab Beckman Coulter (Brea, CA) \cr
+Glycerol \tab 445850 \tab Beckman Coulter \cr
+Lactate \tab A95550 \tab Beckman Coulter \cr
+Total Ketones \tab 415-73301, 411-73401 \tab Fujifilm Wako (Osaka, Japan) \cr
+NEFA \tab 995-34791, 999-34691, 993-35191, 991-34891 \tab Fujifilm Wako \cr
+Glucagon \tab K1535YK \tab Meso Scale  Discovery (Rockville, MD) \cr
+Insulin, Leptin \tab K15158C (multiplex assay) \tab Meso Scale Discovery \cr
 }
 }
 \examples{
-print.data.frame(head(ANALYTES))
+head(ANALYTES)
 
 }
 \seealso{

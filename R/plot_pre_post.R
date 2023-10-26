@@ -1,7 +1,7 @@
 #' @title Plot pre and post-training values
 #'
-#' @description Create a \code{ggplot2} object with an arrow for each sample
-#'   that spans from its pre-training to post-training value.
+#' @description Create a \code{ggplot2} object with a line for each sample that
+#'   spans from its pre-training to post-training value.
 #'
 #' @param x \code{data.frame} with pre and post values. The data should be
 #'   filtered to a specific age and sex.
@@ -11,12 +11,16 @@
 #'   values.
 #' @param stats \code{data.frame} with post - pre stats for each training group.
 #'   The data should be filtered to a specific measure, age, and sex.
-#' @param width numeric; value between 0 and 1 specifying the maximum width of
-#'   the group with the most samples.
-#' @param angle numeric; angle of the arrow heads.
-#' @param scale numeric; scaling factor for text and other plot elements.
 #'
 #' @return A \code{ggplot} object.
+#'
+#' @details Lines are colored according to whether the change from pre to post
+#'   is an increase (red) or decrease (blue). If the pre and post values are the
+#'   same (no change), a black point is used instead of a line. Originally, the
+#'   post end of each line terminated in an arrow, but the final figure panels
+#'   were too small to display them properly. Also, the arrows were somewhat
+#'   misleading when the post - pre differences were small enough to be hidden
+#'   by the arrow heads.
 #'
 #' @importFrom dplyr %>% filter rename select mutate arrange group_by ungroup
 #'   summarise left_join n case_when
@@ -33,10 +37,7 @@
 plot_pre_post <- function(x,
                           pre,
                           post,
-                          stats = NULL,
-                          width = 0.8,
-                          angle = 20,
-                          scale = 1)
+                          stats = NULL)
 {
   # Reformat data
   x <- x %>%
@@ -52,7 +53,7 @@ plot_pre_post <- function(x,
     ungroup() %>%
     mutate(group_num = as.numeric(group),
            group_offset = group_num +
-             scales::rescale(rank, to = (width / 2) * c(-1, 1)),
+             scales::rescale(rank, to = (0.9 / 2) * c(-1, 1)),
            color = case_when(diff > 0 ~ "Increase",
                              diff < 0 ~ "Decrease",
                              diff == 0 ~ "No Change"))
@@ -62,16 +63,14 @@ plot_pre_post <- function(x,
     ggplot(data = filter(x, color != "No Change")) +
     geom_segment(aes(x = group_offset, xend = group_offset,
                      y = pre, yend = post, color = color),
-                 arrow = arrow(length = scale * unit(0.35, "mm"),
-                               type = "closed", angle = angle),
                  lineend = "butt", linejoin = "mitre",
-                 linewidth = scale * 0.4)
+                 linewidth = 0.5)
 
   # Add squares for samples where post - pre = 0
   p <- p +
     geom_point(data = filter(x, color == "No Change"),
                aes(x = group_offset, y = pre, color = color),
-               show.legend = FALSE, shape = 15, size = 0.3)
+               show.legend = FALSE, shape = 16, size = 0.5)
 
   if (!is.null(stats)) {
     # Add asterisks for significant changes
@@ -80,14 +79,17 @@ plot_pre_post <- function(x,
     y_pos <- x %>%
       group_by(sex, group, group_num) %>%
       summarise(y_position = max(c(pre, post), na.rm = TRUE),
-                y_position = y_position + diff(ylim) * 0.05)
+                y_position = y_position + diff(ylim) * 0.05,
+                .groups = "keep")
 
-    stats <- left_join(stats, y_pos, by = c("sex", "group"))
+    stats <- left_join(stats, y_pos, by = c("sex", "group")) %>%
+      filter(signif)
 
+    # Asterisks marking significance
     p <- p +
-      # Asterisks
-      geom_text(aes(x = group_num, y = y_position, label = signif),
-                data = stats, size = scale * 3, color = "black")
+      geom_point(aes(x = group_num, y = y_position),
+                 data = stats, size = 3.5, color = "black",
+                 shape = "*")
   }
 
   # Modify appearance
@@ -99,27 +101,26 @@ plot_pre_post <- function(x,
     scale_x_continuous(name = NULL,
                        breaks = 1:nlevels(x$group),
                        labels = levels(x$group)) +
-    guides(color = guide_legend(keywidth = scale * unit(6, "pt"),
-                                keyheight = scale * unit(5, "pt"))) +
+    guides(color = guide_legend(keywidth = unit(7, "pt"),
+                                keyheight = unit(7, "pt"))) +
     labs(y = pre) +
-    theme_minimal(base_size = scale * 6) +
-    theme(axis.text.x = element_text(size = scale * 6, color = "black"),
-          axis.text.y = element_text(size = scale * 5.5, color = "black"),
-          axis.title.y = element_text(size = scale * 5.5, color = "black",
+    theme_minimal(base_size = 7) +
+    theme(axis.text.x = element_text(size = 7, color = "black"),
+          axis.text.y = element_text(size = 7, color = "black"),
+          axis.title.y = element_text(size = 7, color = "black",
                                       margin = margin(r = 3, unit = "pt")),
           axis.ticks.y = element_line(color = "black"),
           axis.line = element_line(color = "black"),
           panel.grid = element_blank(),
           plot.background = element_rect(fill = "white", color = NA),
-          plot.title = element_text(size = scale * 7, hjust = 0.5),
+          plot.title = element_text(size = 7, hjust = 0.5),
           plot.margin = unit(c(2, 2, 2, 2), "pt"),
           legend.position = "bottom",
           legend.direction = "horizontal",
-          legend.title = element_text(size = scale * 5, color = "black"),
-          legend.text = element_text(size = scale * 5, color = "black"),
-          legend.margin = margin(t = -4, b = 0, l = -18,
-                                 unit = "pt"),
-          strip.text = element_text(size = scale * 6, color = "black"),
+          legend.title = element_text(size = 7, color = "black"),
+          legend.text = element_text(size = 7, color = "black"),
+          legend.margin = margin(t = -4, b = 0, l = -18, unit = "pt"),
+          strip.text = element_text(size = 7, color = "black"),
           panel.spacing = unit(3, "pt"))
 
   return(p)

@@ -5,21 +5,54 @@
 \alias{NMR}
 \title{NMR body composition measures}
 \format{
-An object of class \code{data.frame} with 282 rows and 19 columns.
+An object of class \code{data.frame} with 282 rows and 19 columns:
+
+\describe{
+\item{pid}{character; randomly generated 8-digit identifier used in
+linkage to phenotypic data. All samples from the same animal have the same
+PID.}
+\item{iowa_id}{character; unique ID used for each rat at the Iowa PASS.}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{group}{factor; exercise training group. Either "SED" (sedentary) or
+the number of weeks of training ("1W", "2W", "4W", "8W").}
+\item{pre_day}{POSIXct, POSIXt; the day when the pre-training NMR body
+composition measures were recorded.}
+\item{pre_body_mass}{numeric; body mass (g) recorded on the same day
+as NMR body composition measures (pre-training).}
+\item{pre_fat}{numeric; fat mass (g) recorded via NMR (pre-training).}
+\item{pre_lean}{numeric; lean mass (g) recorded via NMR (pre-training).}
+\item{pre_fat_pct}{numeric; percent fat mass (pre-training). Calculated as
+\code{pre_fat / pre_body_mass * 100}.}
+\item{pre_lean_pct}{numeric; percent lean mass (pre-training). Calculated
+as \code{pre_lean / pre_body_mass * 100}.}
+\item{pre_fluid_pct}{numeric; percent fluid mass (pre-training).}
+\item{post_day}{POSIXct, POSIXt; the day when the post-training NMR body
+composition measures were recorded.}
+\item{post_body_mass}{numeric; body mass (g) recorded on the same day as
+NMR body composition measures (post-training).}
+\item{post_fat}{numeric; fat mass (g) recorded via NMR (post-training).}
+\item{post_lean}{numeric; lean mass (g) recorded via NMR (post-training).}
+\item{post_fat_pct}{numeric; percent fat mass (post-training). Calculated
+as \code{post_fat / post_body_mass * 100}.}
+\item{post_lean_pct}{numeric; percent lean mass (post-training). Calculated
+as \code{post_lean / post_body_mass * 100}.}
+\item{post_fluid_pct}{numeric; percent fluid mass (post-training).}
+}
 }
 \usage{
 NMR
 }
 \description{
-A \code{data.frame} containing measures of body composition
-  (total body mass, body fat, %% body fat, lean mass, and %% lean mass) both
-  pre- and post-training.
+Measures of body composition (total body mass, body fat, \% body
+fat, lean mass, and \% lean mass) both pre- and post-training.
 }
 \examples{
-print.data.frame(head(NMR))
+head(NMR)
 
 }
 \seealso{
-\code{\link{PHYSIO}}, \code{\link{PRE_POST_STATS}}
+\code{\link{PRE_POST_STATS}}
 }
 \keyword{datasets}

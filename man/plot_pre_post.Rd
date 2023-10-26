@@ -4,7 +4,7 @@
 \alias{plot_pre_post}
 \title{Plot pre and post-training values}
 \usage{
-plot_pre_post(x, pre, post, stats = NULL, width = 0.8, angle = 20, scale = 1)
+plot_pre_post(x, pre, post, stats = NULL)
 }
 \arguments{
 \item{x}{\code{data.frame} with pre and post values. The data should be
@@ -18,18 +18,20 @@ values.}
 
 \item{stats}{\code{data.frame} with post - pre stats for each training group.
 The data should be filtered to a specific measure, age, and sex.}
-
-\item{width}{numeric; value between 0 and 1 specifying the maximum width of
-the group with the most samples.}
-
-\item{angle}{numeric; angle of the arrow heads.}
-
-\item{scale}{numeric; scaling factor for text and other plot elements.}
 }
 \value{
 A \code{ggplot} object.
 }
 \description{
-Create a \code{ggplot2} object with an arrow for each sample
-  that spans from its pre-training to post-training value.
+Create a \code{ggplot2} object with a line for each sample that
+spans from its pre-training to post-training value.
+}
+\details{
+Lines are colored according to whether the change from pre to post
+is an increase (red) or decrease (blue). If the pre and post values are the
+same (no change), a black point is used instead of a line. Originally, the
+post end of each line terminated in an arrow, but the final figure panels
+were too small to display them properly. Also, the arrows were somewhat
+misleading when the post - pre differences were small enough to be hidden
+by the arrow heads.
 }

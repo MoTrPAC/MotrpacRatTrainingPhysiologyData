@@ -643,16 +643,16 @@ model_df <- model_list %>%
          weights = ifelse(grepl("weights = ", model), 
                           sub(".*weights = ([^,]+),.*", "\\1", model), 
                           NA_character_)) %>% 
-  dplyr::select(-model) %>% 
   mutate(obs_removed = ifelse(response == "Terminal Muscle Mass", 
                               "18M8T3 SOL = 73, 18M4T18 PL = 210",
-                              NA_character_))
+                              NA_character_)) %>% 
+  dplyr::select(-model)
 
 # Results
 MUSCLES_STATS <- MUSCLES_EMM %>% 
   map(function(emm_i) {
-    contrast(emm_i, method = "dunnett", ratios = TRUE,
-             bias.adj = FALSE) %>% 
+    contrast(emm_i, method = "dunnett", 
+             ratios = TRUE, bias.adj = FALSE) %>% 
       summary(infer = TRUE) %>% 
       as.data.frame() %>% 
       rename(any_of(c(lower.CL = "asymp.LCL",
@@ -660,14 +660,23 @@ MUSCLES_STATS <- MUSCLES_EMM %>%
   }) %>%
   enframe(name = "response") %>% 
   unnest(value) %>%
-  mutate(signif = ifelse(p.value < 0.05, "*", ""),
-         pct_change = 100 * (ratio - 1),
-         pct_change = round(pct_change, digits = 1),
-         across(.cols = c(ratio, SE, lower.CL, upper.CL), 
-                .f = ~ round(.x, digits = 2)),
-         p.value = signif(p.value, digits = 2)) %>% 
+  group_by(response, age, sex) %>%
+  mutate(p.adj = p.adjust(p.value, method = "holm"),
+         signif = p.adj < 0.05) %>% 
+  ungroup() %>% 
+  pivot_longer(cols = ratio, 
+               names_to = "estimate_type", 
+               values_to = "estimate", 
+               values_drop_na = TRUE) %>% 
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>% 
+  mutate(statistic_type = sub("\\.ratio", "", statistic_type)) %>% 
   left_join(model_df, by = "response") %>% 
-  relocate(pct_change, .after = "ratio") %>% 
+  dplyr::select(response, age, sex, muscle, contrast, estimate_type, null,
+                estimate, SE, lower.CL, upper.CL, statistic_type, statistic, df,
+                p.value, p.adj, signif, everything()) %>% 
   arrange(response, age, sex, muscle, contrast)
 ```
 

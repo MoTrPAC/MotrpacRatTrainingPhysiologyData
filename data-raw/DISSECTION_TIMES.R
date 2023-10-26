@@ -2,6 +2,9 @@ library(MotrpacRatTrainingPhysiologyData)
 library(dplyr)
 library(lubridate)
 
+PHYSIO <- get0("PHYSIO",
+               envir = asNamespace("MotrpacRatTrainingPhysiologyData"))
+
 ## 6-month data ================================================================
 sp6 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.6M_1.02_DS_MoTrPAC.PASS_Animal.Specimen.Processing.csv") %>%
   mutate(aliquotdescription = ifelse(grepl("Aorta", aliquotdescription),
@@ -12,6 +15,7 @@ sc6 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.6M_1.02_DS_MoTrPAC.PASS_Anima
 x6 <- full_join(sp6, sc6, by = "pid")
 
 unique(x6$aliquotdescription) # 25 descriptions, not all relevant
+
 
 ## 18-month data ===============================================================
 sp18 <- read.csv("./data-raw/DMAQC_Transfer_PASS_1B.18M_1.00_DS_MoTrPAC.PASS_Animal.Specimen.Processing.csv")
@@ -56,7 +60,7 @@ dissection_order <- c(
 x6 <- x6[, colnames(x18)]
 
 DISSECTION_TIMES <- rbind(x6, x18) %>%
-  select(pid, techid, sampletypedescription,
+  select(pid, sampletypedescription,
          aliquotdescription, t_collection, t_freeze, t_death) %>%
   filter(t_collection != "",
          !grepl("Histology", aliquotdescription),
@@ -66,7 +70,8 @@ DISSECTION_TIMES <- rbind(x6, x18) %>%
          aliquotdescription = dissection_order[aliquotdescription],
          aliquotdescription = factor(aliquotdescription,
                                      levels = unique(dissection_order)),
-         across(c(t_collection, t_death, t_freeze), ~ seconds(hms(.x))),
+         across(.cols = c(t_collection, t_death, t_freeze),
+                .fn = ~ seconds(hms(.x))),
 
          # Fix data-entry errors
          t_freeze = case_when(
@@ -79,13 +84,17 @@ DISSECTION_TIMES <- rbind(x6, x18) %>%
          t_death = ifelse(pid == "10059369" & aliquotdescription == "Heart",
                           t_collection, t_death),
 
-         across(c(t_collection, t_death, t_freeze),
-                ~ as.integer(.x - pmin(t_collection, t_death, t_freeze))),
+         across(.cols = c(t_collection, t_death, t_freeze),
+                .fn = ~ hms(seconds_to_period(.x))),
+
+         # across(c(t_collection, t_death, t_freeze),
+         #        ~ as.integer(.x - pmin(t_collection, t_death, t_freeze))),
+
          collect_before_death = aliquotdescription %in% dissection_order[1:9],
          freeze_after_death = ifelse(!collect_before_death,
                                      t_freeze >= t_death, NA),
          freeze_after_collect = t_freeze >= t_collection) %>%
-  # Data only available for 18M animals
+  # This data is only available for 18M animals, so we will remove it
   filter(!aliquotdescription %in% c("Femur", "Soleus", "Plantaris"))
 
 # Fix data entry errors (swap t_freeze and t_collection for a few rows)
@@ -98,17 +107,23 @@ DISSECTION_TIMES$freeze_after_collect[idx] <- TRUE
 
 DISSECTION_TIMES <- DISSECTION_TIMES %>%
   mutate(t_diff = ifelse(collect_before_death,
-                         t_freeze - t_collection,
-                         t_freeze - t_death)) %>%
+                         seconds(t_freeze) - seconds(t_collection),
+                         seconds(t_freeze) - seconds(t_death))) %>%
   left_join(select(PHYSIO, pid, age, sex, group), by = "pid") %>%
   # Several pid not in master spreadsheet (1W controls for 18M)
   filter(!is.na(sex), !is.na(age)) %>%
-  relocate(t_freeze, .after = t_death)
+  relocate(t_freeze, .after = t_death) %>%
+  relocate(age, sex, group, .after = pid) %>%
+  droplevels.data.frame() %>%
+  arrange(age, sex, group, pid, t_collection)
 
-## Used to identify data entry errors (should be an empty table)
+## Used to identify data-entry errors (should be an empty table)
 # DISSECTION_TIMES %>%
 #   filter(!freeze_after_death | !freeze_after_collect | t_diff < 0) %>%
 #   View()
+
+# Remove columns used to check for data-entry errors
+DISSECTION_TIMES <- select(DISSECTION_TIMES, -starts_with("freeze_after"))
 
 ## Data-entry errors (fixed)
 # 11464089 liver t_freeze 49 min, not 48

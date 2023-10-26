@@ -1,10 +1,11 @@
 #' @title Plot fiber area by fiber type and group
 #'
-#' @param x `data.frame` with columns "response", "type", "group", "muscle",
-#'   "age", "sex", and the column given by \code{response}.
+#' @param x a `data.frame` with columns \code{"response"}, \code{"type"},
+#'   \code{"group"}, \code{"muscle"}, \code{"age"}, \code{"sex"}, and the column
+#'   given by \code{response}.
 #' @param response character; name of a column in \code{x}. Used to plot
 #'   individual data points.
-#' @param conf \code{data.frame} with columns "muscle", "age", "sex", "group",
+#' @param conf a \code{data.frame} with columns "muscle", "age", "sex", "group",
 #'   "response_mean", "lower.CL", and "upper.CL".
 #' @param stats \code{data.frame} with columns "muscle", "type", "age", "sex",
 #'   "contrast", "type", "p.value", and "signif".
@@ -52,23 +53,21 @@ plot_fiber_type <- function(x,
                   fatten = 1, linewidth = 0.4,
                   color = ifelse(sex == "Female", "#ff6eff", "#5555ff")) +
     geom_point(shape = 16, size = 0.4, na.rm = TRUE,
-               # color = ifelse(age == "6M", "black", "grey40"),
                position = position_beeswarm(cex = 7.5)) +
     facet_grid(~ type, switch = "x") +
     labs(x = NULL) +
     coord_cartesian(clip = "off") +
-    theme_bw() +
-    theme(text = element_text(size = 6.5, color = "black"),
+    theme_bw(base_size = 7) +
+    theme(text = element_text(size = 7, color = "black"),
           line = element_line(linewidth = 0.3, color = "black"),
           axis.ticks = element_line(linewidth = 0.3, color = "black"),
           panel.grid = element_blank(),
           panel.border = element_blank(),
           axis.ticks.x = element_blank(),
-          axis.text = element_text(size = 5,
-                                   color = "black"),
-          axis.text.x = element_text(size = 6.5, angle = 90, hjust = 1,
+          axis.text = element_text(size = 7, color = "black"),
+          axis.text.x = element_text(size = 7, angle = 90, hjust = 1,
                                      vjust = 0.5),
-          axis.title = element_text(size = 6.5, margin = margin(),
+          axis.title = element_text(size = 7, margin = margin(),
                                     color = "black"),
           axis.line = element_line(color = "black", linewidth = 0.3),
           strip.background = element_blank(),
@@ -76,7 +75,7 @@ plot_fiber_type <- function(x,
                                     margin = margin(b = 0, t = 2)),
           panel.spacing = unit(2, "pt"),
           plot.title = element_text(size = 7, color = "black"),
-          plot.subtitle = element_text(size = 6, color = "black"),
+          plot.subtitle = element_text(size = 7, color = "black"),
           legend.position = "none",
           strip.placement = "outside"
     )
@@ -93,16 +92,18 @@ plot_fiber_type <- function(x,
   stats <- stats %>%
     filter(muscle == !!muscle, type %in% x$type,
            age == !!age, sex == !!sex) %>%
+    # Drop levels before filtering to significant comparisons
     droplevels.data.frame() %>%
-    filter(signif != "")
+    filter(signif)
 
   if (nrow(stats) > 0) {
+    # Y-axis limits
     limits <- layer_scales(p)$y$range$range
 
     stats <- stats %>%
       mutate(group1 = sub(".* ", "", contrast),
              group2 = sub(" .*", "", contrast)) %>%
-      dplyr::select(type, group1, group2, p.adj = p.value, signif)
+      dplyr::select(type, group1, group2, p.adj, signif)
 
     stat_test <- x %>%
       mutate(y = response) %>%
@@ -118,9 +119,9 @@ plot_fiber_type <- function(x,
 
     p <- p +
       stat_pvalue_manual(stat_test,
-                         label = "signif",
+                         label = NULL,
                          hide.ns = "p.adj",
-                         size = 3,
+                         size = 0,
                          bracket.nudge.y = bracket.nudge.y,
                          bracket.size = 0.3,
                          step.group.by = "type")
@@ -128,85 +129,4 @@ plot_fiber_type <- function(x,
 
   return(p)
 }
-
-
-# f1 <- function(x, response, age, sex, muscle,
-#                conf_df, stats_df,
-#                bracket.nudge.y = 0) {
-#
-#   x <- x %>%
-#     dplyr::rename(response = !!sym(response)) %>%
-#     filter(!is.na(response)) %>%
-#     droplevels.data.frame() %>%
-#     filter(age == !!age, sex == !!sex, muscle == !!muscle)
-#
-#   conf_df <- filter(conf_df, age == !!age,
-#                     sex == !!sex, muscle == !!muscle) # response == "Fiber CSA"
-#
-#   y_pos <- x %>%
-#     group_by(type) %>%
-#     summarise(y.position = max(response))
-#
-#   stats_df <- stats_df %>% # response == "Fiber CSA"
-#     filter(signif != "") %>%
-#     filter(age == !!age, sex == !!sex) %>%
-#     mutate(contrast = as.character(contrast),
-#            group1 = sub(" .*", "", contrast),
-#            group2 = sub(".* ", "", contrast)) %>%
-#     left_join(y_pos, by = "type")
-#
-#   p <- ggplot(x, aes(x = group, y = response)) +
-#     geom_crossbar(data = conf_df,
-#                   aes(x = group, y = response_mean,
-#                       ymin = lower.CL, ymax = upper.CL,
-#                       color = sex),
-#                   fatten = 1, linewidth = 0.5, width = 0.7) +
-#     geom_point(shape = 16, size = 0.5,
-#                position = ggbeeswarm::position_beeswarm(cex = 6,
-#                                                         dodge.width = 0.7)) +
-#     annotation_custom(grob = linesGrob(x = c(0, 1),
-#                                        y = unit(-20, "pt"),
-#                                        gp = gpar(lwd = 0.9)),
-#                       xmin = -Inf, xmax = Inf,
-#                       ymin = -Inf, ymax = Inf) +
-#     facet_grid(~ type, switch = "x") +
-#     scale_color_manual(values = c("#ff6eff", "#5555ff"),
-#                        breaks = c("Female", "Male")) +
-#     labs(x = NULL) +
-#     theme_bw() +
-#     theme(text = element_text(size = 6.5, color = "black"),
-#           line = element_line(linewidth = 0.3, color = "black"),
-#           axis.ticks = element_line(linewidth = 0.3, color = "black"),
-#           panel.grid = element_blank(),
-#           panel.border = element_blank(),
-#           axis.ticks.x = element_blank(),
-#           axis.text = element_text(size = 5,
-#                                    color = "black"),
-#           axis.text.x = element_text(size = 6.5, angle = 90, hjust = 1,
-#                                      vjust = 0.5),
-#           axis.title = element_text(size = 6.5, margin = margin(),
-#                                     color = "black"),
-#           axis.line = element_line(color = "black", linewidth = 0.3),
-#           strip.background = element_blank(),
-#           strip.text = element_text(size = 7, color = "black",
-#                                     margin = margin(b = 0, t = 2)),
-#           panel.spacing = unit(2, "pt"),
-#           plot.title = element_text(size = 7, color = "black"),
-#           plot.subtitle = element_text(size = 6, color = "black"),
-#           legend.position = "none",
-#           strip.placement = "outside"
-#     )
-#
-#   if (nrow(stats_df) > 0) {
-#     p <- p +
-#       ggpubr::stat_pvalue_manual(data = stats_df,
-#                                  label = "signif",
-#                                  size = 3.5,
-#                                  bracket.nudge.y = bracket.nudge.y)
-#   }
-#
-#   return(p)
-# }
-
-
 

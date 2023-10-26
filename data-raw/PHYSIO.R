@@ -41,7 +41,9 @@ analyte_df <- file.path("data-raw",
                           "20230208_PASS1B-18_clinical_analytes_updated.csv")) %>%
   map(function(file_i) {
     read.csv(file_i) %>%
-      rename_fn()
+      rename_fn() %>%
+      dplyr::rename(insulin_iu = insulin_uu_ml) %>%
+      dplyr::select(-insulin_glucagon_molar_ratio) # See Kronmal 1995
   }) %>%
   setNames(c("6M", "18M"))
 
@@ -75,7 +77,8 @@ PHYSIO <- plyr::rbind.fill(PHYSIO) %>%
            date(post_t) <- vo2_post_d
            return(post_t)
          }),
-         # Remove glycogen values if they are negative (assay artifact)
+         # Remove glycogen values if they are negative (assay artifact caused
+         # over-correcting when there is a lot of glucose)
          across(.cols = starts_with("glyc_"), ~ ifelse(.x < 0, NA, .x)),
          nmr_pre_fat = nmr_pre_fat_pct / 100 * nmr_pre_weight,
          nmr_post_fat = nmr_post_fat_pct / 100 * nmr_pre_weight,
@@ -84,8 +87,12 @@ PHYSIO <- plyr::rbind.fill(PHYSIO) %>%
   select(-ends_with("_d")) %>%
   relocate(nmr_pre_fat, nmr_pre_lean, .after = nmr_pre_weight) %>%
   relocate(nmr_post_fat, nmr_post_lean, .after = nmr_post_weight) %>%
-  arrange(age, sex, group, pid)
+  arrange(age, sex, group, pid) %>%
+  rename_with(.cols = contains("weight"),
+              .fn = ~ sub("weight", "body_mass", .x)) %>%
+  rename_with(.cols = c(starts_with("term"), -term_body_mass),
+              .fn = ~ sub("body", "muscle", .x))
 
-usethis::use_data(PHYSIO, internal = FALSE, overwrite = TRUE,
+usethis::use_data(PHYSIO, internal = TRUE, overwrite = TRUE,
                   compress = "bzip2", version = 3)
 

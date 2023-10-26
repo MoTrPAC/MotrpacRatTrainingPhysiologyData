@@ -32,74 +32,23 @@ library(tidyr)
 library(purrr)
 ```
 
-```{r}
-# Function to create donut charts
-fiber_piechart <- function(x) {
-  colors <- c("#75281C", "#F79485", "#FF5454", "#796C6A")
-  
-  x <- x %>%
-    group_by(group, type) %>% 
-    summarise(fiber_count = sum(fiber_count)) %>% 
-    group_by(group) %>% 
-    mutate(total_fiber_count = sum(fiber_count),
-           fiber_pct = 100 * fiber_count / total_fiber_count,
-           type = factor(type, 
-                         levels = c("I", "IIa", "IIb", "IIx"))) %>% 
-    ungroup()
-  
-  # Stacked bar graphs
-  p <- ggplot(x, aes(x = 2, y = fiber_pct, fill = type)) +
-    geom_bar(stat = "identity", width = 1, color = "white") 
-  
-  # Label percentages (no % sign to save space - include in main figure legend)
-  p <- p +
-    geom_text(aes(label = round(fiber_pct, 1), 
-                  x = 2.5 * 1.15),
-              position = position_stack(vjust = 0.5), 
-              size = 6.5 / .pt) 
-  
-  # Label donut holes with the group
-  p <- p +
-    geom_text(aes(x = 1, y = 0, label = "SED"),
-              data = filter(x, group == "SED"), size = 7 / .pt) +
-    geom_text(aes(x = 1, y = 0, label = "8W"),
-              data = filter(x, group == "8W"), size = 7 / .pt) 
-  
-  # Set axis limits (cartesian only) and then switch to polar coordinates to
-  # convert stacked bars to donuts
-  p <- p +
-    coord_cartesian(clip = "off", xlim = c(1, 2.5)) +
-    coord_polar("y", start = 0, direction = -1)
-  
-  # Modify appearance
-  p <- p +
-    facet_wrap(~ group, ncol = 1) +
-    scale_fill_manual(name = "Type",
-                      values = colors) +
-    theme_void() +
-    theme(strip.text = element_blank(),
-          panel.spacing.y = unit(-4, "pt"),
-          legend.position = "none",
-          legend.title = element_text(size = 6.5, color = "black"),
-          legend.text = element_text(size = 6, color = "black"),
-          legend.key.size = unit(10, "pt"))
-
-  return(p)
-}
-```
-
 ```{r, results='hide'}
 # Create and save all 16 plots
 foo <- FIBER_TYPES %>% 
   nest(.by = c(age, sex, muscle)) %>% 
-  mutate(plots = map(.x = data, .f = fiber_piechart),
+  mutate(plots = map(.x = data, .f = fiber_donut_chart),
          file_name = sprintf("../../plots/fiber_count_%s_%s_%s.pdf", 
-                             age, tolower(sex), muscle))
+                             muscle, age, tolower(sex)))
 
 map2(.x = foo$file_name, .y = foo$plots, 
      .f = ~ ggsave(filename = .x, plot = .y, 
-                   height = 2, width = 1.3, # width = 1.6 with legend
+                   height = 2, width = 1.3,
                    family = "ArialMT"))
+
+# Save panel with a legend
+ggsave(filename = "../../plots/fiber_count_example_with_legend.pdf",
+       plot = foo$plots[[1]] + theme(legend.position = "right"),
+       height = 2, width = 1.6, family = "ArialMT")
 ```
 
 

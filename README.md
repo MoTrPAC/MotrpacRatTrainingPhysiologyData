@@ -31,21 +31,23 @@ The [data-raw/](https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiol
 **Vignettes:**
 
 * Statistical analyses of baseline body composition and VO2max testing measures
-* Statistical analyses of mean fiber area and fiber count by muscle and fiber type
+* Statistical analyses of mean fiber area by muscle and fiber type
+* Statistical analysis of fiber counts by muscle and fiber type
 * Statistical analyses of muscle-specific measures 
 * Statistical analyses of plasma clinical analytes
 * Statistical analyses of post- vs. pre-training body composition and VO2max testing measures
-* Statistical analysis of weekly total body weight
+* Statistical analysis of weekly total body mass
 
 **Articles:**
 
 * Plots of plasma clinical analytes
 * Plots of baseline measures
 * Plots of fiber area by muscle and fiber type
+* Plots of muscle fiber type percentages
 * Plots of muscle measures
 * Plots of post - pre differences
 * Plots of tissue dissection times
-* Plots of weekly body weight and blood lactate
+* Plots of weekly body mass and blood lactate
 
 
 ### About MoTrPAC

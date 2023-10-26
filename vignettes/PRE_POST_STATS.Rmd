@@ -581,8 +581,6 @@ model_df <- model_list %>%
   mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
          model_type = sub("^([^\\(]+).*", "\\1", model),
          formula = sub(".*formula = ([^,]+),.*", "\\1", model),
-         family = sub(".*family = ([^\\)]+\\)),.*", "\\1", model),
-         family = ifelse(model_type == "lm", "gaussian", family),
          # if weights were used, they were reciprocal group variances
          weights = ifelse(grepl("weights = ", model), 
                           "reciprocal group variances", NA)) %>% 
@@ -592,7 +590,9 @@ model_df <- model_list %>%
     response == "NMR % Fat" ~ paste(NMR$iowa_id[c(136, 138, 218)],
                                     collapse = ", ")
   ))
+```
 
+```{r}
 # Estimated marginal means
 PRE_POST_STATS <- map(model_list, function(mod_i) {
   terms_i <- attr(terms(mod_i), which = "term.labels")
@@ -620,25 +620,34 @@ PRE_POST_STATS <- map(model_list, function(mod_i) {
   c(list("Maximum Run Speed" = speed_res)) %>% 
   enframe(name = "response") %>% 
   unnest(value) %>%
-  group_by(age, sex) %>% 
-  mutate(p.value = p.adjust(p.value, method = "holm")) %>% 
-  ungroup() %>% 
-  mutate(signif = cut(p.value, 
-                      breaks = c(0, 0.001, 0.01, 0.05, 1),
-                      labels = c("***", "**", "*", ""),
-                      include.lowest = TRUE, right = FALSE,
-                      ordered_result = TRUE)) %>% 
-  left_join(model_df, by = "response") %>% 
+  mutate(sex = ifelse(is.na(sex), "Female, Male", as.character(sex))) %>% 
+  separate_longer_delim(cols = sex, delim = ", ") %>%
+  group_by(response, age, sex) %>% 
+  mutate(p.adj = p.adjust(p.value, method = "holm")) %>% 
+  ungroup() %>%
+  mutate(signif = p.adj < 0.05,
+         age = factor(age, levels = c("6M", "18M")),
+         sex = factor(sex, levels = c("Female", "Male")),
+         group = factor(group, levels = c("SED", paste0(2 ^ (0:3), "W")))) %>% 
+  pivot_longer(cols = c(emmean, estimate),
+               names_to = "estimate_type",
+               values_to = "estimate",
+               values_drop_na = TRUE) %>%
   pivot_longer(cols = contains(".ratio"), 
                names_to = "statistic_type", 
                values_to = "statistic", 
                values_drop_na = TRUE) %>% 
-  mutate(statistic_type = sub("\\.ratio", "", statistic_type),
+  left_join(model_df, by = "response") %>% 
+  mutate(estimate_type = ifelse(estimate_type == "emmean",
+                                "(post - pre) mean", 
+                                "signed mean (post - pre) rank"),
+         statistic_type = sub("\\.ratio", "", statistic_type),
          model_type = ifelse(statistic_type == "W", 
-                             "Wilcoxon", model_type)) %>% 
-  relocate(group, .after = sex) %>% 
-  relocate(signif, .after = p.value) %>%
-  relocate(starts_with("statistic"), .before = p.value)
+                             "wilcox.test", model_type)) %>% 
+  dplyr::select(response, age, sex, group, estimate_type, estimate, SE, 
+                lower.CL, upper.CL, statistic_type, statistic, df, n, p.value, 
+                p.adj, signif, everything()) %>% 
+  arrange(response, age, sex, group)
 ```
 
 See `?PRE_POST_STATS` for details.

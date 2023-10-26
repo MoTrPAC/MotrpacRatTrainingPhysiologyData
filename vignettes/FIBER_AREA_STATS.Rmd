@@ -166,15 +166,17 @@ anova(fit.area)
 ```
 
 ```{r}
+fit.area <- update(fit.area, method = "ML")
 fit.area.1 <- update(fit.area, 
                      fixed = . ~ (age + sex + group + muscle_type) ^ 3 -
                        sex:group:muscle_type)
 anova(fit.area, fit.area.1)
 ```
 
-Removal of the 4-way interaction and the least significant 3-way interaction leads to a significant difference (P = 0.13) between the full and reduced models, so we will not remove any terms.
+Removal of the 4-way interaction and the least significant 3-way interaction does not lead to a significant difference between the full and reduced models at the 0.05 level, but we will not remove any terms.
 
 ```{r}
+fit.area <- update(fit.area, method = "REML")
 VarCorr(fit.area)
 ```
 
@@ -196,9 +198,9 @@ model_df <- data.frame(response = "Mean Fiber Area",
                        model = paste(deparse(fit.area[["call"]]), 
                                      collapse = "")) %>% 
   mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
-         model.type = "lme",
+         model_type = "lme",
          fixed = sub(".*fixed = ([^,]+),.*", "\\1", model),
-         random = "~ 1 | pid") %>% 
+         random = "~1 | pid") %>% 
   dplyr::select(-model)
 
 FIBER_AREA_STATS <- FIBER_AREA_EMM %>% 
@@ -214,23 +216,25 @@ FIBER_AREA_STATS <- FIBER_AREA_EMM %>%
   # Holm-adjust p-values across fiber types
   group_by(age, sex, muscle) %>% 
   mutate(p.adj = p.adjust(p.value, method = "holm"),
-         signif = ifelse(p.adj < 0.05, "*", "")) %>%
+         signif = p.adj < 0.05) %>%
   ungroup() %>% 
-  mutate(response = "Mean Fiber Area") %>% 
-  left_join(model_df, by = "response") %>% 
-  pivot_longer(cols = contains(".ratio"), 
-               names_to = "statistic.type", 
-               values_to = "statistic", 
+  pivot_longer(cols = ratio, 
+               names_to = "estimate_type", 
+               values_to = "estimate", 
                values_drop_na = TRUE) %>% 
-  mutate(across(.cols = c(ratio, lower.CL, upper.CL, statistic), 
-                .fns = ~ round(.x, digits = 2)),
-         across(.cols = c(SE, p.value, p.adj),
-                .fns = ~ signif(.x, digits = 2))) %>% 
-  relocate(c(starts_with("statistic"), p.value), .before = p.adj) %>% 
-  relocate(signif, .after = p.adj) %>% 
-  relocate(response, .before = everything()) %>% 
-  relocate(contrast, .before = ratio) %>% 
-  arrange(response, age, sex, muscle, type)
+  pivot_longer(cols = contains(".ratio"), 
+               names_to = "statistic_type", 
+               values_to = "statistic", 
+               values_drop_na = TRUE) %>%
+  mutate(response = "Mean Fiber Area",
+         statistic_type = sub("\\.ratio", "", statistic_type)) %>% 
+  left_join(model_df, by = "response") %>% 
+  dplyr::select(response, age, sex, muscle, type, contrast, estimate_type, null,
+                estimate, SE, lower.CL, upper.CL, statistic_type, statistic,
+                df, p.value, p.adj, signif, model_type, fixed, random,
+                everything()) %>% 
+  arrange(response, age, sex, muscle, type) %>% 
+  as.data.frame()
 ```
 
 See `?FIBER_AREA_STATS` for details.

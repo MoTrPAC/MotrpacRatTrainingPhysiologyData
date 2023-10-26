@@ -13,7 +13,7 @@ output:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 1.5,
+  fig.width = 1.4,
   fig.height = 1.8,
   out.height = "50%",
   out.width = "50%",
@@ -85,7 +85,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_LG_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 6M Male
@@ -105,7 +105,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_LG_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -125,7 +125,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_LG_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -146,7 +146,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_LG_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -169,7 +169,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_MG_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 6M Male
@@ -189,7 +189,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_MG_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -209,7 +209,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_MG_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -230,7 +230,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_MG_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -253,7 +253,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_PL_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 6M Male
@@ -273,7 +273,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_PL_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -293,7 +293,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_PL_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Male
@@ -313,7 +313,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_PL_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -336,7 +336,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_SOL_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 6M Male
@@ -356,7 +356,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_SOL_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -376,7 +376,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_SOL_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Male
@@ -396,7 +396,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_glycogen_SOL_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -421,7 +421,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_LG_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -442,7 +442,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   theme(plot.margin = unit(c(17, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_LG_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -462,7 +462,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   theme(plot.margin = unit(c(6, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_LG_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -483,7 +483,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_LG_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -506,7 +506,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_MG_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -527,7 +527,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   theme(plot.margin = unit(c(15, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_MG_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -547,7 +547,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_MG_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -568,7 +568,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   theme(plot.margin = unit(c(18, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_MG_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -591,7 +591,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_PL_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -612,7 +612,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_PL_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -632,7 +632,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_PL_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -653,7 +653,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_PL_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -676,7 +676,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   theme(plot.margin = unit(c(25, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_SOL_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -697,7 +697,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   theme(plot.margin = unit(c(18, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_SOL_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -717,7 +717,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_SOL_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -738,7 +738,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_citrate_synthase_SOL_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -758,14 +758,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "LG"),
               sex = "Female", age = "6M", y_position = 620) +
-  scale_y_continuous(name  = "LG Terminal Mass (g)",
+  scale_y_continuous(name  = "LG Terminal Mass (mg)",
                      breaks = seq(500, 700, 100),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(485, 700), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_LG_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -779,14 +779,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "LG"),
               sex = "Male", age = "6M") +
-  scale_y_continuous(name  = "LG Terminal Mass (g)",
+  scale_y_continuous(name  = "LG Terminal Mass (mg)",
                      breaks = seq(700, 1000, 100),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(650, 1060), clip = "off") +
   theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_LG_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -799,14 +799,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "LG"),
               sex = "Female", age = "18M") +
-  scale_y_continuous(name  = "LG Terminal Mass (g)",
+  scale_y_continuous(name  = "LG Terminal Mass (mg)",
                      breaks = seq(500, 620, 40),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(490, 625), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_LG_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -820,14 +820,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "LG"),
               sex = "Male", age = "18M", y_position = 940) +
-  scale_y_continuous(name  = "LG Terminal Mass (g)",
+  scale_y_continuous(name  = "LG Terminal Mass (mg)",
                      breaks = seq(750, 1000, 50),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(750, 1000), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_LG_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -843,14 +843,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "MG"),
               sex = "Female", age = "6M") +
-  scale_y_continuous(name  = "MG Terminal Mass (g)",
+  scale_y_continuous(name  = "MG Terminal Mass (mg)",
                      breaks = seq(320, 450, 20),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(315, 450), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_MG_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -864,14 +864,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "MG"),
               sex = "Male", age = "6M") +
-  scale_y_continuous(name  = "MG Terminal Mass (g)",
+  scale_y_continuous(name  = "MG Terminal Mass (mg)",
                      breaks = seq(500, 750, 50),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(500, 770), clip = "off") +
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_MG_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -884,14 +884,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "MG"),
               sex = "Female", age = "18M") +
-  scale_y_continuous(name  = "MG Terminal Mass (g)",
+  scale_y_continuous(name  = "MG Terminal Mass (mg)",
                      breaks = seq(350, 470, 20),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(350, 472), clip = "off") +
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_MG_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -905,14 +905,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "MG"),
               sex = "Male", age = "18M") +
-  scale_y_continuous(name  = "MG Terminal Mass (g)",
+  scale_y_continuous(name  = "MG Terminal Mass (mg)",
                      breaks = seq(550, 750, 50),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(550, 750), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_MG_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -928,14 +928,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "PL"),
               sex = "Female", age = "6M", y_position = 212) +
-  scale_y_continuous(name  = "PL Terminal Mass (g)",
+  scale_y_continuous(name  = "PL Terminal Mass (mg)",
                      breaks = seq(160, 220, 20),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(160, 220), clip = "off") +
   theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_PL_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -949,14 +949,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "PL"),
               sex = "Male", age = "6M") +
-  scale_y_continuous(name  = "PL Terminal Mass (g)",
+  scale_y_continuous(name  = "PL Terminal Mass (mg)",
                      breaks = seq(250, 370, 40),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(245, 375), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_PL_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -969,14 +969,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "PL"),
               sex = "Female", age = "18M") +
-  scale_y_continuous(name  = "PL Terminal Mass (g)",
+  scale_y_continuous(name  = "PL Terminal Mass (mg)",
                      breaks = seq(160, 220, 20),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(160, 225), clip = "off") +
   theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_PL_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -990,14 +990,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "PL"),
               sex = "Male", age = "18M") +
-  scale_y_continuous(name  = "PL Terminal Mass (g)",
+  scale_y_continuous(name  = "PL Terminal Mass (mg)",
                      breaks = seq(200, 380, 40),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(200, 380), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_PL_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -1013,14 +1013,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "SOL"),
               sex = "Female", age = "6M", y_position = 101) +
-  scale_y_continuous(name  = "SOL Terminal Mass (g)",
+  scale_y_continuous(name  = "SOL Terminal Mass (mg)",
                      breaks = seq(60, 110, 10),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(60, 110), clip = "off") +
   theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_SOL_6M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -1034,14 +1034,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "SOL"),
               sex = "Male", age = "6M") +
-  scale_y_continuous(name  = "SOL Terminal Mass (g)",
+  scale_y_continuous(name  = "SOL Terminal Mass (mg)",
                      breaks = seq(100, 180, 20),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(100, 180), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_SOL_6M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 ### 18M Female
@@ -1054,14 +1054,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "SOL"),
               sex = "Female", age = "18M") +
-  scale_y_continuous(name  = "SOL Terminal Mass (g)",
+  scale_y_continuous(name  = "SOL Terminal Mass (mg)",
                      breaks = seq(70, 100, 10),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(65, 103), clip = "off") +
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_SOL_18M_female.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -1075,14 +1075,14 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "SOL"),
               sex = "Male", age = "18M") +
-  scale_y_continuous(name  = "SOL Terminal Mass (g)",
+  scale_y_continuous(name  = "SOL Terminal Mass (mg)",
                      breaks = seq(80, 180, 20),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(70, 180), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 
 ggsave("../../plots/muscle_term_muscle_mass_SOL_18M_male.pdf",
-       height = 1.8, width = 1.5, family = "ArialMT")
+       height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
 
@@ -1120,8 +1120,11 @@ conf_df <- map(MUSCLES_EMM, function(emm_i) {
 
 
 ```{r}
-f1 <- function(response, sex, age, 
-               conf_df, stats_df,
+f1 <- function(response, 
+               sex, 
+               age, 
+               conf_df, 
+               stats_df,
                bracket.nudge.y = 0) {
   
   x <- MUSCLES %>% 
@@ -1136,7 +1139,7 @@ f1 <- function(response, sex, age,
     group_by(muscle) %>% 
     summarise(y.position = max(response))
   
-  stats_df <- stats_df %>% # response == "Mean CSA"
+  stats_df <- stats_df %>%
     filter(signif != "") %>% 
     filter(age == !!age, sex == !!sex) %>% 
     mutate(contrast = as.character(contrast),
@@ -1166,26 +1169,26 @@ f1 <- function(response, sex, age,
     scale_color_manual(values = c("#ff6eff", "#5555ff"),
                        breaks = c("Female", "Male")) +
     labs(x = NULL) +
-    theme_bw() +
-    theme(text = element_text(size = 6.5, color = "black"),
+    theme_bw(base_size = 7) +
+    theme(text = element_text(size = 7, color = "black"),
           line = element_line(linewidth = 0.3, color = "black"),
           axis.ticks = element_line(linewidth = 0.3, color = "black"),
           panel.grid = element_blank(),
           panel.border = element_blank(),
           axis.ticks.x = element_blank(),
-          axis.text = element_text(size = 5,
+          axis.text = element_text(size = 7,
                                    color = "black"),
-          axis.text.x = element_text(size = 6.5, angle = 90, hjust = 1,
+          axis.text.x = element_text(size = 7, angle = 90, hjust = 1,
                                      vjust = 0.5),
-          axis.title = element_text(size = 6.5, margin = margin(),
+          axis.title = element_text(size = 7, margin = margin(),
                                     color = "black"),
           axis.line = element_line(color = "black", linewidth = 0.3),
           strip.background = element_blank(),
           strip.text = element_text(size = 7, color = "black", 
                                     margin = margin(b = 0, t = 2)),
           panel.spacing = unit(2, "pt"),
-          plot.title = element_text(size = 7, color = "black"),
-          plot.subtitle = element_text(size = 6, color = "black"),
+          plot.title = element_text(size = 8, color = "black"),
+          plot.subtitle = element_text(size = 7, color = "black"),
           legend.position = "none",
           strip.placement = "outside"
     )
@@ -1205,35 +1208,38 @@ f1(response = "mean_CSA", sex = "Female", age = "6M",
   coord_cartesian(ylim = c(1000, 2500), clip = "off")
 
 ggsave("../../plots/mean_CSA_6M_female.pdf", 
-       height = 1.7, width = 2, family = "ArialMT")
+       height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
 
 ```{r}
 f1(response = "mean_CSA", sex = "Male", age = "6M", 
    conf_df = filter(conf_df, response == "Mean CSA"), 
-   stats_df = filter(MUSCLES_STATS, response == "Mean CSA")) +
+   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"),
+   bracket.nudge.y = 85) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1500, 3500, 500),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(1500, 3500), clip = "off")
+  coord_cartesian(ylim = c(1500, 3500), clip = "off") +
+  theme(plot.margin = margin(t = 12))
 
 ggsave("../../plots/mean_CSA_6M_male.pdf", 
-       height = 1.7, width = 2, family = "ArialMT")
+       height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
 
 ```{r}
 f1(response = "mean_CSA", sex = "Female", age = "18M", 
    conf_df = filter(conf_df, response == "Mean CSA"), 
-   stats_df = filter(MUSCLES_STATS, response == "Mean CSA")) +
+   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
+   bracket.nudge.y = 60) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1500, 2500, 500),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(1370, 2500), clip = "off")
 
 ggsave("../../plots/mean_CSA_18M_female.pdf", 
-       height = 1.7, width = 2, family = "ArialMT")
+       height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
 
@@ -1241,7 +1247,7 @@ ggsave("../../plots/mean_CSA_18M_female.pdf",
 f1(response = "mean_CSA", sex = "Male", age = "18M", 
    conf_df = filter(conf_df, response == "Mean CSA"), 
    stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
-   bracket.nudge.y = 70) +
+   bracket.nudge.y = 60) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1600, 2800, 400),
                      expand = expansion(mult = 5e-3)) +
@@ -1249,7 +1255,7 @@ f1(response = "mean_CSA", sex = "Male", age = "18M",
   theme(plot.margin = margin(t = 10))
 
 ggsave("../../plots/mean_CSA_18M_male.pdf", 
-       height = 1.7, width = 2, family = "ArialMT")
+       height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
 
@@ -1258,54 +1264,59 @@ ggsave("../../plots/mean_CSA_18M_male.pdf",
 ```{r}
 f1(response = "capillary_contacts", sex = "Female", age = "6M", 
    conf_df = filter(conf_df, response == "Capillary Contacts"), 
-   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts")) +
+   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
+   bracket.nudge.y = 0.1) +
   scale_y_continuous(name = "Capillary Contacts (#/capillary)",
                      breaks = seq(3, 5, 0.5),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(3, 5), clip = "off")
 
 ggsave("../../plots/capillary_contacts_6M_female.pdf", 
-       height = 1.7, width = 2, family = "ArialMT")
+       height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
 
 ```{r}
 f1(response = "capillary_contacts", sex = "Male", age = "6M", 
    conf_df = filter(conf_df, response == "Capillary Contacts"), 
-   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts")) +
+   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
+   bracket.nudge.y = 0.15) +
   scale_y_continuous(name = "Capillary Contacts (#/capillary)",
                      breaks = seq(3, 5.5, 0.5),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
 
 ggsave("../../plots/capillary_contacts_6M_male.pdf", 
-       height = 1.7, width = 2, family = "ArialMT")
+       height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
 
 ```{r}
 f1(response = "capillary_contacts", sex = "Female", age = "18M", 
    conf_df = filter(conf_df, response == "Capillary Contacts"), 
-   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts")) +
+   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
+   bracket.nudge.y = 0.08) +
   scale_y_continuous(name = "Capillary Contacts (#/capillary)",
                      breaks = seq(3, 4.5, 0.5),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(3, 4.5), clip = "off")
 
 ggsave("../../plots/capillary_contacts_18M_female.pdf", 
-       height = 1.7, width = 2, family = "ArialMT")
+       height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
 
 ```{r}
 f1(response = "capillary_contacts", sex = "Male", age = "18M", 
    conf_df = filter(conf_df, response == "Capillary Contacts"), 
-   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts")) +
+   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
+   bracket.nudge.y = 0.1) +
   scale_y_continuous(name = "Capillary Contacts (#/capillary)",
                      breaks = seq(3.5, 5.5, 0.5),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(3.5, 5.5), clip = "off")
+  coord_cartesian(ylim = c(3.5, 5.5), clip = "off") +
+  theme(plot.margin = margin(t = 6))
 
 ggsave("../../plots/capillary_contacts_18M_male.pdf", 
-       height = 1.7, width = 2, family = "ArialMT")
+       height = 1.7, width = 1.55, family = "ArialMT")
 ```

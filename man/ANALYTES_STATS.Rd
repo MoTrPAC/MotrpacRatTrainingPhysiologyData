@@ -5,17 +5,51 @@
 \alias{ANALYTES_STATS}
 \title{Statistical analysis results of plasma clinical analytes}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 136 rows and 18 columns.
+An object of class \code{data.frame} with 144 rows and 20 columns:
+
+\describe{
+\item{response}{character; the clinical analyte being tested.}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{contrast}{factor; the comparison between groups. All contrasts are
+ratios between the trained and SED group means (levels "1W / SED", "2W /
+SED", "4W / SED", "8W / SED").}
+\item{estimate_type}{character; interpretation of the value in the
+\code{estimate} column. All "ratio" (ratio between group means, as
+specified by \code{contrast}).}
+\item{null}{numeric; the value of the estimate under the null hypothesis.}
+\item{estimate}{numeric; ratio between the means of the groups as specified
+by \code{contrast}.}
+\item{SE}{numeric; the standard error of the estimate.}
+\item{lower.CL}{numeric; lower bound of the 95\% confidence interval.}
+\item{upper.CL}{numeric; upper bound of the 95\% confidence interval.}
+\item{statistic_type}{character; the type of statistical test.}
+\item{statistic}{numeric; the value of the test statistic.}
+\item{df}{numeric; the number of residual degrees of freedom.}
+\item{p.value}{numeric; the p-value associated with the statistical
+test.}
+\item{p.adj}{numeric; the Dunnett-adjusted p-value.}
+\item{signif}{logical; \code{TRUE} if \code{p.adj} < 0.05.}
+\item{model_type}{character; the statistical model used. All "glm"
+(generalized linear model).}
+\item{family}{character; the probability distribution and link function for
+the generalized linear model.}
+\item{formula}{character; the model formula. Includes the response
+variable, any transformations, and predictors.}
+\item{weights}{character; if reciprocal group variances were used as
+weights to account for heteroscedasticity (nonconstant residual variance),
+this is noted here.}
+}
 }
 \usage{
 ANALYTES_STATS
 }
 \description{
-A \code{data.frame} containing analysis results of plasma
-  clinical analytes.
+Statistical analysis results of plasma clinical analytes.
 }
 \examples{
-print.data.frame(head(ANALYTES_STATS))
+head(ANALYTES_STATS)
 
 }
 \seealso{

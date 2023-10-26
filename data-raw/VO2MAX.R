@@ -1,6 +1,9 @@
 library(MotrpacRatTrainingPhysiologyData)
 library(dplyr)
 
+PHYSIO <- get0("PHYSIO",
+               envir = asNamespace("MotrpacRatTrainingPhysiologyData"))
+
 VO2MAX <- PHYSIO %>%
   dplyr::select(pid, iowa_id, age, sex, group, starts_with("vo2")) %>%
   filter(!if_all(starts_with("vo2"), is.na)) %>%

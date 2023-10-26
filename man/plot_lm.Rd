@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_lm.R
 \name{plot_lm}
 \alias{plot_lm}
-\title{Show all regression diagnostic plots}
+\title{Regression diagnostic plots}
 \usage{
 plot_lm(model)
 }
@@ -10,7 +10,7 @@ plot_lm(model)
 \item{model}{output of \code{lm} or \code{glm}.}
 }
 \description{
-Show all regression diagnostic plots
+Regression diagnostic plots
 }
 \examples{
 data("iris")

@@ -2,7 +2,7 @@ Package: MotrpacRatTrainingPhysiologyData
 Type: Package
 Title: MoTrPAC PASS1B Rat Physiology Data
 Version: 0.1.0
-Date: 2023-07-14
+Date: 2023-10-20
 Authors@R: 
   c(
     person(given = "Tyler J.", family = "Sagendorf",
@@ -39,12 +39,14 @@ Imports:
     rstatix,
     stats
 Suggests:
+    compositions,
     emmeans,
     Hmisc,
     knitr,
     latex2exp,
     lubridate,
     MASS,
+    nlme,
     purrr,
     readxl,
     rmarkdown,
@@ -52,6 +54,7 @@ Suggests:
     tibble,
     tidyr
 RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 URL:
     https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/,

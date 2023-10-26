@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_baseline.R
 \name{plot_baseline}
 \alias{plot_baseline}
-\title{Plot data by exercise group}
+\title{Plot baseline or pre-training measures}
 \usage{
 plot_baseline(
   x,
@@ -15,11 +15,12 @@ plot_baseline(
 )
 }
 \arguments{
-\item{x}{\code{data.frame}.}
+\item{x}{a \code{data.frame} with columns \code{"sex"}, \code{"age"},
+\code{"group"}, and a column specified by \code{response}.}
 
-\item{response}{character}
+\item{response}{character; the name of a column in \code{x} to plot.}
 
-\item{conf}{\code{data.frame}}
+\item{conf}{a \code{data.frame} with confidence interval data.}
 
 \item{stats}{optional \code{data.frame} with results of statistical analyses
 filtered to the response of interest.}
@@ -32,5 +33,5 @@ filtered to the response of interest.}
 brackets.}
 }
 \description{
-Placeholder
+Plot baseline or pre-training measures.
 }

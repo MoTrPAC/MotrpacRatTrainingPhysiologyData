@@ -3,22 +3,46 @@
 \docType{data}
 \name{WEEKLY_MEASURES}
 \alias{WEEKLY_MEASURES}
-\title{Weekly body weight and blood lactate measures}
+\title{Weekly body mass and blood lactate measures}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 2226 rows and 11 columns.
+An object of class \code{data.frame} with 2226 rows and 11 columns:
+
+\describe{
+\item{pid}{character; randomly generated 8-digit identifier used in
+linkage to phenotypic data. All samples from the same animal have the same
+PID.}
+\item{iowa_id}{character; unique ID used for each rat at the Iowa PASS.}
+\item{omics_analysis}{logical; whether the sample was selected for -omics
+analysis.}
+\item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
+\item{group}{factor; exercise training group. Either "SED" (sedentary) or
+the number of weeks of training ("1W", "2W", "4W", "8W").}
+\item{age}{factor; the age of the rat at the beginning of the training
+protocol. Levels: "6M" (Adult) and "18M" (Aged).}
+\item{day}{numeric; the day the measurement was recorded relative to the
+start of the training protocol.}
+\item{week}{numeric; the week the measurement was recorded relative to the
+start of the training protocol (1--8).}
+\item{week_time}{factor; at what point in the week the measurement was
+taken ("start" or "end").}
+\item{body_mass}{numeric; total body mass (g) recorded at the start of each
+week.}
+\item{lactate}{numeric; blood lactate (mM) recorded at the start and end of
+each week.}
+}
 }
 \usage{
 WEEKLY_MEASURES
 }
 \description{
-A \code{data.frame} containing weekly measures of total body
-  mass and blood lactate.
+Weekly measures of total body mass and blood lactate.
 }
 \examples{
-print.data.frame(head(WEEKLY_MEASURES))
+head(WEEKLY_MEASURES)
 
 }
 \seealso{
-\code{\link{PHYSIO}}
+\code{\link{WEEKLY_BODY_MASS_EMM}},
+\code{\link{WEEKLY_BODY_MASS_STATS}}
 }
 \keyword{datasets}
