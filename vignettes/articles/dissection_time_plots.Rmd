@@ -32,7 +32,6 @@ library(purrr)
 library(tidyr)
 library(ggplot2)
 library(scales)
-library(lubridate)
 ```
 
 ```{r}
@@ -51,10 +50,9 @@ plot_dissection_times <- function(x, ymax = 12) {
   
   # Modify appearance
   p <- p +
-    scale_y_continuous(name = "Time Elapsed (min:sec)",
-                       trans = "hms",
-                       labels = label_time(format = "%M:%S"),
-                       expand = expansion(mult = 1e-2)) +
+    scale_y_time(name = "Time Elapsed (min:sec)",
+                 labels = scales::label_time(format = "%M:%S"),
+                 expand = expansion(mult = 1e-2)) +
     labs(x = NULL) +
     coord_cartesian(ylim = c(0, ymax * 60)) +
     # light blue for tissues collected under anesthesia, grey for tissues
