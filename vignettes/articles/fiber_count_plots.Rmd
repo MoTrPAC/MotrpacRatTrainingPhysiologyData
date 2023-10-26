@@ -21,6 +21,8 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+
+save_plots <- dir.exists(paths = file.path("..", "..", "plots"))
 ```
 
 ```{r setup}
@@ -37,16 +39,20 @@ library(purrr)
 foo <- FIBER_TYPES %>% 
   nest(.by = c(age, sex, muscle)) %>% 
   mutate(plots = map(.x = data, .f = fiber_donut_chart),
-         file_name = sprintf("../../plots/fiber_count_%s_%s_%s.pdf", 
-                             muscle, age, tolower(sex)))
+         file_name = file.path("..", "..", "plots",
+                               sprintf("fiber_count_%s_%s_%s.pdf", 
+                                       muscle, age, tolower(sex))))
+```
 
+```{r eval=save_plots}
 map2(.x = foo$file_name, .y = foo$plots, 
      .f = ~ ggsave(filename = .x, plot = .y, 
                    height = 2, width = 1.3,
                    family = "ArialMT"))
 
 # Save panel with a legend
-ggsave(filename = "../../plots/fiber_count_example_with_legend.pdf",
+ggsave(filename = file.path("..", "..", "plots",
+                            "fiber_count_example_with_legend.pdf"),
        plot = foo$plots[[1]] + theme(legend.position = "right"),
        height = 2, width = 1.6, family = "ArialMT")
 ```

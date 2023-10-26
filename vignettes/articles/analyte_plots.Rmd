@@ -21,6 +21,8 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+
+save_plots <- dir.exists(paths = file.path("..", "..", "plots"))
 ```
 
 ```{r setup}
@@ -74,8 +76,10 @@ plot_baseline(ANALYTES, response = "ketones",
               stats = filter(ANALYTES_STATS, response == "Ketones"),
               sex = "Female", age = "6M") +
   labs(y = TeX("Ketones ($\\mu$mol/L)"))
+```
 
-ggsave("../../plots/analytes_ketones_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_ketones_6M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -88,8 +92,10 @@ plot_baseline(ANALYTES, response = "ketones",
               stats = filter(ANALYTES_STATS, response == "Ketones"),
               sex = "Male", age = "6M") +
   labs(y = TeX("Ketones ($\\mu$mol/L)"))
+```
 
-ggsave("../../plots/analytes_ketones_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_ketones_6M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -102,8 +108,10 @@ plot_baseline(ANALYTES, response = "ketones",
               stats = filter(ANALYTES_STATS, response == "Ketones"),
               sex = "Female", age = "18M") +
   labs(y = TeX("Ketones ($\\mu$mol/L)"))
+```
 
-ggsave("../../plots/analytes_ketones_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_ketones_18M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -115,8 +123,10 @@ plot_baseline(ANALYTES, response = "ketones",
               stats = filter(ANALYTES_STATS, response == "Ketones"),
               sex = "Male", age = "18M") +
   labs(y = TeX("Ketones ($\\mu$mol/L)"))
+```
 
-ggsave("../../plots/analytes_ketones_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_ketones_18M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -135,8 +145,10 @@ plot_baseline(ANALYTES, response = "nefa",
                      breaks = seq(0.3, 1.3, 0.2),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0.3, 1.34), clip = "off")
+```
 
-ggsave("../../plots/analytes_NEFA_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_NEFA_6M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -151,8 +163,10 @@ plot_baseline(ANALYTES, response = "nefa",
                      breaks = seq(0.3, 1.3, 0.2),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0.3, 1.3), clip = "off")
+```
 
-ggsave("../../plots/analytes_NEFA_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_NEFA_6M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -167,8 +181,10 @@ plot_baseline(ANALYTES, response = "nefa",
                      breaks = seq(0.3, 1.3, 0.2),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0.3, 1.3), clip = "off")
+```
 
-ggsave("../../plots/analytes_NEFA_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_NEFA_18M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -180,8 +196,10 @@ plot_baseline(ANALYTES, response = "nefa",
               stats = filter(ANALYTES_STATS, response == "NEFA"),
               sex = "Male", age = "18M") +
   labs(y = "NEFA (mmol/L)")
+```
 
-ggsave("../../plots/analytes_NEFA_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_NEFA_18M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -200,8 +218,10 @@ plot_baseline(ANALYTES, response = "lactate",
                      breaks = seq(1, 2, 0.2),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(1, 2), clip = "off")
+```
 
-ggsave("../../plots/analytes_lactate_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_lactate_6M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -217,8 +237,10 @@ plot_baseline(ANALYTES, response = "lactate",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 3), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_lactate_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_lactate_6M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -234,8 +256,10 @@ plot_baseline(ANALYTES, response = "lactate",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(1.08, 2.1), clip = "off") +
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_lactate_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_lactate_18M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -251,8 +275,10 @@ plot_baseline(ANALYTES, response = "lactate",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(1, 1.9), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_lactate_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_lactate_18M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -272,8 +298,10 @@ plot_baseline(ANALYTES, response = "glucose",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(117, 183), clip = "off") +
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glucose_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucose_6M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -289,8 +317,10 @@ plot_baseline(ANALYTES, response = "glucose",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(150, 230), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glucose_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucose_6M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -306,8 +336,10 @@ plot_baseline(ANALYTES, response = "glucose",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(120, 200), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glucose_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucose_18M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -323,8 +355,10 @@ plot_baseline(ANALYTES, response = "glucose",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(145, 205), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glucose_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucose_18M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -344,8 +378,10 @@ plot_baseline(ANALYTES, response = "glycerol",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0.5, 2.7), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glycerol_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glycerol_6M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -361,8 +397,10 @@ plot_baseline(ANALYTES, response = "glycerol",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0.45, 2.5), clip = "off") +
   theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glycerol_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glycerol_6M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -378,8 +416,10 @@ plot_baseline(ANALYTES, response = "glycerol",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0.7, 2.2), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glycerol_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glycerol_18M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -395,8 +435,10 @@ plot_baseline(ANALYTES, response = "glycerol",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0.6, 1.9), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glycerol_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glycerol_18M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
@@ -418,8 +460,10 @@ plot_baseline(ANALYTES, response = "corticosterone",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 110), clip = "off") +
   theme(plot.margin = unit(c(20, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_corticosterone_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_corticosterone_6M_female.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -438,8 +482,10 @@ plot_baseline(ANALYTES, response = "corticosterone",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 160), clip = "off") +
   theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_corticosterone_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_corticosterone_6M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -458,8 +504,10 @@ plot_baseline(ANALYTES, response = "corticosterone",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 80), clip = "off") +
   theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_corticosterone_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_corticosterone_18M_female.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -478,8 +526,10 @@ plot_baseline(ANALYTES, response = "corticosterone",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 170), clip = "off") +
   theme(plot.margin = unit(c(20, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_corticosterone_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_corticosterone_18M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -499,8 +549,10 @@ plot_baseline(ANALYTES, response = "glucagon",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 162), clip = "off") +
   theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glucagon_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucagon_6M_female.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -516,8 +568,10 @@ plot_baseline(ANALYTES, response = "glucagon",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 80), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glucagon_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucagon_6M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -533,8 +587,10 @@ plot_baseline(ANALYTES, response = "glucagon",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 130), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glucagon_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucagon_18M_female.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -550,8 +606,10 @@ plot_baseline(ANALYTES, response = "glucagon",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 80), clip = "off") +
   theme(plot.margin = unit(c(6, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_glucagon_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucagon_18M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -571,8 +629,10 @@ plot_baseline(ANALYTES, response = "insulin_pm",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 1050), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_insulin_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_insulin_6M_female.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -588,8 +648,10 @@ plot_baseline(ANALYTES, response = "insulin_pm",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 1000), clip = "off") +
   theme(plot.margin = unit(c(14, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_insulin_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_insulin_6M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -605,8 +667,10 @@ plot_baseline(ANALYTES, response = "insulin_pm",
                      expand = expansion(mult = 1e-2)) +
     coord_cartesian(ylim = c(380, 1400), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_insulin_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_insulin_18M_female.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -622,8 +686,10 @@ plot_baseline(ANALYTES, response = "insulin_pm",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(380, 1000), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_insulin_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_insulin_18M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -643,8 +709,10 @@ plot_baseline(ANALYTES, response = "leptin",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 3e4), clip = "off") +
   theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_leptin_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_leptin_6M_female.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -661,8 +729,10 @@ plot_baseline(ANALYTES, response = "leptin",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 6e4), clip = "off") +
   theme(plot.margin = unit(c(18, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_leptin_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_leptin_6M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -679,8 +749,10 @@ plot_baseline(ANALYTES, response = "leptin",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 7e4), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_leptin_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_leptin_18M_female.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 
@@ -697,8 +769,10 @@ plot_baseline(ANALYTES, response = "leptin",
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 6e4), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
 
-ggsave("../../plots/analytes_leptin_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_leptin_18M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
 ```
 

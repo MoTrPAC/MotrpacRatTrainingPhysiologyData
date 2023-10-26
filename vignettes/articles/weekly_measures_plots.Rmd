@@ -21,6 +21,8 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+
+save_plots <- dir.exists(paths = file.path("..", "..", "plots"))
 ```
 
 ```{r setup}
@@ -67,8 +69,10 @@ WEEKLY_BODY_MASS_EMM %>%
         strip.background = element_blank(),
         panel.spacing = unit(-1, "pt"),
         panel.grid = element_blank())
+```
 
-ggsave("../../plots/weekly_body_mass_6M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "weekly_body_mass_6M_female.pdf"),
        height = 1.7, width = 3, family = "ArialMT")
 ```
 
@@ -101,8 +105,10 @@ WEEKLY_BODY_MASS_EMM %>%
         strip.background = element_blank(),
         panel.spacing = unit(-1, "pt"),
         panel.grid = element_blank())
+```
 
-ggsave("../../plots/weekly_body_mass_6M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "weekly_body_mass_6M_male.pdf"),
        height = 1.7, width = 3, family = "ArialMT")
 ```
 
@@ -135,8 +141,10 @@ WEEKLY_BODY_MASS_EMM %>%
         strip.background = element_blank(),
         panel.spacing = unit(-1, "pt"),
         panel.grid = element_blank())
+```
 
-ggsave("../../plots/weekly_body_mass_18M_female.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "weekly_body_mass_18M_female.pdf"),
        height = 1.7, width = 3, family = "ArialMT")
 ```
 
@@ -169,8 +177,10 @@ WEEKLY_BODY_MASS_EMM %>%
         strip.background = element_blank(),
         panel.spacing = unit(-1, "pt"),
         panel.grid = element_blank())
+```
 
-ggsave("../../plots/weekly_body_mass_18M_male.pdf",
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "weekly_body_mass_18M_male.pdf"),
        height = 1.7, width = 3, family = "ArialMT")
 ```
 
@@ -217,8 +227,10 @@ WEEKLY_BODY_MASS_STATS %>%
         axis.ticks = element_line(color = "black"),
         strip.text = element_text(color = "black", size = 7),
         strip.background = element_blank())
+```
 
-ggsave(filename = "../../plots/weekly_body_mass_tests.pdf",
+```{r eval=save_plots}
+ggsave(filename = file.path("..", "..", "plots", "weekly_body_mass_tests.pdf"),
        height = 2.4, width = 3.8, family = "ArialMT")
 ```
 
@@ -296,8 +308,10 @@ lact_df %>%
                      expand = expansion(mult = 5e-3),
                      breaks = seq(0, 8, 2)) +
   coord_cartesian(ylim = c(0, 8), clip = "off")
+```
 
-ggsave("../../plots/weekly_lactate_6M_female.pdf", 
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "weekly_lactate_6M_female.pdf"), 
        height = 1.7, width = 3, family = "ArialMT")
 ```
 
@@ -312,8 +326,10 @@ lact_df %>%
   scale_y_continuous(name = "Lactate (mM)",
                      breaks = seq(0, 12, 4),
                      expand = expansion(mult = 5e-3))
+```
 
-ggsave("../../plots/weekly_lactate_6M_male.pdf", 
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "weekly_lactate_6M_male.pdf"), 
        height = 1.7, width = 3, family = "ArialMT")
 ```
 
@@ -328,8 +344,10 @@ lact_df %>%
   scale_y_continuous(name = "Lactate (mM)",
                      breaks = seq(0, 12, 4),
                      expand = expansion(mult = 5e-3))
+```
 
-ggsave("../../plots/weekly_lactate_18M_female.pdf", 
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "weekly_lactate_18M_female.pdf"), 
        height = 1.7, width = 3, family = "ArialMT")
 ```
 
@@ -344,8 +362,10 @@ lact_df %>%
   scale_y_continuous(name = "Lactate (mM)",
                      breaks = seq(0, 8, 2),
                      expand = expansion(mult = 5e-3))
+```
 
-ggsave("../../plots/weekly_lactate_18M_male.pdf", 
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "weekly_lactate_18M_male.pdf"), 
        height = 1.7, width = 3, family = "ArialMT")
 ```
 

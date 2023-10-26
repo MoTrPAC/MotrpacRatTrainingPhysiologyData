@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
+
+save_plots <- dir.exists(paths = file.path("..", "..", "plots"))
 ```
 
 ```{r setup}
@@ -79,9 +81,12 @@ foo <- DISSECTION_TIMES %>%
   arrange(age, sex) %>% 
   mutate(ymax = c(12, 16, 10, 10),
          plots = map2(.x = data, .y = ymax, .f = plot_dissection_times)) %>% 
-  mutate(file_name = sprintf("../../plots/dissection_times_%s_%s.pdf", 
-                             age, tolower(sex)))
+  mutate(file_name = file.path("..", "..", "plots", 
+                               sprintf("dissection_times_%s_%s.pdf", 
+                                       age, tolower(sex))))
+```
 
+```{r eval=save_plots}
 map2(.x = foo$file_name, .y = foo$plots, 
      .f = ~ ggsave(filename = .x, plot = .y, 
                    height = 2, width = 3.1, family = "ArialMT"))
