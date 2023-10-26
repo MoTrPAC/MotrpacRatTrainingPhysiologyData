@@ -55,7 +55,7 @@ fiber_donut_chart <- function(x)
     geom_text(aes(x = 1, y = 0, label = group),
               data = x, size = 7 / .pt)
 
-  # stupid workaround to avoid warning messages
+  # workaround to avoid warning messages
   cart <- coord_cartesian(clip = "off", xlim = c(1, 2.5))
   cart$default <- TRUE
 

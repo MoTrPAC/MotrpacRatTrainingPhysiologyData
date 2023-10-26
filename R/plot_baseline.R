@@ -60,12 +60,16 @@ plot_baseline <- function(x,
                     color = ifelse(sex == "Female", "#ff6eff", "#5555ff"))
   }
 
+  # workaround to avoid warning messages
+  cart <- coord_cartesian(clip = "off", xlim = c(1, 2.5))
+  cart$default <- TRUE
+
   p <- p +
     geom_point(color = "black", na.rm = TRUE, shape = 16,
                position = position_beeswarm(cex = 3, dodge.width = 0.7),
                size = 0.4) +
     labs(x = NULL) +
-    coord_cartesian(clip = "off") +
+    cart +
     theme_bw(base_size = 7) +
     theme(text = element_text(size = 7, color = "black"),
           line = element_line(linewidth = 0.3, color = "black"),

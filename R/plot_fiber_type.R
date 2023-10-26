@@ -47,6 +47,10 @@ plot_fiber_type <- function(x,
     filter(muscle == !!muscle, age == !!age, sex == !!sex) %>%
     droplevels.data.frame()
 
+  # workaround to avoid warning messages
+  cart <- coord_cartesian(clip = "off")
+  cart$default <- TRUE
+
   p <- ggplot(x, aes(x = group, y = response)) +
     geom_crossbar(data = conf, aes(x = group, y = response_mean,
                                    ymin = lower.CL, ymax = upper.CL),
@@ -56,7 +60,7 @@ plot_fiber_type <- function(x,
                position = position_beeswarm(cex = 7.5)) +
     facet_grid(~ type, switch = "x") +
     labs(x = NULL) +
-    coord_cartesian(clip = "off") +
+    cart +
     theme_bw(base_size = 7) +
     theme(text = element_text(size = 7, color = "black"),
           line = element_line(linewidth = 0.3, color = "black"),
