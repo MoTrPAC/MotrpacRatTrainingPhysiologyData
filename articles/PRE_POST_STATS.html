@@ -56,7 +56,10 @@
       <a href="../articles/BASELINE_STATS.html">Statistical analyses of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
-      <a href="../articles/FIBER_TYPES_STATS.html">Statistical analyses of mean fiber area and fiber count by muscle and fiber type</a>
+      <a href="../articles/FIBER_AREA_STATS.html">Statistical analysis of mean fiber area by muscle and fiber type</a>
+    </li>
+    <li>
+      <a href="../articles/FIBER_COUNT_STATS.html">Statistical analysis of fiber counts by muscle and fiber type</a>
     </li>
     <li>
       <a href="../articles/MUSCLES_STATS.html">Statistical analyses of muscle-specific measures</a>
@@ -65,10 +68,19 @@
       <a href="../articles/PRE_POST_STATS.html">Statistical analyses of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
+      <a href="../articles/WEEKLY_BODY_MASS_STATS.html">Statistical analysis of weekly body mass</a>
+    </li>
+    <li>
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
       <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+    </li>
+    <li>
+      <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
+    </li>
+    <li>
+      <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
       <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
@@ -80,9 +92,12 @@
       <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
     </li>
     <li>
-      <a href="../articles/weekly_measures_plots.html">Plots of weekly body weight and blood lactate</a>
+      <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -110,7 +125,7 @@ body composition and VO2max testing measures</h1>
                         <h4 data-toc-skip class="author">Tyler
 Sagendorf</h4>
             
-            <h4 data-toc-skip class="date">15 July, 2023</h4>
+            <h4 data-toc-skip class="date">27 October, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/PRE_POST_STATS.Rmd" class="external-link"><code>vignettes/PRE_POST_STATS.Rmd</code></a></small>
       <div class="hidden name"><code>PRE_POST_STATS.Rmd</code></div>
@@ -143,14 +158,16 @@ observed, we will include reciprocal group variances as weights. Certain
 observations may be removed if their inclusion substantially affects the
 model fit. Model parsimony will be achieved through ANOVA F-tests.</p>
 <div class="section level3">
-<h3 id="nmr-weight">NMR Weight<a class="anchor" aria-label="anchor" href="#nmr-weight"></a>
+<h3 id="body-mass-nmr-day">Body Mass (NMR Day)<a class="anchor" aria-label="anchor" href="#body-mass-nmr-day"></a>
 </h3>
+<p>Body mass recorded on the same day as the NMR body composition
+measures.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
 <span><span class="va">NMR</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">post_weight</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">post_body_mass</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">post_weight</span> <span class="op">-</span> <span class="va">pre_weight</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">post_body_mass</span> <span class="op">-</span> <span class="va">pre_body_mass</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitter.html" class="external-link">position_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.15</span>, height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
 <span>             na.rm <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
@@ -161,23 +178,23 @@ model fit. Model parsimony will be achieved through ANOVA F-tests.</p>
 may affect the model fit. We will start with a WLS model, since we
 observe different group variances.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">wt.weight</span> <span class="op">&lt;-</span> <span class="va">NMR</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">wt.body_mass</span> <span class="op">&lt;-</span> <span class="va">NMR</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">sex</span>, <span class="va">group</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">post_weight</span> <span class="op">-</span> <span class="va">pre_weight</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">post_body_mass</span> <span class="op">-</span> <span class="va">pre_body_mass</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit.weight</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">post_weight</span> <span class="op">-</span> <span class="va">pre_weight</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span>,</span>
-<span>                 weights <span class="op">=</span> <span class="va">wt.weight</span>,</span>
-<span>                 data <span class="op">=</span> <span class="va">NMR</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plot_lm.html">plot_lm</a></span><span class="op">(</span><span class="va">fit.weight</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">fit.body_mass</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">post_body_mass</span> <span class="op">-</span> <span class="va">pre_body_mass</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span>,</span>
+<span>                    weights <span class="op">=</span> <span class="va">wt.body_mass</span>,</span>
+<span>                    data <span class="op">=</span> <span class="va">NMR</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_lm.html">plot_lm</a></span><span class="op">(</span><span class="va">fit.body_mass</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PRE_POST_STATS_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
 <p>The diagnostic plots appear fine. We will try to simplify the
 model.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.weight</span>, test <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.body_mass</span>, test <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Analysis of Variance Table</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Response: I(post_weight - pre_weight)</span></span>
+<span><span class="co">#&gt; Response: I(post_body_mass - pre_body_mass)</span></span>
 <span><span class="co">#&gt;                Df Sum Sq Mean Sq  F value    Pr(&gt;F)    </span></span>
 <span><span class="co">#&gt; age             1 227.94  227.94 227.9378 &lt; 2.2e-16 ***</span></span>
 <span><span class="co">#&gt; sex             1 490.51  490.51 490.5147 &lt; 2.2e-16 ***</span></span>
@@ -191,15 +208,15 @@ model.</p>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
 <p>The 3-way interaction is not significant, so we will remove it.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.weight</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.weight</span>, formula <span class="op">=</span> <span class="va">.</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="va">age</span><span class="op">:</span><span class="va">sex</span><span class="op">:</span><span class="va">group</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plot_lm.html">plot_lm</a></span><span class="op">(</span><span class="va">fit.weight</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fit.body_mass</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.body_mass</span>, formula <span class="op">=</span> <span class="va">.</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="va">age</span><span class="op">:</span><span class="va">sex</span><span class="op">:</span><span class="va">group</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_lm.html">plot_lm</a></span><span class="op">(</span><span class="va">fit.body_mass</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PRE_POST_STATS_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.weight</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.body_mass</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; lm(formula = I(post_weight - pre_weight) ~ age + sex + group + </span></span>
-<span><span class="co">#&gt;     age:sex + age:group + sex:group, data = NMR, weights = wt.weight)</span></span>
+<span><span class="co">#&gt; lm(formula = I(post_body_mass - pre_body_mass) ~ age + sex + </span></span>
+<span><span class="co">#&gt;     group + age:sex + age:group + sex:group, data = NMR, weights = wt.body_mass)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Weighted Residuals:</span></span>
 <span><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
@@ -226,13 +243,13 @@ model.</p>
 <span><span class="co">#&gt; F-statistic: 95.59 on 9 and 164 DF,  p-value: &lt; 2.2e-16</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="w-2w-terminal---pre-nmr-weight">1W, 2W: Terminal - Pre NMR Weight<a class="anchor" aria-label="anchor" href="#w-2w-terminal---pre-nmr-weight"></a>
+<h3 id="w-2w-terminal---pre-nmr-body-mass">1W, 2W: Terminal - Pre NMR Body Mass<a class="anchor" aria-label="anchor" href="#w-2w-terminal---pre-nmr-body-mass"></a>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">term_nmr_df</span> <span class="op">&lt;-</span> <span class="va">WEIGHTS</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">term_nmr_df</span> <span class="op">&lt;-</span> <span class="va">BODY_MASSES</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">group</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1W"</span>, <span class="st">"2W"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pid</span>, <span class="va">iowa_id</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">group</span>, <span class="va">term_weight</span>, <span class="va">nmr_pre_weight</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>diff <span class="op">=</span> <span class="va">term_weight</span> <span class="op">-</span> <span class="va">nmr_pre_weight</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pid</span>, <span class="va">iowa_id</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">group</span>, <span class="va">term_body_mass</span>, <span class="va">nmr_pre_body_mass</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>diff <span class="op">=</span> <span class="va">term_body_mass</span> <span class="op">-</span> <span class="va">nmr_pre_body_mass</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot points</span></span>
@@ -240,14 +257,14 @@ model.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitter.html" class="external-link">position_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.15</span>, height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
 <span>             alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"terminal - NMR weight (pre)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"terminal - NMR body mass (pre)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p_term</span></span></code></pre></div>
 <p><img src="PRE_POST_STATS_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 <p>There is an extreme observation in both 6M Male groups.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">term_nmr_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">nmr_pre_weight</span>, y <span class="op">=</span> <span class="va">term_weight</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">term_nmr_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">nmr_pre_body_mass</span>, y <span class="op">=</span> <span class="va">term_body_mass</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">stat_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PRE_POST_STATS_files/figure-html/unnamed-chunk-8-1.png" width="384"></p>
@@ -265,13 +282,13 @@ and fit a WLS model.</p>
 <code class="sourceCode R"><span><span class="va">out.term_nmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">term_nmr_df</span><span class="op">$</span><span class="va">diff</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">50</span><span class="op">)</span> <span class="co"># 58</span></span>
 <span></span>
 <span><span class="va">wt.term_nmr</span> <span class="op">&lt;-</span> <span class="va">term_nmr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>term_weight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">out.term_nmr</span>, </span>
-<span>                              <span class="cn">NA</span>, <span class="va">term_weight</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>term_body_mass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">out.term_nmr</span>, </span>
+<span>                                 <span class="cn">NA</span>, <span class="va">term_body_mass</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">sex</span>, <span class="va">group</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">term_weight</span> <span class="op">-</span> <span class="va">nmr_pre_weight</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">term_body_mass</span> <span class="op">-</span> <span class="va">nmr_pre_body_mass</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit.term_nmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">term_weight</span> <span class="op">-</span> <span class="va">nmr_pre_weight</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span>,</span>
+<span><span class="va">fit.term_nmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">term_body_mass</span> <span class="op">-</span> <span class="va">nmr_pre_body_mass</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span>,</span>
 <span>                   weights <span class="op">=</span> <span class="va">wt.term_nmr</span>,</span>
 <span>                   subset <span class="op">=</span> <span class="op">-</span><span class="va">out.term_nmr</span>,</span>
 <span>                   data <span class="op">=</span> <span class="va">term_nmr_df</span><span class="op">)</span></span>
@@ -283,7 +300,7 @@ model.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.term_nmr</span>, test <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Analysis of Variance Table</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Response: I(term_weight - nmr_pre_weight)</span></span>
+<span><span class="co">#&gt; Response: I(term_body_mass - nmr_pre_body_mass)</span></span>
 <span><span class="co">#&gt;               Df  Sum Sq Mean Sq  F value    Pr(&gt;F)    </span></span>
 <span><span class="co">#&gt; age            1  45.106  45.106  45.1065  1.19e-09 ***</span></span>
 <span><span class="co">#&gt; sex            1 102.394 102.394 102.3936 &lt; 2.2e-16 ***</span></span>
@@ -301,8 +318,8 @@ terms.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit.term_nmr</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; lm(formula = I(term_weight - nmr_pre_weight) ~ age * sex * group, </span></span>
-<span><span class="co">#&gt;     data = term_nmr_df, subset = -out.term_nmr, weights = wt.term_nmr)</span></span>
+<span><span class="co">#&gt; lm(formula = I(term_body_mass - nmr_pre_body_mass) ~ age * sex * </span></span>
+<span><span class="co">#&gt;     group, data = term_nmr_df, subset = -out.term_nmr, weights = wt.term_nmr)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Weighted Residuals:</span></span>
 <span><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
@@ -959,14 +976,14 @@ after we set up comparisons for all measures.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="comparisons">Comparisons<a class="anchor" aria-label="anchor" href="#comparisons"></a>
+<h2 id="hypothesis-testing">Hypothesis Testing<a class="anchor" aria-label="anchor" href="#hypothesis-testing"></a>
 </h2>
 <p>We will test if group means are different from 0 and adjust p-values
 using the Holm procedure within each combination of sex and age.</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We will include the maximum run speed test results at the end</span></span>
-<span><span class="va">model_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"NMR Weight"</span> <span class="op">=</span> <span class="va">fit.weight</span>,</span>
-<span>                   <span class="st">"Term - NMR Pre Weight"</span> <span class="op">=</span> <span class="va">fit.term_nmr</span>,</span>
+<span><span class="va">model_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"NMR Body Mass"</span> <span class="op">=</span> <span class="va">fit.body_mass</span>,</span>
+<span>                   <span class="st">"Term - NMR Pre Body Mass"</span> <span class="op">=</span> <span class="va">fit.term_nmr</span>,</span>
 <span>                   <span class="st">"NMR Lean Mass"</span> <span class="op">=</span> <span class="va">fit.lean</span>,</span>
 <span>                   <span class="st">"NMR Fat Mass"</span> <span class="op">=</span> <span class="va">fit.fat</span>,</span>
 <span>                   <span class="st">"NMR % Lean"</span> <span class="op">=</span> <span class="va">fit.lean_pct</span>,</span>
@@ -982,19 +999,17 @@ using the Holm procedure within each combination of sex and age.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(?&lt;=[\\s])\\s*|^\\s+|\\s+$"</span>, <span class="st">""</span>, <span class="va">model</span>, perl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>         model_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">"^([^\\(]+).*"</span>, <span class="st">"\\1"</span>, <span class="va">model</span><span class="op">)</span>,</span>
 <span>         formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">".*formula = ([^,]+),.*"</span>, <span class="st">"\\1"</span>, <span class="va">model</span><span class="op">)</span>,</span>
-<span>         family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">".*family = ([^\\)]+\\)),.*"</span>, <span class="st">"\\1"</span>, <span class="va">model</span><span class="op">)</span>,</span>
-<span>         family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">model_type</span> <span class="op">==</span> <span class="st">"lm"</span>, <span class="st">"gaussian"</span>, <span class="va">family</span><span class="op">)</span>,</span>
 <span>         <span class="co"># if weights were used, they were reciprocal group variances</span></span>
 <span>         weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"weights = "</span>, <span class="va">model</span><span class="op">)</span>, </span>
 <span>                          <span class="st">"reciprocal group variances"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>obs_removed <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span>    <span class="va">response</span> <span class="op">==</span> <span class="st">"Term - NMR Pre Weight"</span> <span class="op">~</span> <span class="va">NMR</span><span class="op">$</span><span class="va">iowa_id</span><span class="op">[</span><span class="fl">58</span><span class="op">]</span>,</span>
+<span>    <span class="va">response</span> <span class="op">==</span> <span class="st">"Term - NMR Pre Body Mass"</span> <span class="op">~</span> <span class="va">NMR</span><span class="op">$</span><span class="va">iowa_id</span><span class="op">[</span><span class="fl">58</span><span class="op">]</span>,</span>
 <span>    <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Fat"</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NMR</span><span class="op">$</span><span class="va">iowa_id</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">136</span>, <span class="fl">138</span>, <span class="fl">218</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>                                    collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
-<span>  <span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Estimated marginal means</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Estimated marginal means</span></span>
 <span><span class="va">PRE_POST_STATS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">model_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">mod_i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">terms_i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/terms.html" class="external-link">terms</a></span><span class="op">(</span><span class="va">mod_i</span><span class="op">)</span>, which <span class="op">=</span> <span class="st">"term.labels"</span><span class="op">)</span></span>
 <span>  <span class="va">specs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age_group"</span>, <span class="st">"group"</span><span class="op">)</span>, <span class="va">terms_i</span><span class="op">)</span></span>
@@ -1021,81 +1036,90 @@ using the Holm procedure within each combination of sex and age.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Maximum Run Speed"</span> <span class="op">=</span> <span class="va">speed_res</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html" class="external-link">enframe</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">sex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>p.value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">p.value</span>, method <span class="op">=</span> <span class="st">"holm"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>signif <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">p.value</span>, </span>
-<span>                      breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>                      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"***"</span>, <span class="st">"**"</span>, <span class="st">"*"</span>, <span class="st">""</span><span class="op">)</span>,</span>
-<span>                      include.lowest <span class="op">=</span> <span class="cn">TRUE</span>, right <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                      ordered_result <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">model_df</span>, by <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>, <span class="st">"Female, Male"</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_longer_delim.html" class="external-link">separate_longer_delim</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="va">sex</span>, delim <span class="op">=</span> <span class="st">", "</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">age</span>, <span class="va">sex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>p.adj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">p.value</span>, method <span class="op">=</span> <span class="st">"holm"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>signif <span class="op">=</span> <span class="va">p.adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span>,</span>
+<span>         age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">age</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"6M"</span>, <span class="st">"18M"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sex</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Female"</span>, <span class="st">"Male"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">group</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SED"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">^</span> <span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>, <span class="st">"W"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">emmean</span>, <span class="va">estimate</span><span class="op">)</span>,</span>
+<span>               names_to <span class="op">=</span> <span class="st">"estimate_type"</span>,</span>
+<span>               values_to <span class="op">=</span> <span class="st">"estimate"</span>,</span>
+<span>               values_drop_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">".ratio"</span><span class="op">)</span>, </span>
 <span>               names_to <span class="op">=</span> <span class="st">"statistic_type"</span>, </span>
 <span>               values_to <span class="op">=</span> <span class="st">"statistic"</span>, </span>
 <span>               values_drop_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>statistic_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">"\\.ratio"</span>, <span class="st">""</span>, <span class="va">statistic_type</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">model_df</span>, by <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>estimate_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">estimate_type</span> <span class="op">==</span> <span class="st">"emmean"</span>,</span>
+<span>                                <span class="st">"(post - pre) mean"</span>, </span>
+<span>                                <span class="st">"signed mean (post - pre) rank"</span><span class="op">)</span>,</span>
+<span>         statistic_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">"\\.ratio"</span>, <span class="st">""</span>, <span class="va">statistic_type</span><span class="op">)</span>,</span>
 <span>         model_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">statistic_type</span> <span class="op">==</span> <span class="st">"W"</span>, </span>
-<span>                             <span class="st">"Wilcoxon"</span>, <span class="va">model_type</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="va">group</span>, .after <span class="op">=</span> <span class="va">sex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="va">signif</span>, .after <span class="op">=</span> <span class="va">p.value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"statistic"</span><span class="op">)</span>, .before <span class="op">=</span> <span class="va">p.value</span><span class="op">)</span></span></code></pre></div>
+<span>                             <span class="st">"wilcox.test"</span>, <span class="va">model_type</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">group</span>, <span class="va">estimate_type</span>, <span class="va">estimate</span>, <span class="va">SE</span>, </span>
+<span>                <span class="va">lower.CL</span>, <span class="va">upper.CL</span>, <span class="va">statistic_type</span>, <span class="va">statistic</span>, <span class="va">df</span>, <span class="va">n</span>, <span class="va">p.value</span>, </span>
+<span>                <span class="va">p.adj</span>, <span class="va">signif</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">group</span><span class="op">)</span></span></code></pre></div>
 <p>See <code><a href="../reference/PRE_POST_STATS.html">?PRE_POST_STATS</a></code> for details.</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.dataframe.html" class="external-link">print.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">PRE_POST_STATS</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      response age    sex group     emmean       SE  df   lower.CL   upper.CL</span></span>
-<span><span class="co">#&gt; 1  NMR Weight  6M Female   SED  19.657280 1.763182 164  16.175816  23.138745</span></span>
-<span><span class="co">#&gt; 2  NMR Weight  6M Female    4W   6.780870 1.079099 164   4.650152   8.911588</span></span>
-<span><span class="co">#&gt; 3  NMR Weight  6M Female    8W   9.089814 1.323312 164   6.476888  11.702740</span></span>
-<span><span class="co">#&gt; 4  NMR Weight 18M Female   SED  -2.537029 1.985229 164  -6.456932   1.382875</span></span>
-<span><span class="co">#&gt; 5  NMR Weight 18M Female    4W  -4.033051 1.035377 164  -6.077438  -1.988663</span></span>
-<span><span class="co">#&gt; 6  NMR Weight 18M Female    8W  -7.130273 1.762925 164 -10.611229  -3.649317</span></span>
-<span><span class="co">#&gt; 7  NMR Weight  6M   Male   SED  18.134686 3.688867 164  10.850890  25.418483</span></span>
-<span><span class="co">#&gt; 8  NMR Weight  6M   Male    4W  -1.287741 2.667299 164  -6.554416   3.978933</span></span>
-<span><span class="co">#&gt; 9  NMR Weight  6M   Male    8W -15.924145 1.302963 164 -18.496891 -13.351399</span></span>
-<span><span class="co">#&gt; 10 NMR Weight 18M   Male   SED -19.437882 2.902355 164 -25.168683 -13.707081</span></span>
-<span><span class="co">#&gt;    statistic_type   statistic      p.value signif estimate  n model_type</span></span>
-<span><span class="co">#&gt; 1               t  11.1487514 1.530334e-20    ***       NA NA         lm</span></span>
-<span><span class="co">#&gt; 2               t   6.2838259 4.295441e-08    ***       NA NA         lm</span></span>
-<span><span class="co">#&gt; 3               t   6.8689855 2.168921e-09    ***       NA NA         lm</span></span>
-<span><span class="co">#&gt; 4               t  -1.2779525 2.030720e-01              NA NA         lm</span></span>
-<span><span class="co">#&gt; 5               t  -3.8952484 1.283240e-03     **       NA NA         lm</span></span>
-<span><span class="co">#&gt; 6               t  -4.0445703 8.856973e-04    ***       NA NA         lm</span></span>
-<span><span class="co">#&gt; 7               t   4.9160579 2.127072e-05    ***       NA NA         lm</span></span>
-<span><span class="co">#&gt; 8               t  -0.4827884 1.000000e+00              NA NA         lm</span></span>
-<span><span class="co">#&gt; 9               t -12.2214860 1.406986e-23    ***       NA NA         lm</span></span>
-<span><span class="co">#&gt; 10              t  -6.6972783 2.905306e-09    ***       NA NA         lm</span></span>
-<span><span class="co">#&gt;                                                                              formula</span></span>
-<span><span class="co">#&gt; 1  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 2  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 3  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 4  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 5  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 6  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 7  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 8  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 9  I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt; 10 I(post_weight - pre_weight) ~ age + sex + group + age:sex + age:group + sex:group</span></span>
-<span><span class="co">#&gt;      family                    weights obs_removed</span></span>
-<span><span class="co">#&gt; 1  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 8  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 9  gaussian reciprocal group variances        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 10 gaussian reciprocal group variances        &lt;NA&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt;           response age    sex group     estimate_type    estimate        SE</span></span>
+<span><span class="co">#&gt; 1  Absolute VO2max  6M Female   SED (post - pre) mean  0.03186467 0.2432343</span></span>
+<span><span class="co">#&gt; 2  Absolute VO2max  6M Female    4W (post - pre) mean  0.64229634 0.1933030</span></span>
+<span><span class="co">#&gt; 3  Absolute VO2max  6M Female    8W (post - pre) mean  2.55372517 0.2175553</span></span>
+<span><span class="co">#&gt; 4  Absolute VO2max  6M   Male   SED (post - pre) mean  0.03186467 0.2432343</span></span>
+<span><span class="co">#&gt; 5  Absolute VO2max  6M   Male    4W (post - pre) mean  0.64229634 0.1933030</span></span>
+<span><span class="co">#&gt; 6  Absolute VO2max  6M   Male    8W (post - pre) mean  2.55372517 0.2175553</span></span>
+<span><span class="co">#&gt; 7  Absolute VO2max 18M Female   SED (post - pre) mean -0.63794428 0.2808627</span></span>
+<span><span class="co">#&gt; 8  Absolute VO2max 18M Female    8W (post - pre) mean  1.56413035 0.2140176</span></span>
+<span><span class="co">#&gt; 9  Absolute VO2max 18M   Male   SED (post - pre) mean -0.63794428 0.2808627</span></span>
+<span><span class="co">#&gt; 10 Absolute VO2max 18M   Male    8W (post - pre) mean  1.56413035 0.2140176</span></span>
+<span><span class="co">#&gt;      lower.CL    upper.CL statistic_type statistic  df  n      p.value</span></span>
+<span><span class="co">#&gt; 1  -0.4491458  0.51287518              t  0.131004 136 NA 8.959657e-01</span></span>
+<span><span class="co">#&gt; 2   0.2600279  1.02456473              t  3.322744 136 NA 1.145251e-03</span></span>
+<span><span class="co">#&gt; 3   2.1234963  2.98395405              t 11.738279 136 NA 2.074787e-22</span></span>
+<span><span class="co">#&gt; 4  -0.4491458  0.51287518              t  0.131004 136 NA 8.959657e-01</span></span>
+<span><span class="co">#&gt; 5   0.2600279  1.02456473              t  3.322744 136 NA 1.145251e-03</span></span>
+<span><span class="co">#&gt; 6   2.1234963  2.98395405              t 11.738279 136 NA 2.074787e-22</span></span>
+<span><span class="co">#&gt; 7  -1.1933674 -0.08252118              t -2.271374 136 NA 2.469474e-02</span></span>
+<span><span class="co">#&gt; 8   1.1408975  1.98736318              t  7.308419 136 NA 2.081410e-11</span></span>
+<span><span class="co">#&gt; 9  -1.1933674 -0.08252118              t -2.271374 136 NA 2.469474e-02</span></span>
+<span><span class="co">#&gt; 10  1.1408975  1.98736318              t  7.308419 136 NA 2.081410e-11</span></span>
+<span><span class="co">#&gt;           p.adj signif model_type</span></span>
+<span><span class="co">#&gt; 1  8.959657e-01  FALSE         lm</span></span>
+<span><span class="co">#&gt; 2  2.290501e-03   TRUE         lm</span></span>
+<span><span class="co">#&gt; 3  6.224360e-22   TRUE         lm</span></span>
+<span><span class="co">#&gt; 4  8.959657e-01  FALSE         lm</span></span>
+<span><span class="co">#&gt; 5  2.290501e-03   TRUE         lm</span></span>
+<span><span class="co">#&gt; 6  6.224360e-22   TRUE         lm</span></span>
+<span><span class="co">#&gt; 7  2.469474e-02   TRUE         lm</span></span>
+<span><span class="co">#&gt; 8  4.162820e-11   TRUE         lm</span></span>
+<span><span class="co">#&gt; 9  2.469474e-02   TRUE         lm</span></span>
+<span><span class="co">#&gt; 10 4.162820e-11   TRUE         lm</span></span>
+<span><span class="co">#&gt;                                                  formula weights obs_removed</span></span>
+<span><span class="co">#&gt; 1  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 8  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 9  I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 10 I(post_vo2max_ml_min - pre_vo2max_ml_min) ~ age_group    &lt;NA&gt;        &lt;NA&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.3.1 (2023-06-16)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
-<span><span class="co">#&gt; Running under: Ubuntu 22.04.2 LTS</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 22.04.3 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -1116,32 +1140,32 @@ using the Holm procedure within each combination of sex and age.</p>
 <span><span class="co">#&gt; other attached packages:</span></span>
 <span><span class="co">#&gt;  [1] rstatix_0.7.2                         </span></span>
 <span><span class="co">#&gt;  [2] latex2exp_0.9.6                       </span></span>
-<span><span class="co">#&gt;  [3] purrr_1.0.1                           </span></span>
+<span><span class="co">#&gt;  [3] purrr_1.0.2                           </span></span>
 <span><span class="co">#&gt;  [4] tidyr_1.3.0                           </span></span>
 <span><span class="co">#&gt;  [5] tibble_3.2.1                          </span></span>
-<span><span class="co">#&gt;  [6] emmeans_1.8.7                         </span></span>
-<span><span class="co">#&gt;  [7] dplyr_1.1.2                           </span></span>
+<span><span class="co">#&gt;  [6] emmeans_1.8.9                         </span></span>
+<span><span class="co">#&gt;  [7] dplyr_1.1.3                           </span></span>
 <span><span class="co">#&gt;  [8] MASS_7.3-60                           </span></span>
-<span><span class="co">#&gt;  [9] ggplot2_3.4.2                         </span></span>
+<span><span class="co">#&gt;  [9] ggplot2_3.4.4                         </span></span>
 <span><span class="co">#&gt; [10] MotrpacRatTrainingPhysiologyData_0.1.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] gtable_0.3.3       beeswarm_0.4.0     xfun_0.39          bslib_0.5.0       </span></span>
-<span><span class="co">#&gt;  [5] lattice_0.21-8     vctrs_0.6.3        tools_4.3.1        generics_0.1.3    </span></span>
-<span><span class="co">#&gt;  [9] fansi_1.0.4        highr_0.10         pkgconfig_2.0.3    Matrix_1.6-0      </span></span>
-<span><span class="co">#&gt; [13] desc_1.4.2         lifecycle_1.0.3    compiler_4.3.1     farver_2.1.1      </span></span>
-<span><span class="co">#&gt; [17] stringr_1.5.0      textshaping_0.3.6  munsell_0.5.0      carData_3.0-5     </span></span>
-<span><span class="co">#&gt; [21] vipor_0.4.5        htmltools_0.5.5    sass_0.4.6         yaml_2.3.7        </span></span>
-<span><span class="co">#&gt; [25] pillar_1.9.0       pkgdown_2.0.7      car_3.1-2          ggpubr_0.6.0      </span></span>
-<span><span class="co">#&gt; [29] jquerylib_0.1.4    cachem_1.0.8       abind_1.4-5        nlme_3.1-162      </span></span>
-<span><span class="co">#&gt; [33] tidyselect_1.2.0   digest_0.6.33      mvtnorm_1.2-2      stringi_1.7.12    </span></span>
-<span><span class="co">#&gt; [37] splines_4.3.1      labeling_0.4.2     rprojroot_2.0.3    fastmap_1.1.1     </span></span>
-<span><span class="co">#&gt; [41] grid_4.3.1         colorspace_2.1-0   cli_3.6.1          magrittr_2.0.3    </span></span>
-<span><span class="co">#&gt; [45] utf8_1.2.3         broom_1.0.5        withr_2.5.0        scales_1.2.1      </span></span>
-<span><span class="co">#&gt; [49] backports_1.4.1    ggbeeswarm_0.7.2   estimability_1.4.1 rmarkdown_2.23    </span></span>
-<span><span class="co">#&gt; [53] ggsignif_0.6.4     ragg_1.2.5         memoise_2.0.1      evaluate_0.21     </span></span>
-<span><span class="co">#&gt; [57] knitr_1.43         mgcv_1.8-42        rlang_1.1.1        glue_1.6.2        </span></span>
-<span><span class="co">#&gt; [61] jsonlite_1.8.7     R6_2.5.1           systemfonts_1.0.4  fs_1.6.2</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] gtable_0.3.4       beeswarm_0.4.0     xfun_0.40          bslib_0.5.1       </span></span>
+<span><span class="co">#&gt;  [5] lattice_0.21-8     vctrs_0.6.4        tools_4.3.1        generics_0.1.3    </span></span>
+<span><span class="co">#&gt;  [9] fansi_1.0.5        pkgconfig_2.0.3    Matrix_1.6-1.1     desc_1.4.2        </span></span>
+<span><span class="co">#&gt; [13] lifecycle_1.0.3    compiler_4.3.1     farver_2.1.1       stringr_1.5.0     </span></span>
+<span><span class="co">#&gt; [17] textshaping_0.3.7  munsell_0.5.0      carData_3.0-5      vipor_0.4.5       </span></span>
+<span><span class="co">#&gt; [21] htmltools_0.5.6.1  sass_0.4.7         yaml_2.3.7         pillar_1.9.0      </span></span>
+<span><span class="co">#&gt; [25] pkgdown_2.0.7      car_3.1-2          ggpubr_0.6.0       jquerylib_0.1.4   </span></span>
+<span><span class="co">#&gt; [29] cachem_1.0.8       abind_1.4-5        nlme_3.1-162       tidyselect_1.2.0  </span></span>
+<span><span class="co">#&gt; [33] digest_0.6.33      mvtnorm_1.2-3      stringi_1.7.12     labeling_0.4.3    </span></span>
+<span><span class="co">#&gt; [37] splines_4.3.1      rprojroot_2.0.3    fastmap_1.1.1      grid_4.3.1        </span></span>
+<span><span class="co">#&gt; [41] colorspace_2.1-0   cli_3.6.1          magrittr_2.0.3     utf8_1.2.4        </span></span>
+<span><span class="co">#&gt; [45] broom_1.0.5        withr_2.5.1        scales_1.2.1       backports_1.4.1   </span></span>
+<span><span class="co">#&gt; [49] ggbeeswarm_0.7.2   estimability_1.4.1 rmarkdown_2.25     ggsignif_0.6.4    </span></span>
+<span><span class="co">#&gt; [53] ragg_1.2.6         memoise_2.0.1      evaluate_0.22      knitr_1.44        </span></span>
+<span><span class="co">#&gt; [57] mgcv_1.8-42        rlang_1.1.1        glue_1.6.2         jsonlite_1.8.7    </span></span>
+<span><span class="co">#&gt; [61] R6_2.5.1           systemfonts_1.0.5  fs_1.6.3</span></span></code></pre></div>
 </div>
   </div>
 

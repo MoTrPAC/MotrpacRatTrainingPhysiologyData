@@ -56,7 +56,10 @@
       <a href="../articles/BASELINE_STATS.html">Statistical analyses of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
-      <a href="../articles/FIBER_TYPES_STATS.html">Statistical analyses of mean fiber area and fiber count by muscle and fiber type</a>
+      <a href="../articles/FIBER_AREA_STATS.html">Statistical analysis of mean fiber area by muscle and fiber type</a>
+    </li>
+    <li>
+      <a href="../articles/FIBER_COUNT_STATS.html">Statistical analysis of fiber counts by muscle and fiber type</a>
     </li>
     <li>
       <a href="../articles/MUSCLES_STATS.html">Statistical analyses of muscle-specific measures</a>
@@ -65,10 +68,19 @@
       <a href="../articles/PRE_POST_STATS.html">Statistical analyses of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
+      <a href="../articles/WEEKLY_BODY_MASS_STATS.html">Statistical analysis of weekly body mass</a>
+    </li>
+    <li>
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
       <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+    </li>
+    <li>
+      <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
+    </li>
+    <li>
+      <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
       <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
@@ -80,9 +92,12 @@
       <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
     </li>
     <li>
-      <a href="../articles/weekly_measures_plots.html">Plots of weekly body weight and blood lactate</a>
+      <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -109,7 +124,7 @@
                         <h4 data-toc-skip class="author">Tyler
 Sagendorf</h4>
             
-            <h4 data-toc-skip class="date">15 July, 2023</h4>
+            <h4 data-toc-skip class="date">27 October, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/articles/baseline_plots.Rmd" class="external-link"><code>vignettes/articles/baseline_plots.Rmd</code></a></small>
       <div class="hidden name"><code>baseline_plots.Rmd</code></div>
@@ -156,71 +171,67 @@ Sagendorf</h4>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html" class="external-link">enframe</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 class="tabset" id="nmr-body-mass">NMR Body Mass<a class="anchor" aria-label="anchor" href="#nmr-body-mass"></a>
+<h2 id="nmr-body-mass">NMR Body Mass<a class="anchor" aria-label="anchor" href="#nmr-body-mass"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female">6M Female<a class="anchor" aria-label="anchor" href="#m-female"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_baseline.html">plot_baseline</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NMR</span>, response <span class="op">=</span> <span class="st">"pre_weight"</span>,</span>
-<span>              conf <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">conf_df</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Weight"</span><span class="op">)</span>,</span>
-<span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Weight"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_baseline.html">plot_baseline</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NMR</span>, response <span class="op">=</span> <span class="st">"pre_body_mass"</span>,</span>
+<span>              conf <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">conf_df</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Body Mass"</span><span class="op">)</span>,</span>
+<span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Body Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"6M"</span>, y_position <span class="op">=</span> <span class="fl">207</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Body Mass (g)"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"Body Mass (g)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="baseline_plots_files/figure-html/unnamed-chunk-3-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_weight_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_body_mass_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male">6M Male<a class="anchor" aria-label="anchor" href="#m-male"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_baseline.html">plot_baseline</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NMR</span>, response <span class="op">=</span> <span class="st">"pre_weight"</span>,</span>
-<span>              conf <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">conf_df</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Weight"</span><span class="op">)</span>,</span>
-<span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Weight"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_baseline.html">plot_baseline</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NMR</span>, response <span class="op">=</span> <span class="st">"pre_body_mass"</span>,</span>
+<span>              conf <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">conf_df</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Body Mass"</span><span class="op">)</span>,</span>
+<span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Body Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"6M"</span>, y_position <span class="op">=</span> <span class="fl">415</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Body Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-4-1.png" width="50%" height="50%"></p>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"Body Mass (g)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-5-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_weight_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_body_mass_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-1">18M Female<a class="anchor" aria-label="anchor" href="#m-female-1"></a>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_baseline.html">plot_baseline</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NMR</span>, response <span class="op">=</span> <span class="st">"pre_weight"</span>,</span>
-<span>              conf <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">conf_df</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Weight"</span><span class="op">)</span>,</span>
-<span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Weight"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_baseline.html">plot_baseline</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NMR</span>, response <span class="op">=</span> <span class="st">"pre_body_mass"</span>,</span>
+<span>              conf <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">conf_df</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Body Mass"</span><span class="op">)</span>,</span>
+<span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Body Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"18M"</span>, y_position <span class="op">=</span> <span class="fl">265</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Body Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-5-1.png" width="50%" height="50%"></p>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"Body Mass (g)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-7-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_weight_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_body_mass_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-1">18M Male<a class="anchor" aria-label="anchor" href="#m-male-1"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_baseline.html">plot_baseline</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NMR</span>, response <span class="op">=</span> <span class="st">"pre_weight"</span>,</span>
-<span>              conf <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">conf_df</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Weight"</span><span class="op">)</span>,</span>
-<span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Weight"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_baseline.html">plot_baseline</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">NMR</span>, response <span class="op">=</span> <span class="st">"pre_body_mass"</span>,</span>
+<span>              conf <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">conf_df</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Body Mass"</span><span class="op">)</span>,</span>
+<span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Body Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Body Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-6-1.png" width="50%" height="50%"></p>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"Body Mass (g)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-9-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_weight_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_body_mass_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="nmr-lean-mass">NMR Lean Mass<a class="anchor" aria-label="anchor" href="#nmr-lean-mass"></a>
+<h2 id="nmr-lean-mass">NMR Lean Mass<a class="anchor" aria-label="anchor" href="#nmr-lean-mass"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-2">6M Female<a class="anchor" aria-label="anchor" href="#m-female-2"></a>
@@ -231,11 +242,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Lean Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"6M"</span>, y_position <span class="op">=</span> <span class="fl">123</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Lean Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-7-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-11-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_lean_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_lean_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-2">6M Male<a class="anchor" aria-label="anchor" href="#m-male-2"></a>
@@ -246,11 +256,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Lean Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Lean Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-8-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-13-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_lean_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_lean_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-3">18M Female<a class="anchor" aria-label="anchor" href="#m-female-3"></a>
@@ -261,11 +270,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Lean Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"18M"</span>, y_position <span class="op">=</span> <span class="fl">146</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Lean Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-9-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-15-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_lean_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_lean_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-3">18M Male<a class="anchor" aria-label="anchor" href="#m-male-3"></a>
@@ -276,15 +284,14 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Lean Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Lean Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-10-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-17-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_lean_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_lean_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="nmr-fat-mass">NMR Fat Mass<a class="anchor" aria-label="anchor" href="#nmr-fat-mass"></a>
+<h2 id="nmr-fat-mass">NMR Fat Mass<a class="anchor" aria-label="anchor" href="#nmr-fat-mass"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-4">6M Female<a class="anchor" aria-label="anchor" href="#m-female-4"></a>
@@ -295,11 +302,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Fat Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Fat Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-11-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-19-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_fat_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_fat_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-4">6M Male<a class="anchor" aria-label="anchor" href="#m-male-4"></a>
@@ -310,11 +316,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Fat Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Fat Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-12-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-21-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_fat_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_fat_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-5">18M Female<a class="anchor" aria-label="anchor" href="#m-female-5"></a>
@@ -325,11 +330,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Fat Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"18M"</span>, y_position <span class="op">=</span> <span class="fl">57</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Fat Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-13-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-23-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_fat_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_fat_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-5">18M Male<a class="anchor" aria-label="anchor" href="#m-male-5"></a>
@@ -340,15 +344,14 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR Fat Mass"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR Fat Mass (g)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-14-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-25-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_fat_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_fat_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="nmr-lean">NMR % Lean<a class="anchor" aria-label="anchor" href="#nmr-lean"></a>
+<h2 id="nmr-lean">NMR % Lean<a class="anchor" aria-label="anchor" href="#nmr-lean"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-6">6M Female<a class="anchor" aria-label="anchor" href="#m-female-6"></a>
@@ -359,11 +362,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Lean"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR % Lean Mass"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-15-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-27-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_pct_lean_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_pct_lean_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-6">6M Male<a class="anchor" aria-label="anchor" href="#m-male-6"></a>
@@ -374,11 +376,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Lean"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR % Lean Mass"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-16-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-29-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_pct_lean_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_pct_lean_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-7">18M Female<a class="anchor" aria-label="anchor" href="#m-female-7"></a>
@@ -389,11 +390,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Lean"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"18M"</span>, y_position <span class="op">=</span> <span class="fl">57.4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR % Lean Mass"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-17-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-31-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_pct_lean_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_pct_lean_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-7">18M Male<a class="anchor" aria-label="anchor" href="#m-male-7"></a>
@@ -404,15 +404,14 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Lean"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span>, y_position <span class="op">=</span> <span class="fl">55.7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR % Lean Mass"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-18-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-33-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_pct_lean_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_pct_lean_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="nmr-fat">NMR % Fat<a class="anchor" aria-label="anchor" href="#nmr-fat"></a>
+<h2 id="nmr-fat">NMR % Fat<a class="anchor" aria-label="anchor" href="#nmr-fat"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-8">6M Female<a class="anchor" aria-label="anchor" href="#m-female-8"></a>
@@ -423,11 +422,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Fat"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR % Fat Mass"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-19-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-35-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_pct_fat_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_pct_fat_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-8">6M Male<a class="anchor" aria-label="anchor" href="#m-male-8"></a>
@@ -438,11 +436,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Fat"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR % Fat Mass"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-20-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-37-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_pct_fat_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_pct_fat_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-9">18M Female<a class="anchor" aria-label="anchor" href="#m-female-9"></a>
@@ -453,11 +450,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Fat"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR % Fat Mass"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-21-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-39-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_pct_fat_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_pct_fat_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-9">18M Male<a class="anchor" aria-label="anchor" href="#m-male-9"></a>
@@ -468,15 +464,14 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NMR % Fat"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="st">"NMR % Fat Mass"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-22-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-41-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_NMR_pct_fat_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_NMR_pct_fat_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="absolute-vo_2max">Absolute VO<span class="math inline">\(_2\)</span>max<a class="anchor" aria-label="anchor" href="#absolute-vo_2max"></a>
+<h2 id="absolute-vo_2max">Absolute VO<span class="math inline">\(_2\)</span>max<a class="anchor" aria-label="anchor" href="#absolute-vo_2max"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-10">6M Female<a class="anchor" aria-label="anchor" href="#m-female-10"></a>
@@ -487,11 +482,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Absolute VO2max"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"VO$_2$max (mL/min)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-23-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-43-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_absolute_VO2max_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_absolute_VO2max_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-10">6M Male<a class="anchor" aria-label="anchor" href="#m-male-10"></a>
@@ -502,11 +496,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Absolute VO2max"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"6M"</span>, y_position <span class="op">=</span> <span class="fl">26</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"VO$_2$max (mL/min)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-24-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-45-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_absolute_VO2max_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_absolute_VO2max_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-11">18M Female<a class="anchor" aria-label="anchor" href="#m-female-11"></a>
@@ -517,11 +510,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Absolute VO2max"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"VO$_2$max (mL/min)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-25-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-47-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_absolute_VO2max_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_absolute_VO2max_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-11">18M Male<a class="anchor" aria-label="anchor" href="#m-male-11"></a>
@@ -532,15 +524,14 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Absolute VO2max"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"VO$_2$max (mL/min)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-26-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-49-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_absolute_VO2max_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_absolute_VO2max_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="relative-vo_2max">Relative VO<span class="math inline">\(_2\)</span>max<a class="anchor" aria-label="anchor" href="#relative-vo_2max"></a>
+<h2 id="relative-vo_2max">Relative VO<span class="math inline">\(_2\)</span>max<a class="anchor" aria-label="anchor" href="#relative-vo_2max"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-12">6M Female<a class="anchor" aria-label="anchor" href="#m-female-12"></a>
@@ -551,11 +542,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Relative VO2max"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"VO$_2$max (mL/kg/min)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-27-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-51-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_relative_VO2max_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_relative_VO2max_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-12">6M Male<a class="anchor" aria-label="anchor" href="#m-male-12"></a>
@@ -566,11 +556,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Relative VO2max"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"VO$_2$max (mL/kg/min)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-28-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-53-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_relative_VO2max_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_relative_VO2max_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-13">18M Female<a class="anchor" aria-label="anchor" href="#m-female-13"></a>
@@ -581,11 +570,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Relative VO2max"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"VO$_2$max (mL/kg/min)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-29-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-55-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_relative_VO2max_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_relative_VO2max_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-13">18M Male<a class="anchor" aria-label="anchor" href="#m-male-13"></a>
@@ -596,40 +584,39 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">BASELINE_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Relative VO2max"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y  <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"VO$_2$max (mL/kg/min)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-30-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-57-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_relative_VO2max_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_relative_VO2max_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="maximum-run-speed">Maximum Run Speed<a class="anchor" aria-label="anchor" href="#maximum-run-speed"></a>
+<h2 id="maximum-run-speed">Maximum Run Speed<a class="anchor" aria-label="anchor" href="#maximum-run-speed"></a>
 </h2>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Custom theme for maximum run speed plots</span></span>
-<span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">6.5</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
+<span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>            line <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">0.3</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>            axis.ticks <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">0.3</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>            panel.grid <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>            panel.border <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>            axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>            axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>            axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>                                     color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
-<span>            axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">6.5</span>, angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>            axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span>, angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                                       vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
-<span>            axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">6.5</span>, margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span>, margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                                      color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>            axis.line <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>,</span>
 <span>            strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>            strip.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>            panel.spacing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="st">"pt"</span><span class="op">)</span>,</span>
 <span>            plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
-<span>            plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">6</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
+<span>            plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>            legend.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
 <span>            legend.direction <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
 <span>            legend.title.align <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>            legend.key.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">4</span>, <span class="st">"pt"</span><span class="op">)</span>, </span>
+<span>            legend.key.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">7</span>, <span class="st">"pt"</span><span class="op">)</span>, </span>
 <span>            legend.box.spacing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0</span>, <span class="st">"pt"</span><span class="op">)</span>,</span>
 <span>            legend.box.margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0</span>, b <span class="op">=</span> <span class="fl">0</span>, unit <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span>,</span>
 <span>            strip.placement <span class="op">=</span> <span class="st">"outside"</span></span>
@@ -648,13 +635,12 @@ Sagendorf</h4>
 <span>                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">19.8</span>, <span class="fl">36</span>, <span class="fl">1.8</span><span class="op">)</span>,</span>
 <span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">19.8</span>, <span class="fl">28.8</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">t1</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-32-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-60-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_max_run_speed_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_max_run_speed_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-14">6M Male<a class="anchor" aria-label="anchor" href="#m-male-14"></a>
@@ -669,9 +655,9 @@ Sagendorf</h4>
 <span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>y.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">23.4</span>, <span class="fl">25.2</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span>,</span>
 <span>                      group1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"SED"</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>                      group2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1W"</span>, <span class="st">"2W"</span><span class="op">)</span>,</span>
-<span>                      label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"         Wilcoxon p = 0.002"</span>, </span>
-<span>                                <span class="st">"   Wilcoxon p = 0.001"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    label.size <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="va">.pt</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.25</span></span>
+<span>                      label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Wilcoxon p = 0.002"</span>, </span>
+<span>                                <span class="st">"Wilcoxon p = 0.001"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    label.size <span class="op">=</span> <span class="fl">7</span> <span class="op">/</span> <span class="va">.pt</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.25</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size_area</a></span><span class="op">(</span>max_size <span class="op">=</span> <span class="fl">4</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">10</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Maximum Run Speed (m/min)"</span>,</span>
@@ -681,11 +667,10 @@ Sagendorf</h4>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">t1</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-33-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-62-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_max_run_speed_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_max_run_speed_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.1</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-15">18M Female<a class="anchor" aria-label="anchor" href="#m-female-15"></a>
@@ -701,13 +686,12 @@ Sagendorf</h4>
 <span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16.2</span>, <span class="fl">21.6</span><span class="op">)</span>,</span>
 <span>                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">16.2</span>, <span class="fl">21.6</span>, <span class="fl">1.8</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">t1</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-34-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-64-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_max_run_speed_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_max_run_speed_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-15">18M Male<a class="anchor" aria-label="anchor" href="#m-male-15"></a>
@@ -723,13 +707,12 @@ Sagendorf</h4>
 <span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12.6</span>, <span class="fl">18</span><span class="op">)</span>,</span>
 <span>                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">12.6</span>, <span class="fl">18</span>, <span class="fl">1.8</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">t1</span></span></code></pre></div>
-<p><img src="baseline_plots_files/figure-html/unnamed-chunk-35-1.png" width="50%" height="50%"></p>
+<p><img src="baseline_plots_files/figure-html/unnamed-chunk-66-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/baseline_max_run_speed_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">" baseline_max_run_speed_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </div>

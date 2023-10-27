@@ -56,7 +56,10 @@
       <a href="../articles/BASELINE_STATS.html">Statistical analyses of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
-      <a href="../articles/FIBER_TYPES_STATS.html">Statistical analyses of mean fiber area and fiber count by muscle and fiber type</a>
+      <a href="../articles/FIBER_AREA_STATS.html">Statistical analysis of mean fiber area by muscle and fiber type</a>
+    </li>
+    <li>
+      <a href="../articles/FIBER_COUNT_STATS.html">Statistical analysis of fiber counts by muscle and fiber type</a>
     </li>
     <li>
       <a href="../articles/MUSCLES_STATS.html">Statistical analyses of muscle-specific measures</a>
@@ -65,10 +68,19 @@
       <a href="../articles/PRE_POST_STATS.html">Statistical analyses of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
+      <a href="../articles/WEEKLY_BODY_MASS_STATS.html">Statistical analysis of weekly body mass</a>
+    </li>
+    <li>
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
       <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+    </li>
+    <li>
+      <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
+    </li>
+    <li>
+      <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
       <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
@@ -80,9 +92,12 @@
       <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
     </li>
     <li>
-      <a href="../articles/weekly_measures_plots.html">Plots of weekly body weight and blood lactate</a>
+      <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -109,7 +124,7 @@
                         <h4 data-toc-skip class="author">Tyler
 Sagendorf</h4>
             
-            <h4 data-toc-skip class="date">15 July, 2023</h4>
+            <h4 data-toc-skip class="date">27 October, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/articles/analyte_plots.Rmd" class="external-link"><code>vignettes/articles/analyte_plots.Rmd</code></a></small>
       <div class="hidden name"><code>analyte_plots.Rmd</code></div>
@@ -155,7 +170,7 @@ Sagendorf</h4>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html" class="external-link">enframe</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 class="tabset" id="ketones">Ketones<a class="anchor" aria-label="anchor" href="#ketones"></a>
+<h2 id="ketones">Ketones<a class="anchor" aria-label="anchor" href="#ketones"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female">6M Female<a class="anchor" aria-label="anchor" href="#m-female"></a>
@@ -168,9 +183,8 @@ Sagendorf</h4>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"Ketones ($\\mu$mol/L)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="analyte_plots_files/figure-html/unnamed-chunk-3-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_ketones_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_ketones_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male">6M Male<a class="anchor" aria-label="anchor" href="#m-male"></a>
@@ -181,11 +195,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ANALYTES_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Ketones"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"6M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"Ketones ($\\mu$mol/L)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-4-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-5-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_ketones_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_ketones_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-1">18M Female<a class="anchor" aria-label="anchor" href="#m-female-1"></a>
@@ -196,11 +209,10 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ANALYTES_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Ketones"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Female"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"Ketones ($\\mu$mol/L)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-5-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-7-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_ketones_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_ketones_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-1">18M Male<a class="anchor" aria-label="anchor" href="#m-male-1"></a>
@@ -211,15 +223,14 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ANALYTES_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"Ketones"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://www.stefanom.io/latex2exp/reference/TeX.html" class="external-link">TeX</a></span><span class="op">(</span><span class="st">"Ketones ($\\mu$mol/L)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-6-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-9-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_ketones_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_ketones_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="nefa">NEFA<a class="anchor" aria-label="anchor" href="#nefa"></a>
+<h2 id="nefa">NEFA<a class="anchor" aria-label="anchor" href="#nefa"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-2">6M Female<a class="anchor" aria-label="anchor" href="#m-female-2"></a>
@@ -233,11 +244,10 @@ Sagendorf</h4>
 <span>                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">1.3</span>, <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">1.34</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-7-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-11-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_NEFA_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_NEFA_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-2">6M Male<a class="anchor" aria-label="anchor" href="#m-male-2"></a>
@@ -251,11 +261,10 @@ Sagendorf</h4>
 <span>                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">1.3</span>, <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">1.3</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-8-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-13-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_NEFA_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_NEFA_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-3">18M Female<a class="anchor" aria-label="anchor" href="#m-female-3"></a>
@@ -269,11 +278,10 @@ Sagendorf</h4>
 <span>                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">1.3</span>, <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">1.3</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-9-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-15-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_NEFA_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_NEFA_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-3">18M Male<a class="anchor" aria-label="anchor" href="#m-male-3"></a>
@@ -284,15 +292,14 @@ Sagendorf</h4>
 <span>              stats <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ANALYTES_STATS</span>, <span class="va">response</span> <span class="op">==</span> <span class="st">"NEFA"</span><span class="op">)</span>,</span>
 <span>              sex <span class="op">=</span> <span class="st">"Male"</span>, age <span class="op">=</span> <span class="st">"18M"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"NEFA (mmol/L)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-10-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-17-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_NEFA_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_NEFA_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="lactate">Lactate<a class="anchor" aria-label="anchor" href="#lactate"></a>
+<h2 id="lactate">Lactate<a class="anchor" aria-label="anchor" href="#lactate"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-4">6M Female<a class="anchor" aria-label="anchor" href="#m-female-4"></a>
@@ -306,11 +313,10 @@ Sagendorf</h4>
 <span>                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-11-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-19-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_lactate_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_lactate_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-4">6M Male<a class="anchor" aria-label="anchor" href="#m-male-4"></a>
@@ -325,11 +331,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-12-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-21-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_lactate_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_lactate_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-5">18M Female<a class="anchor" aria-label="anchor" href="#m-female-5"></a>
@@ -344,11 +349,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.08</span>, <span class="fl">2.1</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-13-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-23-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_lactate_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_lactate_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-5">18M Male<a class="anchor" aria-label="anchor" href="#m-male-5"></a>
@@ -363,15 +367,14 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1.9</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-14-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-25-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_lactate_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_lactate_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="glucose">Glucose<a class="anchor" aria-label="anchor" href="#glucose"></a>
+<h2 id="glucose">Glucose<a class="anchor" aria-label="anchor" href="#glucose"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-6">6M Female<a class="anchor" aria-label="anchor" href="#m-female-6"></a>
@@ -386,11 +389,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">117</span>, <span class="fl">183</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-15-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-27-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glucose_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glucose_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-6">6M Male<a class="anchor" aria-label="anchor" href="#m-male-6"></a>
@@ -405,11 +407,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">150</span>, <span class="fl">230</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-16-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-29-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glucose_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glucose_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-7">18M Female<a class="anchor" aria-label="anchor" href="#m-female-7"></a>
@@ -424,11 +425,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">120</span>, <span class="fl">200</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-17-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-31-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glucose_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glucose_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-7">18M Male<a class="anchor" aria-label="anchor" href="#m-male-7"></a>
@@ -443,15 +443,14 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">145</span>, <span class="fl">205</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-18-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-33-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glucose_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glucose_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="glycerol">Glycerol<a class="anchor" aria-label="anchor" href="#glycerol"></a>
+<h2 id="glycerol">Glycerol<a class="anchor" aria-label="anchor" href="#glycerol"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-8">6M Female<a class="anchor" aria-label="anchor" href="#m-female-8"></a>
@@ -466,11 +465,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">2.7</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-19-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-35-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glycerol_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glycerol_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-8">6M Male<a class="anchor" aria-label="anchor" href="#m-male-8"></a>
@@ -485,11 +483,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.45</span>, <span class="fl">2.5</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-20-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-37-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glycerol_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glycerol_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-9">18M Female<a class="anchor" aria-label="anchor" href="#m-female-9"></a>
@@ -504,11 +501,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">2.2</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-21-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-39-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glycerol_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glycerol_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-9">18M Male<a class="anchor" aria-label="anchor" href="#m-male-9"></a>
@@ -523,15 +519,14 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.6</span>, <span class="fl">1.9</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-22-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-41-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glycerol_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glycerol_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.2</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="corticosterone">Corticosterone<a class="anchor" aria-label="anchor" href="#corticosterone"></a>
+<h2 id="corticosterone">Corticosterone<a class="anchor" aria-label="anchor" href="#corticosterone"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-10">6M Female<a class="anchor" aria-label="anchor" href="#m-female-10"></a>
@@ -549,11 +544,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">110</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-23-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-43-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_corticosterone_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_corticosterone_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-10">6M Male<a class="anchor" aria-label="anchor" href="#m-male-10"></a>
@@ -571,11 +565,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">160</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-24-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-45-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_corticosterone_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_corticosterone_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-11">18M Female<a class="anchor" aria-label="anchor" href="#m-female-11"></a>
@@ -593,11 +586,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">80</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-25-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-47-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_corticosterone_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_corticosterone_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-11">18M Male<a class="anchor" aria-label="anchor" href="#m-male-11"></a>
@@ -615,15 +607,14 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">170</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-26-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-49-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_corticosterone_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_corticosterone_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="glucagon">Glucagon<a class="anchor" aria-label="anchor" href="#glucagon"></a>
+<h2 id="glucagon">Glucagon<a class="anchor" aria-label="anchor" href="#glucagon"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-12">6M Female<a class="anchor" aria-label="anchor" href="#m-female-12"></a>
@@ -638,11 +629,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">162</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-27-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-51-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glucagon_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glucagon_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-12">6M Male<a class="anchor" aria-label="anchor" href="#m-male-12"></a>
@@ -657,11 +647,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">80</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-28-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-53-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glucagon_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glucagon_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-13">18M Female<a class="anchor" aria-label="anchor" href="#m-female-13"></a>
@@ -676,11 +665,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">130</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-29-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-55-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glucagon_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glucagon_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-13">18M Male<a class="anchor" aria-label="anchor" href="#m-male-13"></a>
@@ -695,15 +683,14 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">80</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-30-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-57-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_glucagon_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_glucagon_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="insulin">Insulin<a class="anchor" aria-label="anchor" href="#insulin"></a>
+<h2 id="insulin">Insulin<a class="anchor" aria-label="anchor" href="#insulin"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-14">6M Female<a class="anchor" aria-label="anchor" href="#m-female-14"></a>
@@ -718,11 +705,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1050</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-31-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-59-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_insulin_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_insulin_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-14">6M Male<a class="anchor" aria-label="anchor" href="#m-male-14"></a>
@@ -737,11 +723,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">14</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-32-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-61-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_insulin_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_insulin_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-15">18M Female<a class="anchor" aria-label="anchor" href="#m-female-15"></a>
@@ -756,11 +741,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">380</span>, <span class="fl">1400</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-33-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-63-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_insulin_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_insulin_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-15">18M Male<a class="anchor" aria-label="anchor" href="#m-male-15"></a>
@@ -775,15 +759,14 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">380</span>, <span class="fl">1000</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-34-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-65-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_insulin_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_insulin_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 class="tabset" id="leptin">Leptin<a class="anchor" aria-label="anchor" href="#leptin"></a>
+<h2 id="leptin">Leptin<a class="anchor" aria-label="anchor" href="#leptin"></a>
 </h2>
 <div class="section level3">
 <h3 id="m-female-16">6M Female<a class="anchor" aria-label="anchor" href="#m-female-16"></a>
@@ -799,11 +782,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3e4</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-35-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-67-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_leptin_6M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_leptin_6M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-16">6M Male<a class="anchor" aria-label="anchor" href="#m-male-16"></a>
@@ -819,11 +801,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6e4</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-36-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-69-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_leptin_6M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_leptin_6M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-female-17">18M Female<a class="anchor" aria-label="anchor" href="#m-female-17"></a>
@@ -839,11 +820,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">7e4</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-37-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-71-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_leptin_18M_female.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_leptin_18M_female.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="m-male-17">18M Male<a class="anchor" aria-label="anchor" href="#m-male-17"></a>
@@ -859,11 +839,10 @@ Sagendorf</h4>
 <span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6e4</span><span class="op">)</span>, clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="analyte_plots_files/figure-html/unnamed-chunk-38-1.png" width="50%" height="50%"></p>
+<p><img src="analyte_plots_files/figure-html/unnamed-chunk-73-1.png" width="50%" height="50%"></p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"../../plots/analytes_leptin_18M_male.png"</span>,</span>
-<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, dpi <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">".."</span>, <span class="st">"plots"</span>, <span class="st">"analytes_leptin_18M_male.pdf"</span><span class="op">)</span>,</span>
+<span>       height <span class="op">=</span> <span class="fl">1.8</span>, width <span class="op">=</span> <span class="fl">1.5</span>, family <span class="op">=</span> <span class="st">"ArialMT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </div>

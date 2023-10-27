@@ -16,7 +16,10 @@
     <loc>/articles/BASELINE_STATS.html</loc>
   </url>
   <url>
-    <loc>/articles/FIBER_TYPES_STATS.html</loc>
+    <loc>/articles/FIBER_AREA_STATS.html</loc>
+  </url>
+  <url>
+    <loc>/articles/FIBER_COUNT_STATS.html</loc>
   </url>
   <url>
     <loc>/articles/MUSCLES_STATS.html</loc>
@@ -25,10 +28,19 @@
     <loc>/articles/PRE_POST_STATS.html</loc>
   </url>
   <url>
+    <loc>/articles/WEEKLY_BODY_MASS_STATS.html</loc>
+  </url>
+  <url>
     <loc>/articles/analyte_plots.html</loc>
   </url>
   <url>
     <loc>/articles/baseline_plots.html</loc>
+  </url>
+  <url>
+    <loc>/articles/dissection_time_plots.html</loc>
+  </url>
+  <url>
+    <loc>/articles/fiber_count_plots.html</loc>
   </url>
   <url>
     <loc>/articles/fiber_type_plots.html</loc>
@@ -52,6 +64,9 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/news/index.html</loc>
+  </url>
+  <url>
     <loc>/reference/ANALYTES.html</loc>
   </url>
   <url>
@@ -67,13 +82,28 @@
     <loc>/reference/BASELINE_STATS.html</loc>
   </url>
   <url>
+    <loc>/reference/BODY_MASSES.html</loc>
+  </url>
+  <url>
+    <loc>/reference/DISSECTION_TIMES.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FIBER_AREA_EMM.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FIBER_AREA_STATS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FIBER_COUNT_EMM.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FIBER_COUNT_MVT.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FIBER_COUNT_STATS.html</loc>
+  </url>
+  <url>
     <loc>/reference/FIBER_TYPES.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FIBER_TYPES_EMM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FIBER_TYPES_STATS.html</loc>
   </url>
   <url>
     <loc>/reference/MUSCLES.html</loc>
@@ -88,25 +118,31 @@
     <loc>/reference/NMR.html</loc>
   </url>
   <url>
-    <loc>/reference/PHYSIO.html</loc>
-  </url>
-  <url>
     <loc>/reference/PRE_POST_STATS.html</loc>
   </url>
   <url>
     <loc>/reference/VO2MAX.html</loc>
   </url>
   <url>
+    <loc>/reference/WEEKLY_BODY_MASS_EMM.html</loc>
+  </url>
+  <url>
+    <loc>/reference/WEEKLY_BODY_MASS_STATS.html</loc>
+  </url>
+  <url>
     <loc>/reference/WEEKLY_MEASURES.html</loc>
   </url>
   <url>
-    <loc>/reference/WEIGHTS.html</loc>
+    <loc>/reference/fiber_donut_chart.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
     <loc>/reference/plot_baseline.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot_dissection_times.html</loc>
   </url>
   <url>
     <loc>/reference/plot_fiber_type.html</loc>
@@ -116,5 +152,8 @@
   </url>
   <url>
     <loc>/reference/plot_pre_post.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rstandard.mlm.html</loc>
   </url>
 </urlset>
