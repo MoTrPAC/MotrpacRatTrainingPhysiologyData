@@ -15,8 +15,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.height = 1.7, 
   fig.width = 3.8,
-  out.height = "70%",
-  out.width = "70%",
+  out.height = "50%",
+  out.width = "50%",
   dpi = 400,
   message = FALSE,
   warning = FALSE
@@ -191,7 +191,7 @@ ggsave(file.path("..", "..", "plots", "weekly_body_mass_18M_male.pdf"),
 WEEKLY_BODY_MASS_STATS %>%
   mutate(age = factor(age, levels = c("6M", "18M"),
                       labels = c("Adult", "Aged"))) %>% 
-  ggplot(aes(x = week, y = ratio, color = sex)) +
+  ggplot(aes(x = week, y = estimate, color = sex)) +
   geom_line(aes(x = week, group = sex),
             position = position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL,

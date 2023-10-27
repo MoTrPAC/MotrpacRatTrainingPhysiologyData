@@ -15,8 +15,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.width = 1.6,
   fig.height = 2,
-  out.height = "50%",
-  out.width = "50%",
+  out.height = "30%",
+  out.width = "30%",
   dpi = 500,
   message = FALSE,
   warning = FALSE
@@ -34,7 +34,7 @@ library(tidyr)
 library(purrr)
 ```
 
-```{r, results='hide'}
+```{r}
 # Create and save all 16 plots
 foo <- FIBER_TYPES %>% 
   nest(.by = c(age, sex, muscle)) %>% 
@@ -44,7 +44,7 @@ foo <- FIBER_TYPES %>%
                                        muscle, age, tolower(sex))))
 ```
 
-```{r eval=save_plots}
+```{r eval=save_plots, results='hide'}
 map2(.x = foo$file_name, .y = foo$plots, 
      .f = ~ ggsave(filename = .x, plot = .y, 
                    height = 2, width = 1.3,

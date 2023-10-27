@@ -61,7 +61,7 @@ plot_baseline <- function(x,
   }
 
   # workaround to avoid warning messages
-  cart <- coord_cartesian(clip = "off", xlim = c(1, 2.5))
+  cart <- coord_cartesian(clip = "off")
   cart$default <- TRUE
 
   p <- p +

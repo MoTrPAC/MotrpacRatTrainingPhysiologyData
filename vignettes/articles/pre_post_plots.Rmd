@@ -15,8 +15,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.width = 1.8,
   fig.height = 1.6,
-  out.height = "75%",
-  out.width = "75%",
+  out.height = "50%",
+  out.width = "50%",
   dpi = 400,
   message = FALSE,
   warning = FALSE
@@ -43,8 +43,7 @@ library(latex2exp)
 plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"), 
               pre = "pre_body_mass", post = "post_body_mass", 
               stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
-                             age == "6M", sex == "Female"),
-              width = 0.9) +
+                             age == "6M", sex == "Female")) +
   scale_y_continuous(name = "Body Mass (g)",
                      breaks = seq(160, 240, 20),
                      expand = expansion(mult = 5e-3)) +

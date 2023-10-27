@@ -14,8 +14,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.width = 3.4,
   fig.height = 2,
-  out.height = "80%",
-  out.width = "80%",
+  out.height = "50%",
+  out.width = "50%",
   dpi = 400,
   message = FALSE,
   warning = FALSE
@@ -73,7 +73,7 @@ plot_dissection_times <- function(x, ymax = 12) {
 }
 ```
 
-```{r, results='hide'}
+```{r}
 # Create and save all plots
 foo <- DISSECTION_TIMES %>% 
   nest(.by = c(age, sex)) %>% 
@@ -85,7 +85,7 @@ foo <- DISSECTION_TIMES %>%
                                        age, tolower(sex))))
 ```
 
-```{r eval=save_plots}
+```{r eval=save_plots, results='hide'}
 map2(.x = foo$file_name, .y = foo$plots, 
      .f = ~ ggsave(filename = .x, plot = .y, 
                    height = 2, width = 3.1, family = "ArialMT"))
