@@ -43,6 +43,7 @@ Suggests:
     compositions,
     emmeans,
     Hmisc,
+    hms,
     knitr,
     latex2exp,
     lubridate,
