@@ -342,7 +342,9 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
                              age == "18M", sex == "Female")) +
   scale_y_continuous(name = "NMR Lean Mass (g)") + 
   geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+```
 
+```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "NMR_lean_18M_female.pdf"),
        height = 1.6, width = 1.8, family = "ArialMT")
 ```
