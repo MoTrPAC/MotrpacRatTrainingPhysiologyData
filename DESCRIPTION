@@ -37,6 +37,7 @@ Imports:
     grid,
     rlang,
     rstatix,
+    scales,
     stats
 Suggests:
     compositions,
@@ -50,7 +51,6 @@ Suggests:
     purrr,
     readxl,
     rmarkdown,
-    scales,
     tibble,
     tidyr
 RoxygenNote: 7.2.3
