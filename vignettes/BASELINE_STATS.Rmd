@@ -45,14 +45,14 @@ theme_set(theme_bw()) # base plot theme
 
 Since all of the measures in this vignette are strictly positive, we will check the mean–variance relationship with code from Dunn and Smyth[@dunn_generalized_2018] (pg. 429–430) and fit an appropriate log-link GLM. This allows us to back-transform the means without introducing bias, unlike when the response is transformed. Also, the log-link allows us to test ratios between means, rather than their absolute differences.
 
-Since neither percentage fat mass nor percentage lean mass approach either of their boundaries of 0 and 100%, we will treat them as if they could take on any positive value. That is, the modeling process will be the same as for the other measures.
+Since neither percent fat mass nor percent lean mass approach either of their boundaries of 0 and 100%, we will treat them as if they could take on any positive value. That is, the modeling process will be the same as for the other measures.
 
 If there are obvious problems with the model diagnostic plots, or the mean–variance relationship does not correspond to an exponential family distribution, we will include reciprocal group variances as weights in a log-link Gaussian GLM. Finally, we will remove insignificant predictors to achieve model parsimony based on ANOVA F-tests.
 
 
-## Body Mass (NMR Day)
+## NMR Body Mass
 
-Body mass recorded on the same day as the NMR body composition measures.
+Body mass (g) recorded on the same day as the NMR body composition measures.
 
 ```{r, fig.height=3}
 # Plot points
@@ -122,6 +122,8 @@ summary(fit.body_mass)
 
 ## NMR Lean Mass
 
+Lean mass (g) recorded via NMR.
+
 ```{r, fig.height=3}
 # Plot points
 ggplot(NMR, aes(x = group, y = pre_lean)) +
@@ -178,6 +180,8 @@ summary(fit.lean)
 
 
 ## NMR Fat Mass
+
+Fat mass (g) recorded via NMR.
 
 ```{r, fig.height = 3}
 # Plot points
@@ -248,6 +252,8 @@ summary(fit.fat)
 
 ## NMR % Lean Mass
 
+Lean mass (g) recorded via NMR divided by the body mass (g) recorded on the same day and then multiplied by 100%.
+
 ```{r, fig.height=3}
 # Plot points
 ggplot(NMR, aes(x = group, y = pre_lean_pct)) +
@@ -313,6 +319,8 @@ summary(fit.lean_pct)
 
 ## NMR % Fat Mass
 
+Fat mass (g) recorded via NMR divided by the body mass (g) recorded on the same day and then multiplied by 100%.
+
 ```{r, fig.height=3}
 # Plot points
 ggplot(NMR, aes(x = group, y = pre_fat_pct)) +
@@ -374,7 +382,7 @@ summary(fit.fat_pct)
 
 ## Absolute VO$_2$max
 
-Absolute VO2max is calculated by multiplying relative VO2max ($mL \cdot kg^{-1} \cdot min^{-1}$) by body mass (kg).
+Absolute VO$_2$max is calculated by multiplying relative VO$_2$max ($mL \cdot kg^{-1} \cdot min^{-1}$) by body mass (kg).
 
 ```{r, fig.height=3}
 # Plot points
@@ -443,7 +451,9 @@ summary(fit.vo2max_abs)
 ```
 
 
-## VO$_2$max (relative to total body mass)
+## Relative VO$_2$max
+
+Relative VO$_2$max (mL/kg body mass/min).
 
 ```{r, fig.height=3}
 # Plot points
@@ -503,7 +513,7 @@ summary(fit.vo2max_rel)
 
 ## Maximum Run Speed
 
-Since run speed was increased in 1.8 m/min increments, as defined in the training protocol, it may be better to use a non-parametric test. Rather than plotting the individual points, since they can only take on a few different values, we will instead count the number of samples that take on a particular value in each group and scale the points accordingly.
+Since run speed was increased in 1.8 m/min increments, as defined in the training protocol, it may be preferable to use a non-parametric test. Rather than plotting the individual points, since they can only take on a few different values, we will instead count the number of samples that take on a particular value in each group and scale the points accordingly.
 
 ```{r, fig.height=3}
 # Plot points
@@ -533,6 +543,7 @@ speed_res <- VO2MAX %>%
                 W.ratio = statistic,
                 n_SED = n1,
                 n_trained = n2) %>%
+  # Adjust p-values for multiple comparisons
   group_by(age, sex) %>% 
   mutate(p.adj = p.adjust(p.value, method = "holm")) %>% 
   ungroup() %>% 
@@ -549,11 +560,9 @@ print.data.frame(head(speed_res))
 ```
 
 
-
-
 # Hypothesis Testing
 
-We will compare the means of each trained timepoint to those of their sex-matched sedentary controls within each age group using the Dunnett test. Only maximum run speed and the VO$_2$max measures will not use the Dunnett test. The former because it uses the nonparametric Wilcoxon Rank Sum test, and the latter because we concatenated age and group, so we will need to manually set up the correct contrasts.
+We will compare the means of each trained timepoint to those of their sex-matched sedentary controls within each age group using the Dunnett test. Only maximum run speed and the VO$_2$max measures will not use the Dunnett test. The former because it uses the nonparametric Wilcoxon Rank Sum test and the latter because we concatenated age and group, so we will need to manually set up the correct contrasts.
 
 ```{r}
 # We will include the maximum run speed test results at the end
@@ -579,6 +588,7 @@ model_df <- model_list %>%
          weights = ifelse(grepl("weights = ", model), 
                           "reciprocal group variances", NA)) %>% 
   dplyr::select(-model) %>% 
+  # Note any observations that were removed when fitting the models
   mutate(obs_removed = case_when(
     response == "Absolute VO2max" ~ VO2MAX$iowa_id[119],
     response == "Relative VO2max" ~ VO2MAX$iowa_id[153]
@@ -586,7 +596,6 @@ model_df <- model_list %>%
 ```
 
 We need to manually specify contrasts for the VO$_2$max models that include `age_group` as a predictor.
-
 
 ```{r}
 # Estimated marginal means
@@ -616,7 +625,7 @@ other_stats <- BASELINE_EMM[1:5] %>%
     return(out)
   })
 
-vo2max_stats <- BASELINE_EMM[-c(1:5)] %>% 
+vo2max_stats <- BASELINE_EMM[6:7] %>% 
   map(function(emm_i) {
     out <- contrast(emm_i, method = list(
       "18M: 8W / SED" = c(1, -1, 0, 0, 0, 0, 0),
@@ -662,6 +671,7 @@ BASELINE_STATS <- c(other_stats,
          p.value = ifelse(statistic_type %in% c("t", "z"), 
                           2 * pt(q = statistic, df = df, lower.tail = FALSE),
                           p.value)) %>% 
+  # Reorder columns
   relocate(contrast, estimate_type, null, estimate, .after = sex) %>% 
   relocate(statistic_type, statistic, n_SED, n_trained, df, p.value, 
            .before = p.adj) %>% 

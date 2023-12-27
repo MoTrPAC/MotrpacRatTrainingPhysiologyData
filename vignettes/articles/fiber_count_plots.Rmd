@@ -34,8 +34,12 @@ library(tidyr)
 library(purrr)
 ```
 
+# Overview
+
+This article generates plots of the mean fiber type percentages. These values are calculated by summing the fiber counts across samples within each age, sex, group, and fiber type combination and dividing by the total fiber count and then multiplying by 100%. The percentage symbols (%) are not displayed on the plots to save space. Since there is no need to specify different y-axes, we can create and save all 16 plots with a few lines of code. Please refer to the "Statistical analysis of fiber counts by muscle and fiber type" vignette for details of the statistical analyses (not shown on the plots due to the complexity of the comparisons).
+
 ```{r}
-# Create and save all 16 plots
+# Create all plots
 foo <- FIBER_TYPES %>% 
   nest(.by = c(age, sex, muscle)) %>% 
   mutate(plots = map(.x = data, .f = fiber_donut_chart),
@@ -45,16 +49,22 @@ foo <- FIBER_TYPES %>%
 ```
 
 ```{r eval=save_plots, results='hide'}
+# Save all plots
 map2(.x = foo$file_name, .y = foo$plots, 
      .f = ~ ggsave(filename = .x, plot = .y, 
                    height = 2, width = 1.3,
                    family = "ArialMT"))
 
-# Save panel with a legend
-ggsave(filename = file.path("..", "..", "plots",
-                            "fiber_count_example_with_legend.pdf"),
-       plot = foo$plots[[1]] + theme(legend.position = "right"),
-       height = 2, width = 1.6, family = "ArialMT")
+# Add legend back to plots for display and to save legend separately
+foo <- foo %>% 
+  mutate(plots = map(.x = plots, .f = ~ .x + theme(legend.position = "right")))
+
+# Save legend
+lgd <- get_legend(p = foo$plots[[1]]) %>% 
+  as_ggplot()
+
+ggsave(filename = file.path("..", "..", "plots", "fiber_count_legend.pdf"),
+       plot = lgd, height = 0.7, width = 0.4, family = "ArialMT")
 ```
 
 
@@ -66,8 +76,7 @@ ggsave(filename = file.path("..", "..", "plots",
 foo %>% 
   filter(age == "6M", sex == "Female", muscle == "LG") %>%
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## MG
@@ -76,8 +85,7 @@ foo %>%
 foo %>% 
   filter(age == "6M", sex == "Female", muscle == "MG") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## PL
@@ -86,8 +94,7 @@ foo %>%
 foo %>% 
   filter(age == "6M", sex == "Female", muscle == "PL") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## SOL
@@ -96,8 +103,7 @@ foo %>%
 foo %>% 
   filter(age == "6M", sex == "Female", muscle == "SOL") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 
@@ -109,8 +115,7 @@ foo %>%
 foo %>% 
   filter(age == "6M", sex == "Male", muscle == "LG") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## MG
@@ -119,8 +124,7 @@ foo %>%
 foo %>% 
   filter(age == "6M", sex == "Male", muscle == "MG") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## PL
@@ -129,8 +133,7 @@ foo %>%
 foo %>% 
   filter(age == "6M", sex == "Male", muscle == "PL") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## SOL
@@ -139,8 +142,7 @@ foo %>%
 foo %>% 
   filter(age == "6M", sex == "Male", muscle == "SOL") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 
@@ -152,8 +154,7 @@ foo %>%
 foo %>% 
   filter(age == "18M", sex == "Female", muscle == "LG") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## MG
@@ -162,8 +163,7 @@ foo %>%
 foo %>% 
   filter(age == "18M", sex == "Female", muscle == "MG") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## PL
@@ -172,8 +172,7 @@ foo %>%
 foo %>% 
   filter(age == "18M", sex == "Female", muscle == "PL") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## SOL
@@ -182,8 +181,7 @@ foo %>%
 foo %>% 
   filter(age == "18M", sex == "Female", muscle == "SOL") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 
@@ -195,8 +193,7 @@ foo %>%
 foo %>% 
   filter(age == "18M", sex == "Male", muscle == "LG") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## MG
@@ -205,8 +202,7 @@ foo %>%
 foo %>% 
   filter(age == "18M", sex == "Male", muscle == "MG") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## PL
@@ -215,8 +211,7 @@ foo %>%
 foo %>% 
   filter(age == "18M", sex == "Male", muscle == "PL") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 ## SOL
@@ -225,8 +220,7 @@ foo %>%
 foo %>% 
   filter(age == "18M", sex == "Male", muscle == "SOL") %>% 
   pull(plots) %>% 
-  .[[1]] +
-  theme(legend.position = "right")
+  .[[1]]
 ```
 
 

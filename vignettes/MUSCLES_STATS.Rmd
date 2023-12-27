@@ -40,33 +40,19 @@ library(purrr)
 theme_set(theme_bw()) # base plot theme
 ```
 
-```{r}
-f1 <- function(model) {
-  standard_resid <- resid(model, type = "pearson", scaled=TRUE)
-  par(mfrow = c(1, 2))
-  plot(standard_resid ~ fitted(model),
-       xlab = "Fitted Values", ylab = "Standardized Pearson Residuals",
-       main = "Residuals vs. Fitted")
-  lines(loess.smooth(x = fitted(model),
-                     y = standard_resid, degree = 2),
-        lwd = 2, col = "red")
-  
-  qqnorm(standard_resid); qqline(standard_resid)
-  par(mfrow = c(1, 1))
-}
-```
-
 
 # Regression Models
 
 For each rat, measurements were taken from 4 muscles: lateral gastrocnemius, medial gastrocnemius, plantaris, and soleus. These measurements include post-mortem (terminal) muscle mass, mean cross-sectional area, glycogen concentration, capillary contacts, and citrate synthase concentration.
 
-Since we have repeated measures, we will fit linear mixed models (LMMs) with a random intercept for each rat. Since all response variables are strictly positive, we will use an appropriate variance-stabilizing transformation on each response. Weights will be included if we observe heterogeneity.
+Since we have repeated measures, we will fit linear mixed models (LMMs) with a random intercept for each rat. Since all response variables are strictly positive, we will use an appropriate variance-stabilizing transformation on each response. Weights will be included if we still observe heterogeneity.
 
 Outliers will be inspected and removed if there is a valid reason. We will report all observations that were removed, as well as the reason for doing so, in the final results table.
 
 
 ## Terminal Muscle Mass
+
+Mass (mg) of dissected muscles.
 
 ```{r}
 ggplot(MUSCLES, aes(x = group, y = term_muscle_mass)) +
@@ -103,13 +89,13 @@ fit.term <- lme(fixed = log(term_muscle_mass) ~ age * sex * group * muscle,
                 random = ~ 1 | pid,
                 data = MUSCLES,
                 na.action = na.exclude)
-f1(fit.term)
+plot_lme(fit.term)
 ```
 
 There are two outliers. We will investigate further.
 
 ```{r}
-out.term <- which(resid(fit.term, type = "pearson", scaled = TRUE) < -5)
+out.term <- which(resid(fit.term, type = "pearson") < -5)
 out.term.df <- MUSCLES[out.term, ] %>% 
   dplyr::select(age, sex, group, muscle)
 
@@ -130,7 +116,6 @@ MUSCLES %>%
   dplyr::select(iowa_id, group, muscle, term_muscle_mass) %>% 
   arrange(iowa_id, term_muscle_mass)
 ```
-
 
 Under the assumption that rats will have similar ratios between the terminal masses of the different muscles (i.e., LG/MG ratio should be similar for all rats in the same experimental group), we will flag observations as outlying if they are outside 1.5 times the interquartile range (IQR) above the upper quartile and below the lower quartile. This is how a boxplot identifies potential outliers. Any observations that are outlying in 3/6 pairwise comparisons will be investigated. This would mean that one of the muscles is much lower or much higher than expected. The ratios will be constructed so that the larger muscle is always in the numerator: LG > MG > PL > SOL.
 
@@ -175,21 +160,21 @@ Notice that the ratios between the muscles for 18M8T3 and 18M4T18 are more extre
 
 ```{r, fig.height=3.5}
 fit.term <- update(fit.term, subset = -out.term)
-f1(fit.term)
+plot_lme(fit.term)
 ```
 
 The residuals vs. fitted plot looks fine. The QQ-plot has slightly heavier tails than expected. We will look at plots of residuals vs. predictor levels to identify potential heterogeneity.
 
 ```{r}
 df <- MUSCLES[-out.term, ]
-r.term <- resid(fit.term, type = "pearson", scaled = TRUE)
+r.term <- resid(fit.term, type = "pearson")
 
 par(mfrow = c(2, 2), mar = c(5, 3, 0.5, 0.5))
 boxplot(r.term ~ age, data = df, ylab = "")
 boxplot(r.term ~ sex, data = df, ylab = "")
 boxplot(r.term ~ group, data = df, ylab = "")
 boxplot(r.term ~ muscle, data = df, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -198,20 +183,20 @@ There may be differences in the variability between the muscles (SOL is clearly 
 ```{r, fig.height=3.5}
 fit.term1 <- update(fit.term, 
                     weights = varIdent(form = ~ 1 | muscle))
-f1(fit.term1)
+plot_lme(fit.term1)
 ```
 
 The QQ-plot no longer has those heavy tails. We will examine the boxplots of residuals vs. predictor levels again.
 
 ```{r}
-r.term1 <- resid(fit.term1, type = "pearson", scaled = TRUE)
+r.term1 <- resid(fit.term1, type = "pearson")
 
 par(mfrow = c(2, 2), mar = c(5, 3, 0.5, 0.5))
 boxplot(r.term1 ~ age, data = df, ylab = "")
 boxplot(r.term1 ~ sex, data = df, ylab = "")
 boxplot(r.term1 ~ group, data = df, ylab = "")
 boxplot(r.term1 ~ muscle, data = df, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -231,6 +216,8 @@ VarCorr(fit.term)
 
 
 ## Mean Cross-Sectional Area
+
+Mean muscle cross-sectional area ($\mu m^2$).
 
 ```{r, fig.width=5}
 MUSCLES %>% 
@@ -267,7 +254,7 @@ fit.area <- lme(fixed = log(mean_CSA) ~ age * sex * group * muscle,
                 random = ~ 1 | pid,
                 data = MUSCLES,
                 na.action = na.exclude)
-f1(fit.area)
+plot_lme(fit.area)
 ```
 
 The diagnostic plots look mostly fine, though we see that observation we mentioned before is slightly outlying. We will check boxplots of residuals vs. predictor levels to identify potential sources of heterogeneity.
@@ -280,7 +267,7 @@ boxplot(r.area ~ age, data = MUSCLES, ylab = "")
 boxplot(r.area ~ sex, data = MUSCLES, ylab = "")
 boxplot(r.area ~ group, data = MUSCLES, ylab = "")
 boxplot(r.area ~ muscle, data = MUSCLES, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -288,7 +275,7 @@ We will include weights for the different muscle groups and then reexamine the b
 
 ```{r, fig.height=3.5}
 fit.area1 <- update(fit.area, weights = varIdent(form = ~ 1 | muscle))
-f1(fit.area1)
+plot_lme(fit.area1)
 ```
 
 ```{r}
@@ -299,7 +286,7 @@ boxplot(r.area1 ~ age, data = MUSCLES, ylab = "")
 boxplot(r.area1 ~ sex, data = MUSCLES, ylab = "")
 boxplot(r.area1 ~ group, data = MUSCLES, ylab = "")
 boxplot(r.area1 ~ muscle, data = MUSCLES, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -318,6 +305,8 @@ VarCorr(fit.area)
 
 
 ## Glycogen
+
+Muscle glycogen concentration (ng glycogen/$\mu$L supernatant/mg tissue).
 
 ```{r}
 ggplot(MUSCLES, aes(x = group, y = glycogen)) +
@@ -352,14 +341,14 @@ fit.glyc <- lme(fixed = log(glycogen) ~ age * sex * group * muscle,
                 random = ~ 1 | pid,
                 data = MUSCLES,
                 na.action = na.exclude)
-f1(fit.glyc)
+plot_lme(fit.glyc)
 ```
 
 It appears that the log-transformation over-corrects for the mean-variance relationship at higher values. We will try a square root transformation instead.
 
 ```{r, fig.height=3.5}
 fit.glyc1 <- update(fit.glyc, fixed = sqrt(glycogen) ~ .)
-f1(fit.glyc1)
+plot_lme(fit.glyc1)
 ```
 
 The diagnostic plots look much better, though the QQ-plots have somewhat heavy tails. We will check for heteroscedasticity in the boxplots of residuals vs. predictor levels.
@@ -372,7 +361,7 @@ boxplot(r.glyc1 ~ age, data = MUSCLES, ylab = "")
 boxplot(r.glyc1 ~ sex, data = MUSCLES, ylab = "")
 boxplot(r.glyc1 ~ group, data = MUSCLES, ylab = "")
 boxplot(r.glyc1 ~ muscle, data = MUSCLES, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -381,7 +370,7 @@ There appears to be heterogeneity between the muscles and possibly between the g
 ```{r, fig.height=3.5}
 fit.glyc2 <- update(fit.glyc1, 
                     weights = varIdent(form = ~ 1 | sex * muscle))
-f1(fit.glyc2)
+plot_lme(fit.glyc2)
 ```
 
 The QQ-plot looks a bit better, though there is an observation with a large negative residual. We will investigate the boxplots of residuals vs. predictor levels.
@@ -394,7 +383,7 @@ boxplot(r.glyc2 ~ age, data = MUSCLES, ylab = "")
 boxplot(r.glyc2 ~ sex, data = MUSCLES, ylab = "")
 boxplot(r.glyc2 ~ group, data = MUSCLES, ylab = "")
 boxplot(r.glyc2 ~ muscle, data = MUSCLES, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -412,6 +401,8 @@ fit.glyc <- fit.glyc2
 
 
 ## Capillary Contacts
+
+Mean number of muscle capillary contacts (capillaries/fiber).
 
 ```{r, fig.width=5}
 filter(MUSCLES, !is.na(capillary_contacts)) %>% 
@@ -446,7 +437,7 @@ fit.cap <- lme(fixed = log(capillary_contacts) ~ age * sex * group * muscle,
                random = ~ 1 | pid,
                data = MUSCLES,
                na.action = na.exclude)
-f1(fit.cap)
+plot_lme(fit.cap)
 ```
 
 We will look at boxplots of residuals vs. predictors to identify potential heterogeneity.
@@ -459,7 +450,7 @@ boxplot(r.cap ~ age, data = MUSCLES, ylab = "")
 boxplot(r.cap ~ sex, data = MUSCLES, ylab = "")
 boxplot(r.cap ~ group, data = MUSCLES, ylab = "")
 boxplot(r.cap ~ muscle, data = MUSCLES, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -467,7 +458,7 @@ There appears to be heteroscedasticity between the ages and the muscles.
 
 ```{r, fig.height=3.5}
 fit.cap1 <- update(fit.cap, weights = varIdent(form = ~ 1 | age * muscle))
-f1(fit.cap1)
+plot_lme(fit.cap1)
 ```
 
 The diagnostic plots look fine now. We will double-check the boxplots.
@@ -480,7 +471,7 @@ boxplot(r.cap1 ~ age, data = MUSCLES, ylab = "")
 boxplot(r.cap1 ~ sex, data = MUSCLES, ylab = "")
 boxplot(r.cap1 ~ group, data = MUSCLES, ylab = "")
 boxplot(r.cap1 ~ muscle, data = MUSCLES, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -500,7 +491,7 @@ We will use the simpler model, since they are not significantly different.
 
 ```{r}
 fit.cap2 <- update(fit.cap2, method = "REML")
-f1(fit.cap2)
+plot_lme(fit.cap2)
 ```
 
 The diagnostic plots still look fine.
@@ -512,6 +503,8 @@ VarCorr(fit.cap)
 
 
 ## Citrate Synthase
+
+Muscle citrate synthase concentration (U citrate synthase/$\mu$g protein $\times 10^3$).
 
 ```{r}
 filter(MUSCLES, !is.na(citrate_synthase)) %>% 
@@ -548,7 +541,7 @@ fit.citrate <- lme(
   random = ~ 1 | pid,
   data = MUSCLES,
   na.action = na.exclude)
-f1(fit.citrate)
+plot_lme(fit.citrate)
 ```
 
 While the residuals vs. fitted plot appears mostly fine, the tails of the QQ-plot are heavier than expected. We will check the boxplots of residuals vs. predictor levels to see if it is caused by heteroscedasticity.
@@ -561,7 +554,7 @@ boxplot(r.citrate ~ age, data = MUSCLES, ylab = "")
 boxplot(r.citrate ~ sex, data = MUSCLES, ylab = "")
 boxplot(r.citrate ~ group, data = MUSCLES, ylab = "")
 boxplot(r.citrate ~ muscle, data = MUSCLES, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -570,7 +563,7 @@ There appear to be differences in the muscles and perhaps in the groups as well.
 ```{r, fig.height=3.5}
 fit.citrate1 <- update(fit.citrate, 
                        weights = varIdent(form = ~ 1 | group * muscle))
-f1(fit.citrate1)
+plot_lme(fit.citrate1)
 ```
 
 ```{r}
@@ -581,7 +574,7 @@ boxplot(r.citrate1 ~ age, data = MUSCLES, ylab = "")
 boxplot(r.citrate1 ~ sex, data = MUSCLES, ylab = "")
 boxplot(r.citrate1 ~ group, data = MUSCLES, ylab = "")
 boxplot(r.citrate1 ~ muscle, data = MUSCLES, ylab = "")
-mtext("Scaled Pearson Residuals", side = 2, line = -1, outer = TRUE)
+mtext("Pearson Residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
@@ -615,9 +608,9 @@ MUSCLES_EMM <- map(model_list, function(mod_i) {
     # Calculate estimated marginal means on the square-root scale,
     # back-transform, and convert to log-scale
     em_i <- emmeans(object = mod_i, specs = "group", 
-              by = c("age", "sex", "muscle"), 
-              type = "response", bias.adj = TRUE,
-              infer = TRUE, data = data_i) %>% 
+                    by = c("age", "sex", "muscle"), 
+                    type = "response", bias.adj = TRUE,
+                    infer = TRUE, data = data_i) %>% 
       regrid(transform = "log")
   } else {
     em_i <- emmeans(object = mod_i, specs = "group", 
@@ -647,11 +640,13 @@ model_df <- model_list %>%
                               "18M8T3 SOL = 73, 18M4T18 PL = 210",
                               NA_character_)) %>% 
   dplyr::select(-model)
+```
 
+```{r}
 # Results
 MUSCLES_STATS <- MUSCLES_EMM %>% 
   map(function(emm_i) {
-    contrast(emm_i, method = "dunnett", 
+    contrast(emm_i, method = "trt.vs.ctrl", 
              ratios = TRUE, bias.adj = FALSE) %>% 
       summary(infer = TRUE) %>% 
       as.data.frame() %>% 
@@ -659,10 +654,7 @@ MUSCLES_STATS <- MUSCLES_EMM %>%
                       upper.CL = "asymp.UCL")))
   }) %>%
   enframe(name = "response") %>% 
-  unnest(value) %>%
-  group_by(response, age, sex) %>%
-  mutate(p.adj = p.adjust(p.value, method = "holm"),
-         signif = p.adj < 0.05) %>% 
+  unnest(value) %>% 
   ungroup() %>% 
   pivot_longer(cols = ratio, 
                names_to = "estimate_type", 
@@ -671,9 +663,22 @@ MUSCLES_STATS <- MUSCLES_EMM %>%
   pivot_longer(cols = contains(".ratio"), 
                names_to = "statistic_type", 
                values_to = "statistic", 
-               values_drop_na = TRUE) %>% 
+               values_drop_na = TRUE) %>%
+  # Holm-adjust p-values for capillary contacts and cross-sectional area.
+  # The other measures use adjusted p-values from Dunnett's test.
+  group_by(response, age, sex) %>%
+  mutate(p.adj = ifelse(response %in% c("Capillary Contacts", 
+                                        "Mean CSA"), 
+                        p.adjust(p.value, method = "holm"), p.value),
+         p.value = ifelse(response %in% c("Capillary Contacts", 
+                                          "Mean CSA"),
+                          2 * pt(q = estimate, df = df, lower.tail = FALSE),
+                          p.value),
+         signif = p.adj < 0.05) %>% 
+  ungroup() %>% 
   mutate(statistic_type = sub("\\.ratio", "", statistic_type)) %>% 
   left_join(model_df, by = "response") %>% 
+  # Reorder columns
   dplyr::select(response, age, sex, muscle, contrast, estimate_type, null,
                 estimate, SE, lower.CL, upper.CL, statistic_type, statistic, df,
                 p.value, p.adj, signif, everything()) %>% 

@@ -1,5 +1,5 @@
 ---
-title: "Plots of muscle measures"
+title: "Plots of muscle-specific measures"
 author: Tyler Sagendorf
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -37,6 +37,14 @@ library(latex2exp)
 library(grid)
 ```
 
+# Overview
+
+This article generates plots for all muscle-specific measures: glycogen, citrate synthase, terminal muscle mass, cross-sectional area, and capillary contacts. Brackets indicate a statistically significant difference between the means of the SED group and a trained group (1W, 2W, 4W, 8W). A significant difference is defined as 1) a Dunnett's test p-value < 0.05 for measures of glycogen, citrate synthase, and terminal muscle mass or 2) a Holm-adjusted p-value < 0.05 for measures of cross-sectional area and capillary contacts. Please refer to the "Statistical analyses of muscle-specific measures" vignette for code to generate `MUSCLES_STATS`.
+
+**Data Preparation:**
+
+We apply the `summary` method to each `emmGrid` object and rename columns to work with `plot_baseline`. This list of objects is then converted to a single `data.frame` with the `response` column specifying which measurement is being tested.
+
 ```{r}
 # Reformat confidence interval data
 conf_df <- map(MUSCLES_EMM, function(emm_i) {
@@ -44,21 +52,12 @@ conf_df <- map(MUSCLES_EMM, function(emm_i) {
   
   out <- summary(emm_i) %>% 
     as.data.frame() %>% 
+    # Rename columns for use in plot_baseline
     rename(any_of(c(lower.CL = "asymp.LCL",
                     upper.CL = "asymp.UCL",
                     response_mean = "response",
-                    response_mean = "rate")))
-  
-  if ("age_group" %in% terms_i) {
-    out <- mutate(out,
-                  age = sub("_.*", "", age_group),
-                  group = sub(".*_", "", age_group),
-                  age_group = NULL)
-  }
-  
-  out <- out %>% 
-    mutate(group = factor(group, 
-                          levels = c("SED", paste0(2 ^ (0:3), "W"))))
+                    response_mean = "rate"))) %>% 
+    mutate(group = factor(group, levels = c("SED", paste0(2 ^ (0:3), "W"))))
   
   return(out)
 }) %>% 
@@ -67,6 +66,8 @@ conf_df <- map(MUSCLES_EMM, function(emm_i) {
 ```
 
 # Glycogen
+
+Muscle glycogen concentration (ng glycogen/$\mu$L supernatant/mg tissue).
 
 ## LG
 
@@ -81,10 +82,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
                              muscle == "LG"),
               sex = "Female", age = "6M", y_position = 4.7) +
   scale_y_continuous(name  = TeX("LG Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 5, 1),
+                     breaks = seq(0, 12, 2),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 5), clip = "off") +
-  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 12), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -103,10 +103,10 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
                              muscle == "LG"),
               sex = "Male", age = "6M", y_position = 9.5) +
   scale_y_continuous(name  = TeX("LG Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 10, 2),
+                     breaks = seq(0, 16, 4),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 10), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 16), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -127,8 +127,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   scale_y_continuous(name  = TeX("LG Glycogen (ng/$\\mu$L/mg)"),
                      breaks = seq(0, 12, 2),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 12), clip = "off") +
-  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 12), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -151,14 +150,13 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
                      breaks = seq(0, 16, 4),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 16), clip = "off") +
-  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_glycogen_LG_18M_male.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ## MG
 
@@ -173,9 +171,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
                              muscle == "MG"),
               sex = "Female", age = "6M") +
   scale_y_continuous(name  = TeX("MG Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 10, 2),
+                     breaks = seq(0, 12, 4),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 11), clip = "off") +
+  coord_cartesian(ylim = c(0, 13), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
@@ -195,10 +193,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
                              muscle == "MG"),
               sex = "Male", age = "6M") +
   scale_y_continuous(name  = TeX("MG Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 16, 4),
+                     breaks = seq(0, 20, 5),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 16), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 20), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -228,7 +225,6 @@ ggsave(file.path("..", "..", "plots", "muscle_glycogen_MG_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
-
 ### 18M Male
 
 ```{r}
@@ -242,8 +238,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   scale_y_continuous(name  = TeX("MG Glycogen (ng/$\\mu$L/mg)"),
                      breaks = seq(0, 20, 5),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 20), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 20), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -263,12 +258,11 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                             muscle == "PL"),
               stats = filter(MUSCLES_STATS, response == "Glycogen", 
                              muscle == "PL"),
-              sex = "Female", age = "6M", y_position = 12) +
+              sex = "Female", age = "6M", y_position = 14) +
   scale_y_continuous(name  = TeX("PL Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 12, 4),
+                     breaks = seq(0, 30, 5),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 12), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 30), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -287,10 +281,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                              muscle == "PL"),
               sex = "Male", age = "6M", y_position = 13) +
   scale_y_continuous(name  = TeX("PL Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 15, 5),
+                     breaks = seq(0, 25, 5),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 15), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 25), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -309,10 +302,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                              muscle == "PL"),
               sex = "Female", age = "18M") +
   scale_y_continuous(name  = TeX("PL Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 30, 10),
+                     breaks = seq(0, 30, 5),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 30), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 30), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -333,8 +325,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   scale_y_continuous(name  = TeX("PL Glycogen (ng/$\\mu$L/mg)"),
                      breaks = seq(0, 25, 5),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 25), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 25), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -343,7 +334,7 @@ ggsave(file.path("..", "..", "plots", "muscle_glycogen_PL_18M_male.pdf"),
 ```
 
 
-## SOL {.tabset}
+## SOL
 
 ### 6M Female
 
@@ -356,10 +347,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Female", age = "6M") +
   scale_y_continuous(name  = TeX("SOL Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(5, 25, 5),
+                     breaks = seq(0, 60, 10),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(5, 25), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 64), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -378,10 +368,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Male", age = "6M", y_position = 27) +
   scale_y_continuous(name  = TeX("SOL Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 30, 10),
+                     breaks = seq(0, 35, 5),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 30), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 35), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -400,10 +389,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Female", age = "18M", y_position = 50) +
   scale_y_continuous(name  = TeX("SOL Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(0, 60, 20),
+                     breaks = seq(0, 60, 10),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 64), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 64), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -422,10 +410,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Male", age = "18M") +
   scale_y_continuous(name  = TeX("SOL Glycogen (ng/$\\mu$L/mg)"),
-                     breaks = seq(10, 35, 5),
+                     breaks = seq(0, 35, 5),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(9, 35), clip = "off") +
-  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 35), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -436,7 +423,9 @@ ggsave(file.path("..", "..", "plots", "muscle_glycogen_SOL_18M_male.pdf"),
 
 # Citrate Synthase
 
-## LG {.tabset}
+Muscle citrate synthase concentration (U citrate synthase/$\mu$g protein $\times 10^3$).
+
+## LG
 
 ### 6M Female
 
@@ -459,7 +448,6 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
 ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_LG_6M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 6M Male
 
@@ -494,17 +482,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
                              muscle == "LG"),
               sex = "Female", age = "18M", y_position = 260) +
   scale_y_continuous(name  = TeX("LG CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 300, 100),
+                     breaks = seq(0, 350, 100),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(0, 350), clip = "off") +
-  theme(plot.margin = unit(c(6, 5, 5, 5), units = "pt"))
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_LG_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 18M Male
 
@@ -519,8 +506,8 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   scale_y_continuous(name  = TeX("LG CS (U/$\\mu$g protein $\\times 10^3$)"),
                      breaks = seq(0, 500, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 500), clip = "off") +
-  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 530), clip = "off") +
+  theme(plot.margin = unit(c(17, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -542,17 +529,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
                              muscle == "MG"),
               sex = "Female", age = "6M", y_position = 275) +
   scale_y_continuous(name  = TeX("MG CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 300, 100),
+                     breaks = seq(0, 350, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 310), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 350), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_MG_6M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 6M Male
 
@@ -567,8 +553,8 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   scale_y_continuous(name  = TeX("MG CS (U/$\\mu$g protein $\\times 10^3$)"),
                      breaks = seq(0, 500, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 500), clip = "off") +
-  theme(plot.margin = unit(c(15, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 530), clip = "off") +
+  theme(plot.margin = unit(c(17, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -587,17 +573,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
                              muscle == "MG"),
               sex = "Female", age = "18M", y_position = 240) +
   scale_y_continuous(name  = TeX("MG CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 300, 100),
+                     breaks = seq(0, 350, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 300), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 350), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_MG_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 18M Male
 
@@ -610,10 +595,10 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
                              muscle == "MG"),
               sex = "Male", age = "18M") +
   scale_y_continuous(name  = TeX("MG CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 400, 100),
+                     breaks = seq(0, 500, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 400), clip = "off") +
-  theme(plot.margin = unit(c(18, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 530), clip = "off") +
+  theme(plot.margin = unit(c(17, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -635,17 +620,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                              muscle == "PL"),
               sex = "Female", age = "6M", y_position = 210) +
   scale_y_continuous(name  = TeX("PL CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 250, 50),
+                     breaks = seq(0, 350, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 250), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 350), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_PL_6M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 6M Male
 
@@ -658,10 +642,10 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                              muscle == "PL"),
               sex = "Male", age = "6M", y_position = 320) +
   scale_y_continuous(name  = TeX("PL CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 400, 100),
+                     breaks = seq(0, 500, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 400), clip = "off") +
-  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 530), clip = "off") +
+  theme(plot.margin = unit(c(17, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -680,17 +664,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                              muscle == "PL"),
               sex = "Female", age = "18M", y_position = 210) +
   scale_y_continuous(name  = TeX("PL CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 200, 50),
+                     breaks = seq(0, 350, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 210), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 350), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_PL_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 18M Male
 
@@ -703,10 +686,10 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                              muscle == "PL"),
               sex = "Male", age = "18M") +
   scale_y_continuous(name  = TeX("PL CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 400, 100),
+                     breaks = seq(0, 500, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 400), clip = "off") +
-  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 530), clip = "off") +
+  theme(plot.margin = unit(c(17, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -728,17 +711,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Female", age = "6M", y_position = 310) +
   scale_y_continuous(name  = TeX("SOL CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 300, 100),
+                     breaks = seq(0, 350, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 320), clip = "off") +
-  theme(plot.margin = unit(c(25, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 350), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_SOL_6M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 6M Male
 
@@ -753,8 +735,8 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   scale_y_continuous(name  = TeX("SOL CS (U/$\\mu$g protein $\\times 10^3$)"),
                      breaks = seq(0, 500, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 500), clip = "off") +
-  theme(plot.margin = unit(c(18, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 530), clip = "off") +
+  theme(plot.margin = unit(c(17, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -773,17 +755,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Female", age = "18M", y_position = 230) +
   scale_y_continuous(name  = TeX("SOL CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 250, 50),
+                     breaks = seq(0, 350, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 250), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 350), clip = "off") +
+  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_SOL_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 18M Male
 
@@ -796,10 +777,10 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Male", age = "18M") +
   scale_y_continuous(name  = TeX("SOL CS (U/$\\mu$g protein $\\times 10^3$)"),
-                     breaks = seq(0, 300, 100),
+                     breaks = seq(0, 500, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 300), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 530), clip = "off") +
+  theme(plot.margin = unit(c(17, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -808,9 +789,9 @@ ggsave(file.path("..", "..", "plots", "muscle_citrate_synthase_SOL_18M_male.pdf"
 ```
 
 
+# Terminal Muscle Mass
 
-
-# Terminal Mass
+Mass (mg) of dissected muscles.
 
 ## LG
 
@@ -825,17 +806,15 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
                              muscle == "LG"),
               sex = "Female", age = "6M", y_position = 620) +
   scale_y_continuous(name  = "LG Terminal Mass (mg)",
-                     breaks = seq(500, 700, 100),
+                     breaks = seq(500, 700, 50),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(485, 700), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(485, 700), clip = "off")
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_LG_6M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 6M Male
 
@@ -850,8 +829,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
   scale_y_continuous(name  = "LG Terminal Mass (mg)",
                      breaks = seq(700, 1000, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(650, 1060), clip = "off") +
-  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(650, 1060), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -870,17 +848,15 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
                              muscle == "LG"),
               sex = "Female", age = "18M") +
   scale_y_continuous(name  = "LG Terminal Mass (mg)",
-                     breaks = seq(500, 620, 40),
+                     breaks = seq(500, 700, 50),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(490, 625), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(485, 700), clip = "off")
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_LG_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 18M Male
 
@@ -893,10 +869,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "LG"),
                              muscle == "LG"),
               sex = "Male", age = "18M", y_position = 940) +
   scale_y_continuous(name  = "LG Terminal Mass (mg)",
-                     breaks = seq(750, 1000, 50),
+                     breaks = seq(700, 1000, 100),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(750, 1000), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(650, 1060), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -904,8 +879,7 @@ ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_LG_18M_male.pdf")
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
-
-## MG {.tabset}
+## MG
 
 ### 6M Female
 
@@ -918,17 +892,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
                              muscle == "MG"),
               sex = "Female", age = "6M") +
   scale_y_continuous(name  = "MG Terminal Mass (mg)",
-                     breaks = seq(320, 450, 20),
+                     breaks = seq(320, 470, 30),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(315, 450), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(315, 472), clip = "off") +
+  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_MG_6M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 6M Male
 
@@ -943,8 +916,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
   scale_y_continuous(name  = "MG Terminal Mass (mg)",
                      breaks = seq(500, 750, 50),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(500, 770), clip = "off") +
-  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(500, 770), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -963,9 +935,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
                              muscle == "MG"),
               sex = "Female", age = "18M") +
   scale_y_continuous(name  = "MG Terminal Mass (mg)",
-                     breaks = seq(350, 470, 20),
+                     breaks = seq(320, 470, 30),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(350, 472), clip = "off") +
+  coord_cartesian(ylim = c(315, 472), clip = "off") +
   theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
 ```
 
@@ -973,7 +945,6 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
 ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_MG_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 18M Male
 
@@ -986,10 +957,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "MG"),
                              muscle == "MG"),
               sex = "Male", age = "18M") +
   scale_y_continuous(name  = "MG Terminal Mass (mg)",
-                     breaks = seq(550, 750, 50),
+                     breaks = seq(500, 750, 50),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(550, 750), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(500, 770), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -997,8 +967,7 @@ ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_MG_18M_male.pdf")
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
-
-## PL {.tabset}
+## PL
 
 ### 6M Female
 
@@ -1009,19 +978,18 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                             muscle == "PL"),
               stats = filter(MUSCLES_STATS, response == "Terminal Muscle Mass", 
                              muscle == "PL"),
-              sex = "Female", age = "6M", y_position = 212) +
+              sex = "Female", age = "6M", y_position = 218) +
   scale_y_continuous(name  = "PL Terminal Mass (mg)",
                      breaks = seq(160, 220, 20),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(160, 220), clip = "off") +
-  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(160, 225), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_PL_6M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 6M Male
 
@@ -1034,10 +1002,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                              muscle == "PL"),
               sex = "Male", age = "6M") +
   scale_y_continuous(name  = "PL Terminal Mass (mg)",
-                     breaks = seq(250, 370, 40),
+                     breaks = seq(200, 380, 40),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(245, 375), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(200, 380), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1059,14 +1026,13 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
                      breaks = seq(160, 220, 20),
                      expand = expansion(mult = 1e-2)) +
   coord_cartesian(ylim = c(160, 225), clip = "off") +
-  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_PL_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 18M Male
 
@@ -1081,8 +1047,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "PL"),
   scale_y_continuous(name  = "PL Terminal Mass (mg)",
                      breaks = seq(200, 380, 40),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(200, 380), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(200, 380), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1090,8 +1055,7 @@ ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_PL_18M_male.pdf")
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
-
-## SOL {.tabset}
+## SOL
 
 ### 6M Female
 
@@ -1115,7 +1079,6 @@ ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_SOL_6M_female.pdf
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
 
-
 ### 6M Male
 
 ```{r}
@@ -1127,10 +1090,9 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Male", age = "6M") +
   scale_y_continuous(name  = "SOL Terminal Mass (mg)",
-                     breaks = seq(100, 180, 20),
+                     breaks = seq(80, 180, 20),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(100, 180), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(70, 180), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1149,17 +1111,16 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
                              muscle == "SOL"),
               sex = "Female", age = "18M") +
   scale_y_continuous(name  = "SOL Terminal Mass (mg)",
-                     breaks = seq(70, 100, 10),
+                     breaks = seq(60, 110, 10),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(65, 103), clip = "off") +
-  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(60, 110), clip = "off") +
+  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_SOL_18M_female.pdf"),
        height = 1.8, width = 1.4, family = "ArialMT")
 ```
-
 
 ### 18M Male
 
@@ -1174,8 +1135,7 @@ plot_baseline(x = filter(MUSCLES, muscle == "SOL"),
   scale_y_continuous(name  = "SOL Terminal Mass (mg)",
                      breaks = seq(80, 180, 20),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(70, 180), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(70, 180), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1184,46 +1144,18 @@ ggsave(file.path("..", "..", "plots", "muscle_term_muscle_mass_SOL_18M_male.pdf"
 ```
 
 
+# Mean Cross-Sectional Area
 
-# Mean CSA
-
-```{r}
-# Reformat confidence interval data
-conf_df <- map(MUSCLES_EMM, function(emm_i) {
-  terms_i <- attr(terms(emm_i@model.info), which = "term.labels")
-  
-  out <- summary(emm_i) %>% 
-    as.data.frame() %>% 
-    rename(any_of(c(lower.CL = "asymp.LCL",
-                    upper.CL = "asymp.UCL",
-                    response_mean = "response",
-                    response_mean = "rate")))
-  
-  if ("age_group" %in% terms_i) {
-    out <- mutate(out,
-                  age = sub("_.*", "", age_group),
-                  group = sub(".*_", "", age_group),
-                  age_group = NULL)
-  }
-  
-  out <- out %>% 
-    mutate(group = factor(group, 
-                          levels = c("SED", paste0(2 ^ (0:3), "W"))))
-  
-  return(out)
-}) %>% 
-  enframe(name = "response") %>% 
-  unnest(value)
-```
-
+Mean muscle cross-sectional area ($\mu m^2$).
 
 ```{r}
-f1 <- function(response, 
-               sex, 
-               age, 
-               conf_df, 
-               stats_df,
-               bracket.nudge.y = 0) {
+# Function to plot mean CSA and capillary contacts
+plot_function <- function(response, 
+                          sex, 
+                          age, 
+                          conf_df, 
+                          stats_df,
+                          bracket.nudge.y = 0) {
   
   x <- MUSCLES %>% 
     dplyr::rename(response = !!sym(response)) %>% 
@@ -1238,7 +1170,7 @@ f1 <- function(response,
     summarise(y.position = max(response))
   
   stats_df <- stats_df %>%
-    filter(signif != "") %>% 
+    filter(signif) %>% 
     filter(age == !!age, sex == !!sex) %>% 
     mutate(contrast = as.character(contrast),
            group1 = sub(" .*", "", contrast),
@@ -1295,11 +1227,14 @@ f1 <- function(response,
 }
 ```
 
+## 6M Female
+
 ```{r}
-f1(response = "mean_CSA", sex = "Female", age = "6M", 
-   conf_df = filter(conf_df, response == "Mean CSA"), 
-   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
-   bracket.nudge.y = 70) +
+plot_function(
+  response = "mean_CSA", sex = "Female", age = "6M", 
+  conf_df = filter(conf_df, response == "Mean CSA"), 
+  stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
+  bracket.nudge.y = 70) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 2500, 500),
                      expand = expansion(mult = 5e-3)) +
@@ -1311,17 +1246,18 @@ ggsave(file.path("..", "..", "plots", "mean_CSA_6M_female.pdf"),
        height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
+## 6M Male
 
 ```{r}
-f1(response = "mean_CSA", sex = "Male", age = "6M", 
-   conf_df = filter(conf_df, response == "Mean CSA"), 
-   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"),
-   bracket.nudge.y = 85) +
+plot_function(
+  response = "mean_CSA", sex = "Male", age = "6M", 
+  conf_df = filter(conf_df, response == "Mean CSA"), 
+  stats_df = filter(MUSCLES_STATS, response == "Mean CSA"),
+  bracket.nudge.y = 85) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1500, 3500, 500),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(1500, 3500), clip = "off") +
-  theme(plot.margin = margin(t = 12))
+  coord_cartesian(ylim = c(1500, 3500), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1329,16 +1265,18 @@ ggsave(file.path("..", "..", "plots", "mean_CSA_6M_male.pdf"),
        height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
+## 18M Female
 
 ```{r}
-f1(response = "mean_CSA", sex = "Female", age = "18M", 
-   conf_df = filter(conf_df, response == "Mean CSA"), 
-   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
-   bracket.nudge.y = 60) +
+plot_function(
+  response = "mean_CSA", sex = "Female", age = "18M", 
+  conf_df = filter(conf_df, response == "Mean CSA"), 
+  stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
+  bracket.nudge.y = 60) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
-                     breaks = seq(1500, 2500, 500),
+                     breaks = seq(1000, 2500, 500),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(1370, 2500), clip = "off")
+  coord_cartesian(ylim = c(1000, 2500), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1346,17 +1284,18 @@ ggsave(file.path("..", "..", "plots", "mean_CSA_18M_female.pdf"),
        height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
+## 18M Male
 
 ```{r}
-f1(response = "mean_CSA", sex = "Male", age = "18M", 
-   conf_df = filter(conf_df, response == "Mean CSA"), 
-   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
-   bracket.nudge.y = 60) +
+plot_function(
+  response = "mean_CSA", sex = "Male", age = "18M", 
+  conf_df = filter(conf_df, response == "Mean CSA"), 
+  stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
+  bracket.nudge.y = 60) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
-                     breaks = seq(1600, 2800, 400),
+                     breaks = seq(1500, 3500, 500),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(1600, 2800), clip = "off") +
-  theme(plot.margin = margin(t = 10))
+  coord_cartesian(ylim = c(1500, 3500), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1367,15 +1306,20 @@ ggsave(file.path("..", "..", "plots", "mean_CSA_18M_male.pdf"),
 
 # Capillary Contacts
 
+Mean number of muscle capillary contacts (capillaries/fiber).
+
+## 6M Female
+
 ```{r}
-f1(response = "capillary_contacts", sex = "Female", age = "6M", 
-   conf_df = filter(conf_df, response == "Capillary Contacts"), 
-   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
-   bracket.nudge.y = 0.1) +
-  scale_y_continuous(name = "Capillary Contacts (#/capillary)",
-                     breaks = seq(3, 5, 0.5),
+plot_function(
+  response = "capillary_contacts", sex = "Female", age = "6M", 
+  conf_df = filter(conf_df, response == "Capillary Contacts"), 
+  stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
+  bracket.nudge.y = 0.1) +
+  scale_y_continuous(name = "Capillary Contacts (#/fiber)",
+                     breaks = seq(3, 5.5, 0.5),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(3, 5), clip = "off")
+  coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1383,13 +1327,15 @@ ggsave(file.path("..", "..", "plots", "capillary_contacts_6M_female.pdf"),
        height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
+## 6M Male
 
 ```{r}
-f1(response = "capillary_contacts", sex = "Male", age = "6M", 
-   conf_df = filter(conf_df, response == "Capillary Contacts"), 
-   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
-   bracket.nudge.y = 0.15) +
-  scale_y_continuous(name = "Capillary Contacts (#/capillary)",
+plot_function(
+  response = "capillary_contacts", sex = "Male", age = "6M", 
+  conf_df = filter(conf_df, response == "Capillary Contacts"), 
+  stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
+  bracket.nudge.y = 0.15) +
+  scale_y_continuous(name = "Capillary Contacts (#/fiber)",
                      breaks = seq(3, 5.5, 0.5),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
@@ -1400,16 +1346,18 @@ ggsave(file.path("..", "..", "plots", "capillary_contacts_6M_male.pdf"),
        height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
+## 18M Female
 
 ```{r}
-f1(response = "capillary_contacts", sex = "Female", age = "18M", 
-   conf_df = filter(conf_df, response == "Capillary Contacts"), 
-   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
-   bracket.nudge.y = 0.08) +
-  scale_y_continuous(name = "Capillary Contacts (#/capillary)",
-                     breaks = seq(3, 4.5, 0.5),
+plot_function(
+  response = "capillary_contacts", sex = "Female", age = "18M", 
+  conf_df = filter(conf_df, response == "Capillary Contacts"), 
+  stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
+  bracket.nudge.y = 0.08) +
+  scale_y_continuous(name = "Capillary Contacts (#/fiber)",
+                     breaks = seq(3, 5.5, 0.5),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(3, 4.5), clip = "off")
+  coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -1417,17 +1365,18 @@ ggsave(file.path("..", "..", "plots", "capillary_contacts_18M_female.pdf"),
        height = 1.7, width = 1.55, family = "ArialMT")
 ```
 
+## 18M Male
 
 ```{r}
-f1(response = "capillary_contacts", sex = "Male", age = "18M", 
-   conf_df = filter(conf_df, response == "Capillary Contacts"), 
-   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
-   bracket.nudge.y = 0.1) +
-  scale_y_continuous(name = "Capillary Contacts (#/capillary)",
-                     breaks = seq(3.5, 5.5, 0.5),
+plot_function(
+  response = "capillary_contacts", sex = "Male", age = "18M", 
+  conf_df = filter(conf_df, response == "Capillary Contacts"), 
+  stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
+  bracket.nudge.y = 0.1) +
+  scale_y_continuous(name = "Capillary Contacts (#/fiber)",
+                     breaks = seq(3, 5.5, 0.5),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(3.5, 5.5), clip = "off") +
-  theme(plot.margin = margin(t = 6))
+  coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
 ```
 
 ```{r eval=save_plots}

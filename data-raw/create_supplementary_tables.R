@@ -46,31 +46,27 @@ s2 <- PRE_POST_STATS %>%
   relocate(pre_mean, pct_change, .after = estimate) %>%
   arrange(response, age, sex, group)
 
-# # Save
-# write_xlsx(s2, path = "./supplementary-tables/supplementary_table_2.xlsx",
-#            col_names = TRUE, format_headers = TRUE)
+# Save
+write_xlsx(s2, path = file.path("supplementary-tables",
+                                "supplementary_table_2.xlsx"),
+           col_names = TRUE, format_headers = TRUE)
 
 
 ## Supplementary Table 3: trained vs. SED comparisons ==========================
 s3 <- list(
   "NMR & VO2max" = BASELINE_STATS,
-  "Plasma Analytes" = ANALYTES_STATS,
+  "Weekly Body Mass" = WEEKLY_BODY_MASS_STATS,
   "Muscle Measures" = mutate(MUSCLES_STATS,
                              response = ifelse(response == "Glycogen",
                                                "Muscle Glycogen", response)),
   "Mean Fiber Area" = FIBER_AREA_STATS,
-  "Fiber Count" = FIBER_COUNT_STATS
-) %>%
+  "Fiber Count" = FIBER_COUNT_STATS,
+  "Plasma Analytes" = ANALYTES_STATS) %>%
   map(function(xi) {
-
-    if ("ratio" %in% colnames(xi)) {
-      xi <- mutate(xi, pct_change = 100 * (ratio - 1))
-    }
-
     xi %>%
-      mutate(pct_change = ifelse(estimate_type == "ratio",
-                                 100 * (1 - estimate), NA)) %>%
       mutate(response = factor(response, levels = unique(response)),
+             pct_change = ifelse(estimate_type == "ratio",
+                                 100 * (estimate - 1), NA),
              pct_change = round(pct_change, digits = 0),
              across(.cols = c(where(is.numeric), -starts_with("p.")),
                     .fn = ~ round(.x, digits = 2)),
@@ -79,15 +75,21 @@ s3 <- list(
       relocate(pct_change, .after = estimate) %>%
       {if ("muscle" %in% colnames(.)) {
         arrange(., response, age, sex, muscle, contrast)
+      } else if ("week" %in% colnames(.)) {
+        arrange(., response, age, sex, week, contrast)
       } else {
         arrange(., response, age, sex, contrast)
       }} %>%
-      # arrange(response, age, sex, across(muscle), contrast) %>%
       # Remove columns with all missing values
       dplyr::select(where(fn = ~ !all(is.na(.x))))
   })
 
-# # Save
-# write_xlsx(s3, path = "./supplementary-tables/supplementary_table_3.xlsx",
-#            col_names = TRUE, format_headers = TRUE)
+# Save
+write_xlsx(s3, path = file.path("supplementary-tables",
+                                "supplementary_table_3.xlsx"),
+           col_names = TRUE, format_headers = TRUE)
 
+
+# The supplementary tables are further formatted in Microsoft Excel for ease of
+# viewing. Data dictionaries are also added to provide explanations of each
+# column.

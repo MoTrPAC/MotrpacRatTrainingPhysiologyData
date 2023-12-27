@@ -34,8 +34,12 @@ library(ggplot2)
 library(scales)
 ```
 
+# Overview
+
+This article generates plots of the tissue dissection times: time elapsed from collection to freezing (if the tissue was collected under anesthesia) or death to freezing (if the tissue was collected post-mortem). Each box represents the mean $\pm$ 2 standard deviations. Blue indicates that the tissue was collected while the rat was anesthetized, while grey indicates that the tissue was collected post-mortem.
+
 ```{r}
-# Create and save all plots
+# Create and save all 4 plots
 foo <- DISSECTION_TIMES %>% 
   nest(.by = c(age, sex)) %>% 
   arrange(age, sex) %>% 

@@ -41,12 +41,14 @@ theme_set(theme_bw()) # base plot theme
 
 # Regression Models
 
-Since clinical analytes are strictly positive, we will check the mean–variance relationship with code from Dunn and Smyth[@dunn_generalized_2018] (pg. 429–430) and fit an appropriate log-link GLM. This allows us to back-transform the means without introducing bias, unlike when the response is transformed. Also, the log-link allows us to test ratios between means, rather than their absolute differences.
+Since clinical analytes are strictly positive, we will check the mean–variance relationship with code from Dunn and Smyth[@dunn_generalized_2018] (pg. 429–430) and fit an appropriate log-link generalized linear model (GLM). This allows us to back-transform the means without introducing bias, unlike when the response is transformed. Also, the log-link allows us to test ratios between means, rather than their absolute differences.
 
 If there are obvious problems with the model diagnostic plots, or the mean–variance relationship does not correspond to an exponential family distribution, we will include inverse group variances as weights in a log-link Gaussian GLM. Finally, we will remove insignificant predictors to achieve model parsimony based on ANOVA F-tests.
 
 
 ## Corticosterone
+
+Corticosterone (ng/mL).
 
 ```{r, fig.height=3}
 # Plot points
@@ -63,7 +65,8 @@ We will check the mean-variance relationship.
 mv <- ANALYTES %>% 
   group_by(sex, group, age) %>% 
   summarise(mn = mean(corticosterone, na.rm = TRUE),
-            vr = var(corticosterone, na.rm = TRUE))
+            vr = var(corticosterone, na.rm = TRUE),
+            .groups = "keep")
 
 fit.mv <- lm(log(vr) ~ log(mn), data = mv)
 coef(fit.mv)
@@ -122,6 +125,8 @@ summary(fit.cort)
 
 ## Glucagon
 
+Glucagon (pM).
+
 ```{r, fig.height=3}
 # Plot points
 ggplot(ANALYTES, aes(x = group, y = glucagon)) +
@@ -172,6 +177,8 @@ summary(fit.glucagon)
 
 
 ## Glucose
+
+Glucose (mg/dL).
 
 ```{r, fig.height=3}
 # Plot points
@@ -243,6 +250,8 @@ summary(fit.glucose)
 
 ## Glycerol
 
+Glycerol (mg/dL).
+
 ```{r, fig.height=3}
 # Plot points
 ggplot(ANALYTES, aes(x = group, y = glycerol)) +
@@ -294,7 +303,7 @@ summary(fit.glycerol)
 
 ## Insulin
 
-It does not matter which units we use for insulin. It does not affect the model fit or the ratios when we set up the comparisons later.
+Insulin (pM). It does not matter which units we use for insulin. It does not affect the model fit or the ratios when we set up the comparisons later.
 
 ```{r, fig.height=3}
 # Plot points
@@ -376,6 +385,8 @@ summary(fit.ins)
 
 ## Ketones
 
+Ketones ($\mu$mol/L).
+
 ```{r, fig.height=3}
 # Plot points
 ggplot(ANALYTES, aes(x = group, y = ketones)) +
@@ -427,6 +438,8 @@ summary(fit.ket)
 
 ## Lactate
 
+Lactate (mmol/L).
+
 ```{r, fig.height=3}
 # Plot points
 ggplot(ANALYTES, aes(x = group, y = lactate)) +
@@ -475,7 +488,6 @@ We will try to simplify the model to improve the diagnostics.
 anova(fit.lact, test = "F")
 ```
 
-
 ```{r}
 fit.lact.1 <- update(fit.lact, formula = . ~ age * group + sex)
 anova(fit.lact.1, fit.lact, test = "F")
@@ -496,6 +508,8 @@ summary(fit.lact)
 
 
 ## Leptin
+
+Leptin (pg/mL).
 
 ```{r, fig.height=3}
 # Plot points
@@ -567,6 +581,8 @@ summary(fit.lep)
 
 ## NEFA
 
+NEFA (mmol/L).
+
 ```{r, fig.height=3}
 # Plot points
 ggplot(ANALYTES, aes(x = group, y = nefa)) +
@@ -631,7 +647,9 @@ summary(fit.nefa)
 
 # Hypothesis Testing
 
-We will compare the means of each trained timepoint to those of their sex-matched sedentary controls within each age group using the Dunnett test. If the response had been transformed, tests and interpretation will be done on the transformed scale to avoid introducing bias when back-transforming.
+We will compare the means of each trained timepoint to those of their sex-matched sedentary controls within each age group using the Dunnett test. This is a multiple comparison procedure to compare each of several treatment groups (1W, 2W, 4W, 8W) against a single control group (SED). The assumptions of this test are that the observations in each group are independent and identically distributed with equal variances. We have already checked that these assumptions were satisfied with the regression diagnostic plots.
+
+If the response had been transformed, tests and interpretation will be done on the transformed scale to avoid introducing bias when back-transforming.
 
 ```{r}
 # Create emm_list objects
@@ -645,6 +663,7 @@ model_list <- list("Corticosterone" = fit.cort,
                    "Leptin" = fit.lep,
                    "NEFA" = fit.nefa)
 
+# List of emmGrid objects
 ANALYTES_EMM <- map(model_list, function(mod_i) {
   terms_i <- attr(terms(mod_i), which = "term.labels")
   by <- intersect(c("age", "sex"), terms_i)
@@ -672,18 +691,25 @@ model_df <- model_list %>%
          weights = ifelse(grepl("weights = ", model), 
                           "inverse group variances", NA)) %>% 
   select(-model)
+```
 
+```{r}
 # Results
 ANALYTES_STATS <- ANALYTES_EMM %>% 
   map(function(emm_i) {
+    # "trt.vs.ctrl" and "dunnett" are interchangeable
     contrast(emm_i, method = "trt.vs.ctrl") %>% 
       summary(infer = TRUE) %>% 
       as.data.frame() %>% 
+      # Rename asymptotic confidence interval columns (quasi-distributions) to
+      # simplify output
       rename(any_of(c(lower.CL = "asymp.LCL",
                       upper.CL = "asymp.UCL")))
   }) %>%
   enframe(name = "response") %>% 
   unnest(value) %>%
+  # In cases where either age or sex was not included as a predictor,
+  # we will duplicate those rows and fill in those column entries.
   mutate(age = ifelse(is.na(age), "6M, 18M", as.character(age)),
          sex = ifelse(is.na(sex), "Female, Male", as.character(sex))) %>% 
   separate_longer_delim(cols = c(age, sex), delim = ", ") %>%
@@ -700,6 +726,7 @@ ANALYTES_STATS <- ANALYTES_EMM %>%
   mutate(statistic_type = sub("\\.ratio", "", statistic_type),
          age = factor(age, levels = c("6M", "18M")),
          sex = factor(sex, levels = c("Female", "Male")),
+         # Calculate two-sided p-values
          p.value = 2 * pt(q = estimate, df = df, lower.tail = FALSE),
          signif = p.adj < 0.05) %>% 
   left_join(model_df, by = "response") %>% 

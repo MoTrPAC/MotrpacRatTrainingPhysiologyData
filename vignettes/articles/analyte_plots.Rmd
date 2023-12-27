@@ -36,6 +36,14 @@ library(ggplot2)
 library(latex2exp)
 ```
 
+# Overview
+
+This article generates all plasma clinical analyte figures. A bracket indicates a significant difference (Dunnett's test p-value < 0.05) between the means of the SED group and a trained group (1W, 2W, 4W, 8W). Plots are generated for each combination of age and sex and such that the y-axis limits for the same analyte are identical. This allows for easier visual comparisons. Please refer to the "Statistical analyses of plasma clinical analytes" vignette for code to generate `ANALYTES_STATS`.
+
+**Data Preparation:**
+
+We apply the `summary` method to each `emmGrid` object and rename columns to work with `plot_baseline`. Since the formula for corticosterone did not include `age` as a predictor, the entries for the `age` column are `NA`. We instead modify these entries to include both levels of `age` separated by a comma. Using this, we can separate the rows to effectively duplicate the results so that we now have corticosterone data for both ages. Lastly, we ensure that `group` is a factor to preserve the order when plotting. This list of objects is then converted to a single `data.frame` with the `response` column specifying which analyte is being tested.
+
 ```{r}
 # Reformat confidence interval data
 conf_df <- map(ANALYTES_EMM, function(emm_i) {
@@ -48,16 +56,16 @@ conf_df <- map(ANALYTES_EMM, function(emm_i) {
                     response_mean = "response",
                     response_mean = "rate")))
   
-  if ("age_group" %in% terms_i) {
-    out <- mutate(out,
-                  age = sub("_.*", "", age_group),
-                  group = sub(".*_", "", age_group),
-                  age_group = NULL)
+  # In some cases, age or sex is not included in the model, so their entries
+  # would be NA. We will instead duplicate those rows for plotting.
+  # This was already done for ANALYTES_STATS.
+  if (!"age" %in% colnames(out)) {
+    out$age <- "6M, 18M"
   }
   
   out <- out %>% 
-    mutate(group = factor(group, 
-                          levels = c("SED", paste0(2 ^ (0:3), "W"))))
+    separate_longer_delim(cols = age, delim = ", ") %>% 
+    mutate(group = factor(group, levels = c("SED", paste0(2 ^ (0:3), "W"))))
   
   return(out)
 }) %>% 
@@ -66,399 +74,22 @@ conf_df <- map(ANALYTES_EMM, function(emm_i) {
 ```
 
 
-# Ketones
-
-## 6M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "ketones", 
-              conf = filter(conf_df, response == "Ketones"),
-              stats = filter(ANALYTES_STATS, response == "Ketones"),
-              sex = "Female", age = "6M") +
-  labs(y = TeX("Ketones ($\\mu$mol/L)"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_ketones_6M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-
-## 6M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "ketones", 
-              conf = filter(conf_df, response == "Ketones"),
-              stats = filter(ANALYTES_STATS, response == "Ketones"),
-              sex = "Male", age = "6M") +
-  labs(y = TeX("Ketones ($\\mu$mol/L)"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_ketones_6M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-
-## 18M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "ketones",  
-              conf = filter(conf_df, response == "Ketones"),
-              stats = filter(ANALYTES_STATS, response == "Ketones"),
-              sex = "Female", age = "18M") +
-  labs(y = TeX("Ketones ($\\mu$mol/L)"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_ketones_18M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "ketones",  
-              conf = filter(conf_df, response == "Ketones"),
-              stats = filter(ANALYTES_STATS, response == "Ketones"),
-              sex = "Male", age = "18M") +
-  labs(y = TeX("Ketones ($\\mu$mol/L)"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_ketones_18M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-
-
-# NEFA
-
-## 6M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "nefa", 
-              conf = filter(conf_df, response == "NEFA"), 
-              stats = filter(ANALYTES_STATS, response == "NEFA"),
-              sex = "Female", age = "6M", y_position = 1.25) +
-  scale_y_continuous(name = "NEFA (mmol/L)",
-                     breaks = seq(0.3, 1.3, 0.2),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0.3, 1.34), clip = "off")
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_NEFA_6M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 6M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "nefa", 
-              conf = filter(conf_df, response == "NEFA"),
-              stats = filter(ANALYTES_STATS, response == "NEFA"),
-              sex = "Male", age = "6M") +
-  scale_y_continuous(name = "NEFA (mmol/L)",
-                     breaks = seq(0.3, 1.3, 0.2),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0.3, 1.3), clip = "off")
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_NEFA_6M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "nefa", 
-              conf = filter(conf_df, response == "NEFA"),
-              stats = filter(ANALYTES_STATS, response == "NEFA"),
-              sex = "Female", age = "18M", y_position = 1.1) +
-  scale_y_continuous(name = "NEFA (mmol/L)",
-                     breaks = seq(0.3, 1.3, 0.2),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0.3, 1.3), clip = "off")
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_NEFA_18M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "nefa",
-              conf = filter(conf_df, response == "NEFA"), 
-              stats = filter(ANALYTES_STATS, response == "NEFA"),
-              sex = "Male", age = "18M") +
-  labs(y = "NEFA (mmol/L)")
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_NEFA_18M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-
-
-# Lactate
-
-## 6M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "lactate", 
-              conf = filter(conf_df, response == "Lactate"),
-              stats = filter(ANALYTES_STATS, response == "Lactate"),
-              sex = "Female", age = "6M", y_position = 1.85) +
-  scale_y_continuous(name = "Lactate (mmol/L)",
-                     breaks = seq(1, 2, 0.2),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(1, 2), clip = "off")
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_lactate_6M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 6M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "lactate", 
-              conf = filter(conf_df, response == "Lactate"),
-              stats = filter(ANALYTES_STATS, response == "Lactate"),
-              sex = "Male", age = "6M") +
-  scale_y_continuous(name = "Lactate (mmol/L)",
-                     breaks = seq(0, 3, 1),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 3), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_lactate_6M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "lactate", 
-              conf = filter(conf_df, response == "Lactate"),
-              stats = filter(ANALYTES_STATS, response == "Lactate"),
-              sex = "Female", age = "18M") +
-  scale_y_continuous(name = "Lactate (mmol/L)",
-                     breaks = seq(1, 2, 0.2),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(1.08, 2.1), clip = "off") +
-  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_lactate_18M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "lactate", 
-              conf = filter(conf_df, response == "Lactate"),
-              stats = filter(ANALYTES_STATS, response == "Lactate"),
-              sex = "Male", age = "18M") +
-  scale_y_continuous(name = "Lactate (mmol/L)",
-                     breaks = seq(1, 1.8, 0.2),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(1, 1.9), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_lactate_18M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-
-
-# Glucose
-
-## 6M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "glucose", 
-              conf = filter(conf_df, response == "Glucose"),
-              stats = filter(ANALYTES_STATS, response == "Glucose"),
-              sex = "Female", age = "6M") +
-  scale_y_continuous(name = "Glucose (mg/dL)",
-                     breaks = seq(120, 180, 20),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(117, 183), clip = "off") +
-  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_glucose_6M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 6M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "glucose", 
-              conf = filter(conf_df, response == "Glucose"),
-              stats = filter(ANALYTES_STATS, response == "Glucose"),
-              sex = "Male", age = "6M") +
-  scale_y_continuous(name = "Glucose (mg/dL)",
-                     breaks = seq(150, 230, 20),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(150, 230), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_glucose_6M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "glucose", 
-              conf = filter(conf_df, response == "Glucose"),
-              stats = filter(ANALYTES_STATS, response == "Glucose"),
-              sex = "Female", age = "18M") +
-  scale_y_continuous(name = "Glucose (mg/dL)",
-                     breaks = seq(120, 200, 20),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(120, 200), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_glucose_18M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "glucose", 
-              conf = filter(conf_df, response == "Glucose"),
-              stats = filter(ANALYTES_STATS, response == "Glucose"),
-              sex = "Male", age = "18M", y_position = 201) +
-  scale_y_continuous(name = "Glucose (mg/dL)",
-                     breaks = seq(150, 200, 10),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(145, 205), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_glucose_18M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-
-
-# Glycerol
-
-## 6M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "glycerol", 
-              conf = filter(conf_df, response == "Glycerol"),
-              stats = filter(ANALYTES_STATS, response == "Glycerol"),
-              sex = "Female", age = "6M") +
-  scale_y_continuous(name = "Glycerol (mg/dL)",
-                     breaks = seq(0.5, 2.5, 0.5),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0.5, 2.7), clip = "off") +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_glycerol_6M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 6M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "glycerol", 
-              conf = filter(conf_df, response == "Glycerol"),
-              stats = filter(ANALYTES_STATS, response == "Glycerol"),
-              sex = "Male", age = "6M") +
-  scale_y_continuous(name = "Glycerol (mg/dL)",
-                     breaks = seq(0.5, 2.5, 0.5),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0.45, 2.5), clip = "off") +
-  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_glycerol_6M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Female
-
-```{r}
-plot_baseline(ANALYTES, response = "glycerol", 
-              conf = filter(conf_df, response == "Glycerol"),
-              stats = filter(ANALYTES_STATS, response == "Glycerol"),
-              sex = "Female", age = "18M") +
-  scale_y_continuous(name = "Glycerol (mg/dL)",
-                     breaks = seq(0.8, 2.2, 0.4),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0.7, 2.2), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_glycerol_18M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-## 18M Male
-
-```{r}
-plot_baseline(ANALYTES, response = "glycerol", 
-              conf = filter(conf_df, response == "Glycerol"),
-              stats = filter(ANALYTES_STATS, response == "Glycerol"),
-              sex = "Male", age = "18M") +
-  scale_y_continuous(name = "Glycerol (mg/dL)",
-                     breaks = seq(0.6, 1.8, 0.4),
-                     expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0.6, 1.9), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
-```
-
-```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", "analytes_glycerol_18M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
-```
-
-
 # Corticosterone
 
+Corticosterone (ng/mL).
+
 ## 6M Female
 
 ```{r}
-plot_baseline(ANALYTES, response = "corticosterone", 
-              conf = filter(conf_df, response == "Corticosterone") %>% 
-                mutate(age = "6M"),
-              stats = filter(ANALYTES_STATS, 
-                             response == "Corticosterone") %>% 
-                mutate(age = "6M"),
+plot_baseline(ANALYTES, 
+              response = "corticosterone", 
+              conf = filter(conf_df, response == "Corticosterone"),
+              stats = filter(ANALYTES_STATS, response == "Corticosterone"),
               sex = "Female", age = "6M") +
   scale_y_continuous(name = "Corticosterone (ng/mL)",
-                     breaks = seq(0, 100, 20),
+                     breaks = seq(0, 170, 40),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 110), clip = "off") +
+  coord_cartesian(ylim = c(0, 170), clip = "off") +
   theme(plot.margin = unit(c(20, 5, 5, 5), units = "pt"))
 ```
 
@@ -470,18 +101,17 @@ ggsave(file.path("..", "..", "plots", "analytes_corticosterone_6M_female.pdf"),
 ## 6M Male
 
 ```{r}
-plot_baseline(ANALYTES, response = "corticosterone", 
-              conf = filter(conf_df, response == "Corticosterone") %>% 
-                mutate(age = "6M"),
+plot_baseline(ANALYTES, 
+              response = "corticosterone", 
+              conf = filter(conf_df, response == "Corticosterone"),
               stats = filter(ANALYTES_STATS, 
-                             response == "Corticosterone") %>% 
-                mutate(age = "6M"),
+                             response == "Corticosterone"),
               sex = "Male", age = "6M", y_position = 145) +
   scale_y_continuous(name = "Corticosterone (ng/mL)",
-                     breaks = seq(0, 160, 40),
+                     breaks = seq(0, 170, 40),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 160), clip = "off") +
-  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 170), clip = "off") +
+  theme(plot.margin = unit(c(20, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -492,18 +122,17 @@ ggsave(file.path("..", "..", "plots", "analytes_corticosterone_6M_male.pdf"),
 ## 18M Female
 
 ```{r}
-plot_baseline(ANALYTES, response = "corticosterone", 
-              conf = filter(conf_df, response == "Corticosterone") %>% 
-                mutate(age = "18M"),
+plot_baseline(ANALYTES, 
+              response = "corticosterone", 
+              conf = filter(conf_df, response == "Corticosterone"),
               stats = filter(ANALYTES_STATS, 
-                             response == "Corticosterone") %>% 
-                mutate(age = "18M"),
+                             response == "Corticosterone"),
               sex = "Female", age = "18M", y_position = 75) +
   scale_y_continuous(name = "Corticosterone (ng/mL)",
-                     breaks = seq(0, 80, 20),
+                     breaks = seq(0, 170, 40),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 80), clip = "off") +
-  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 170), clip = "off") +
+  theme(plot.margin = unit(c(20, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -514,12 +143,11 @@ ggsave(file.path("..", "..", "plots", "analytes_corticosterone_18M_female.pdf"),
 ## 18M Male
 
 ```{r}
-plot_baseline(ANALYTES, response = "corticosterone", 
-              conf = filter(conf_df, response == "Corticosterone") %>% 
-                mutate(age = "18M"),
+plot_baseline(ANALYTES, 
+              response = "corticosterone", 
+              conf = filter(conf_df, response == "Corticosterone"),
               stats = filter(ANALYTES_STATS, 
-                             response == "Corticosterone") %>% 
-                mutate(age = "18M"),
+                             response == "Corticosterone"),
               sex = "Male", age = "18M") +
   scale_y_continuous(name = "Corticosterone (ng/mL)",
                      breaks = seq(0, 170, 40),
@@ -534,13 +162,15 @@ ggsave(file.path("..", "..", "plots", "analytes_corticosterone_18M_male.pdf"),
 ```
 
 
-
 # Glucagon
+
+Glucagon (pM).
 
 ## 6M Female
 
 ```{r}
-plot_baseline(ANALYTES, response = "glucagon", 
+plot_baseline(ANALYTES, 
+              response = "glucagon", 
               conf = filter(conf_df, response == "Glucagon"),
               stats = filter(ANALYTES_STATS, response == "Glucagon"),
               sex = "Female", age = "6M") +
@@ -559,15 +189,16 @@ ggsave(file.path("..", "..", "plots", "analytes_glucagon_6M_female.pdf"),
 ## 6M Male
 
 ```{r}
-plot_baseline(ANALYTES, response = "glucagon", 
+plot_baseline(ANALYTES, 
+              response = "glucagon", 
               conf = filter(conf_df, response == "Glucagon"),
               stats = filter(ANALYTES_STATS, response == "Glucagon"),
               sex = "Male", age = "6M") +
   scale_y_continuous(name = "Glucagon (pM)",
-                     breaks = seq(0, 80, 20),
+                     breaks = seq(0, 160, 40),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 80), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 162), clip = "off") +
+  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -578,15 +209,16 @@ ggsave(file.path("..", "..", "plots", "analytes_glucagon_6M_male.pdf"),
 ## 18M Female
 
 ```{r}
-plot_baseline(ANALYTES, response = "glucagon", 
+plot_baseline(ANALYTES, 
+              response = "glucagon", 
               conf = filter(conf_df, response == "Glucagon"),
               stats = filter(ANALYTES_STATS, response == "Glucagon"),
               sex = "Female", age = "18M") +
   scale_y_continuous(name = "Glucagon (pM)",
-                     breaks = seq(0, 130, 40),
+                     breaks = seq(0, 160, 40),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 130), clip = "off") +
-  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 162), clip = "off") +
+  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -597,15 +229,16 @@ ggsave(file.path("..", "..", "plots", "analytes_glucagon_18M_female.pdf"),
 ## 18M Male
 
 ```{r}
-plot_baseline(ANALYTES, response = "glucagon", 
+plot_baseline(ANALYTES, 
+              response = "glucagon", 
               conf = filter(conf_df, response == "Glucagon"),
               stats = filter(ANALYTES_STATS, response == "Glucagon"),
               sex = "Male", age = "18M") +
   scale_y_continuous(name = "Glucagon (pM)",
-                     breaks = seq(0, 80, 20),
+                     breaks = seq(0, 160, 40),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 80), clip = "off") +
-  theme(plot.margin = unit(c(6, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 162), clip = "off") +
+  theme(plot.margin = unit(c(8, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -614,20 +247,188 @@ ggsave(file.path("..", "..", "plots", "analytes_glucagon_18M_male.pdf"),
 ```
 
 
+# Glucose
+
+Glucose (mg/dL).
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "glucose", 
+              conf = filter(conf_df, response == "Glucose"),
+              stats = filter(ANALYTES_STATS, response == "Glucose"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = "Glucose (mg/dL)",
+                     breaks = seq(110, 230, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(110, 230), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucose_6M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "glucose", 
+              conf = filter(conf_df, response == "Glucose"),
+              stats = filter(ANALYTES_STATS, response == "Glucose"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "Glucose (mg/dL)",
+                     breaks = seq(110, 230, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(110, 230), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucose_6M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "glucose", 
+              conf = filter(conf_df, response == "Glucose"),
+              stats = filter(ANALYTES_STATS, response == "Glucose"),
+              sex = "Female", age = "18M") +
+  scale_y_continuous(name = "Glucose (mg/dL)",
+                     breaks = seq(110, 230, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(110, 230), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucose_18M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "glucose", 
+              conf = filter(conf_df, response == "Glucose"),
+              stats = filter(ANALYTES_STATS, response == "Glucose"),
+              sex = "Male", age = "18M", y_position = 204) +
+  scale_y_continuous(name = "Glucose (mg/dL)",
+                     breaks = seq(110, 230, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(110, 230), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glucose_18M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+
+# Glycerol
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "glycerol", 
+              conf = filter(conf_df, response == "Glycerol"),
+              stats = filter(ANALYTES_STATS, response == "Glycerol"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = "Glycerol (mg/dL)",
+                     breaks = seq(0, 2.5, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 2.7), clip = "off") +
+  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glycerol_6M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "glycerol", 
+              conf = filter(conf_df, response == "Glycerol"),
+              stats = filter(ANALYTES_STATS, response == "Glycerol"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "Glycerol (mg/dL)",
+                     breaks = seq(0, 2.5, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 2.7), clip = "off") +
+  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glycerol_6M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "glycerol", 
+              conf = filter(conf_df, response == "Glycerol"),
+              stats = filter(ANALYTES_STATS, response == "Glycerol"),
+              sex = "Female", age = "18M") +
+  scale_y_continuous(name = "Glycerol (mg/dL)",
+                     breaks = seq(0, 2.5, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 2.7), clip = "off") +
+  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glycerol_18M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "glycerol", 
+              conf = filter(conf_df, response == "Glycerol"),
+              stats = filter(ANALYTES_STATS, response == "Glycerol"),
+              sex = "Male", age = "18M") +
+  scale_y_continuous(name = "Glycerol (mg/dL)",
+                     breaks = seq(0, 2.5, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 2.7), clip = "off") +
+  theme(plot.margin = unit(c(10, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_glycerol_18M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
 
 # Insulin
 
 ## 6M Female
 
 ```{r}
-plot_baseline(ANALYTES, response = "insulin_pm", 
+plot_baseline(ANALYTES, 
+              response = "insulin_pm", 
               conf = filter(conf_df, response == "Insulin"),
               stats = filter(ANALYTES_STATS, response == "Insulin"),
               sex = "Female", age = "6M") +
   scale_y_continuous(name = "Insulin (pM)",
-                     breaks = seq(0, 1000, 200),
+                     breaks = seq(0, 1400, 200),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 1050), clip = "off") +
+  coord_cartesian(ylim = c(0, 1400), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 ```
 
@@ -639,15 +440,16 @@ ggsave(file.path("..", "..", "plots", "analytes_insulin_6M_female.pdf"),
 ## 6M Male
 
 ```{r}
-plot_baseline(ANALYTES, response = "insulin_pm", 
+plot_baseline(ANALYTES, 
+              response = "insulin_pm", 
               conf = filter(conf_df, response == "Insulin"),
               stats = filter(ANALYTES_STATS, response == "Insulin"),
               sex = "Male", age = "6M", y_position = 970) +
   scale_y_continuous(name = "Insulin (pM)",
-                     breaks = seq(0, 1000, 200),
+                     breaks = seq(0, 1400, 200),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 1000), clip = "off") +
-  theme(plot.margin = unit(c(14, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 1400), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -658,14 +460,15 @@ ggsave(file.path("..", "..", "plots", "analytes_insulin_6M_male.pdf"),
 ## 18M Female
 
 ```{r}
-plot_baseline(ANALYTES, response = "insulin_pm", 
+plot_baseline(ANALYTES, 
+              response = "insulin_pm", 
               conf = filter(conf_df, response == "Insulin"),
               stats = filter(ANALYTES_STATS, response == "Insulin"),
               sex = "Female", age = "18M") +
   scale_y_continuous(name = "Insulin (pM)",
-                     breaks = seq(400, 1400, 200),
+                     breaks = seq(0, 1400, 200),
                      expand = expansion(mult = 1e-2)) +
-    coord_cartesian(ylim = c(380, 1400), clip = "off") +
+  coord_cartesian(ylim = c(0, 1400), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 ```
 
@@ -677,14 +480,15 @@ ggsave(file.path("..", "..", "plots", "analytes_insulin_18M_female.pdf"),
 ## 18M Male
 
 ```{r}
-plot_baseline(ANALYTES, response = "insulin_pm", 
+plot_baseline(ANALYTES, 
+              response = "insulin_pm", 
               conf = filter(conf_df, response == "Insulin"),
               stats = filter(ANALYTES_STATS, response == "Insulin"),
-              sex = "Male", age = "18M", y_position = 930) +
+              sex = "Male", age = "18M", y_position = 940) +
   scale_y_continuous(name = "Insulin (pM)",
-                     breaks = seq(400, 1000, 200),
+                     breaks = seq(0, 1400, 200),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(380, 1000), clip = "off") +
+  coord_cartesian(ylim = c(0, 1400), clip = "off") +
   theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 ```
 
@@ -694,21 +498,199 @@ ggsave(file.path("..", "..", "plots", "analytes_insulin_18M_male.pdf"),
 ```
 
 
-# Leptin
+# Ketones
+
+Ketones ($\mu$mol/L).
 
 ## 6M Female
 
 ```{r}
-plot_baseline(ANALYTES, response = "leptin", 
+plot_baseline(ANALYTES, 
+              response = "ketones", 
+              conf = filter(conf_df, response == "Ketones"),
+              stats = filter(ANALYTES_STATS, response == "Ketones"),
+              sex = "Female", age = "6M") +
+  scale_y_continuous(name = TeX("Ketones ($\\mu$mol/L)"),
+                     breaks = seq(0, 1400, 200),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1450), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_ketones_6M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "ketones", 
+              conf = filter(conf_df, response == "Ketones"),
+              stats = filter(ANALYTES_STATS, response == "Ketones"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = TeX("Ketones ($\\mu$mol/L)"),
+                     breaks = seq(0, 1400, 200),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1450), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_ketones_6M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "ketones",  
+              conf = filter(conf_df, response == "Ketones"),
+              stats = filter(ANALYTES_STATS, response == "Ketones"),
+              sex = "Female", age = "18M") +
+  labs(y = TeX("Ketones ($\\mu$mol/L)")) +
+  scale_y_continuous(name = TeX("Ketones ($\\mu$mol/L)"),
+                     breaks = seq(0, 1400, 200),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1450), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_ketones_18M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "ketones",  
+              conf = filter(conf_df, response == "Ketones"),
+              stats = filter(ANALYTES_STATS, response == "Ketones"),
+              sex = "Male", age = "18M") +
+  scale_y_continuous(name = TeX("Ketones ($\\mu$mol/L)"),
+                     breaks = seq(0, 1400, 200),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1450), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_ketones_18M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+
+# Lactate
+
+Lactate (mmol/L).
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "lactate", 
+              conf = filter(conf_df, response == "Lactate"),
+              stats = filter(ANALYTES_STATS, response == "Lactate"),
+              sex = "Female", age = "6M", y_position = 1.85) +
+  scale_y_continuous(name = "Lactate (mmol/L)",
+                     breaks = seq(0, 3, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 3), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_lactate_6M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "lactate", 
+              conf = filter(conf_df, response == "Lactate"),
+              stats = filter(ANALYTES_STATS, response == "Lactate"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "Lactate (mmol/L)",
+                     breaks = seq(0, 3, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 3), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_lactate_6M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "lactate", 
+              conf = filter(conf_df, response == "Lactate"),
+              stats = filter(ANALYTES_STATS, response == "Lactate"),
+              sex = "Female", age = "18M", y_position = 2.25) +
+  scale_y_continuous(name = "Lactate (mmol/L)",
+                     breaks = seq(0, 3, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 3), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_lactate_18M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "lactate", 
+              conf = filter(conf_df, response == "Lactate"),
+              stats = filter(ANALYTES_STATS, response == "Lactate"),
+              sex = "Male", age = "18M", y_position = 2) +
+  scale_y_continuous(name = "Lactate (mmol/L)",
+                     breaks = seq(0, 3, 0.5),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 3), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_lactate_18M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+
+# Leptin
+
+Leptin (pg/mL).
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "leptin", 
               conf = filter(conf_df, response == "Leptin"),
               stats = filter(ANALYTES_STATS, response == "Leptin"),
-              sex = "Female", age = "6M") +
+              sex = "Female", age = "6M", y_position = 3.1e4, 
+              step_increase = 0.12) +
   scale_y_continuous(name = "Leptin (pg/mL)", 
                      labels = scales::label_scientific(),
-                     breaks = seq(0, 3e4, 1e4),
+                     breaks = seq(0, 7e4, 2e4),
+                     limits = c(0, 7e4),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 3e4), clip = "off") +
-  theme(plot.margin = unit(c(16, 5, 5, 5), units = "pt"))
+  coord_cartesian(clip = "off", ylim = c(0, 7e4)) +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -719,16 +701,17 @@ ggsave(file.path("..", "..", "plots", "analytes_leptin_6M_female.pdf"),
 ## 6M Male
 
 ```{r}
-plot_baseline(ANALYTES, response = "leptin", 
+plot_baseline(ANALYTES, 
+              response = "leptin", 
               conf = filter(conf_df, response == "Leptin"),
               stats = filter(ANALYTES_STATS, response == "Leptin"),
               sex = "Male", age = "6M") +
   scale_y_continuous(name = "Leptin (pg/mL)", 
                      labels = scales::label_scientific(),
-                     breaks = seq(0, 6e4, 1e4),
+                     breaks = seq(0, 7e4, 2e4),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 6e4), clip = "off") +
-  theme(plot.margin = unit(c(18, 5, 5, 5), units = "pt"))
+  coord_cartesian(ylim = c(0, 7e4), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -739,7 +722,8 @@ ggsave(file.path("..", "..", "plots", "analytes_leptin_6M_male.pdf"),
 ## 18M Female
 
 ```{r}
-plot_baseline(ANALYTES, response = "leptin", 
+plot_baseline(ANALYTES, 
+              response = "leptin", 
               conf = filter(conf_df, response == "Leptin"),
               stats = filter(ANALYTES_STATS, response == "Leptin"),
               sex = "Female", age = "18M") +
@@ -759,20 +743,106 @@ ggsave(file.path("..", "..", "plots", "analytes_leptin_18M_female.pdf"),
 ## 18M Male
 
 ```{r}
-plot_baseline(ANALYTES, response = "leptin", 
+plot_baseline(ANALYTES, 
+              response = "leptin", 
               conf = filter(conf_df, response == "Leptin"),
               stats = filter(ANALYTES_STATS, response == "Leptin"),
-              sex = "Male", age = "18M") +
+              sex = "Male", age = "18M", y_position = 6e4) +
   scale_y_continuous(name = "Leptin (pg/mL)", 
                      labels = scales::label_scientific(),
-                     breaks = seq(0, 6e4, 1e4),
+                     breaks = seq(0, 7e4, 2e4),
                      expand = expansion(mult = 1e-2)) +
-  coord_cartesian(ylim = c(0, 6e4), clip = "off") +
+  coord_cartesian(ylim = c(0, 7e4), clip = "off") +
   theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "analytes_leptin_18M_male.pdf"),
        height = 1.8, width = 1.5, family = "ArialMT")
+```
+
+
+# NEFA
+
+NEFA (mmol/L).
+
+## 6M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "nefa", 
+              conf = filter(conf_df, response == "NEFA"), 
+              stats = filter(ANALYTES_STATS, response == "NEFA"),
+              sex = "Female", age = "6M", y_position = 1.25) +
+  scale_y_continuous(name = "NEFA (mmol/L)",
+                     breaks = seq(0, 1.3, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1.34), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_NEFA_6M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 6M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "nefa", 
+              conf = filter(conf_df, response == "NEFA"),
+              stats = filter(ANALYTES_STATS, response == "NEFA"),
+              sex = "Male", age = "6M") +
+  scale_y_continuous(name = "NEFA (mmol/L)",
+                     breaks = seq(0, 1.3, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1.34), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_NEFA_6M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Female
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "nefa", 
+              conf = filter(conf_df, response == "NEFA"),
+              stats = filter(ANALYTES_STATS, response == "NEFA"),
+              sex = "Female", age = "18M", y_position = 1.15) +
+  scale_y_continuous(name = "NEFA (mmol/L)",
+                     breaks = seq(0, 1.3, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1.34), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_NEFA_18M_female.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
+```
+
+## 18M Male
+
+```{r}
+plot_baseline(ANALYTES, 
+              response = "nefa",
+              conf = filter(conf_df, response == "NEFA"), 
+              stats = filter(ANALYTES_STATS, response == "NEFA"),
+              sex = "Male", age = "18M") +
+  scale_y_continuous(name = "NEFA (mmol/L)",
+                     breaks = seq(0, 1.3, 0.2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(0, 1.34), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
+```
+
+```{r eval=save_plots}
+ggsave(file.path("..", "..", "plots", "analytes_NEFA_18M_male.pdf"),
+       height = 1.8, width = 1.2, family = "ArialMT")
 ```
 

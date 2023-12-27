@@ -40,10 +40,10 @@ theme_set(theme_bw()) # base plot theme
 
 # Regression Models
 
-We will fit linear regression models with age, sex, group, and their interactions as predictors of the differences between post- and pre-training values for different measures of body composition and VO$_2$max. If heteroscedasticity is observed, we will include reciprocal group variances as weights. Certain observations may be removed if their inclusion substantially affects the model fit. Model parsimony will be achieved through ANOVA F-tests.
+We will fit linear regression models with age, sex, group, and their interactions as predictors of the differences between post- and pre-training values for different measures of body mass, body composition, and VO$_2$max. If heteroscedasticity is observed, we will include reciprocal group variances as weights. Certain observations may be removed if their inclusion substantially affects the model fit. Model parsimony will be achieved through ANOVA F-tests.
 
 
-## Body Mass (NMR Day)
+## NMR Body Mass
 
 Body mass recorded on the same day as the NMR body composition measures.
 
@@ -93,6 +93,8 @@ summary(fit.body_mass)
 
 
 ## 1W, 2W: Terminal - Pre NMR Body Mass
+
+Pre: body mass recorded on the same day as the NMR body composition measures in the 1W and 2W groups. Post: body mass recorded upon death (terminal body mass).
 
 ```{r, fig.height=3}
 term_nmr_df <- BODY_MASSES %>% 
@@ -162,6 +164,8 @@ summary(fit.term_nmr)
 
 ## NMR Lean Mass
 
+Lean mass (g) recorded via NMR.
+
 ```{r, fig.height=3}
 # Plot points
 NMR %>% 
@@ -227,6 +231,8 @@ summary(fit.lean)
 
 ## NMR Fat Mass
 
+Fat mass (g) recorded via NMR.
+
 ```{r, fig.height=3}
 # Plot points
 NMR %>% 
@@ -281,6 +287,8 @@ summary(fit.fat)
 
 ## NMR % Lean Mass
 
+Lean mass (g) recorded via NMR divided by the body mass (g) recorded on the same day and then multiplied by 100%.
+
 ```{r, fig.height=3}
 # Plot points
 NMR %>% 
@@ -329,6 +337,8 @@ summary(fit.lean_pct)
 
 
 ## NMR % Fat Mass
+
+Fat mass (g) recorded via NMR divided by the body mass (g) recorded on the same day and then multiplied by 100%.
 
 ```{r, fig.height=3}
 # Plot points
@@ -401,6 +411,8 @@ summary(fit.fat_pct)
 
 ## Absolute VO$_2$max
 
+Absolute VO$_2$max is calculated by multiplying relative VO$_2$max ($mL \cdot kg^{-1} \cdot min^{-1}$) by body mass (kg).
+
 ```{r, fig.height=3}
 # Plot points
 VO2MAX %>% 
@@ -451,7 +463,9 @@ summary(fit.vo2max_abs)
 ```
 
 
-## VO$_2$max (relative to total body mass)
+## Relative VO$_2$max
+
+Relative VO$_2$max (mL/kg body mass/min).
 
 ```{r, fig.height=3}
 # Plot points
@@ -555,7 +569,6 @@ speed_res <- VO2MAX %>%
   dplyr::select(age, sex, group, estimate, lower.CL, upper.CL,
                 n, W.ratio, p.value)
 ```
-
 
 
 # Hypothesis Testing

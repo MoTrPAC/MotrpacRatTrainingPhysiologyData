@@ -119,12 +119,13 @@ The slope of the line is close to 2, which suggests a gamma distribution or log 
 ```{r}
 FIBER_TYPES <- mutate(FIBER_TYPES, muscle_type = paste0(muscle, ".", type))
 
-fit.area <- lme(
-  fixed = log(fiber_area) ~ age * sex * group * muscle_type,
-  random = ~ 1 | pid,
-  data = FIBER_TYPES,
-  na.action = na.exclude)
+fit.area <- lme(fixed = log(fiber_area) ~ age * sex * group * muscle_type,
+                random = ~ 1 | pid,
+                data = FIBER_TYPES,
+                na.action = na.exclude)
 ```
+
+We will check regression diagnostic plots and plots of residuals vs. predictor levels.
 
 ```{r fig.height=5, fig.width=6}
 r <- resid(fit.area, scaled = TRUE, type = "pearson")
@@ -183,7 +184,7 @@ VarCorr(fit.area)
 
 # Hypothesis Testing
 
-We will compare the 8W trained to the sedentary control group within each age, sex, and muscle. We will then adjust p-values across fiber types within each age, sex, and muscle group using the Holm method.
+We will compare the 8W trained to the sedentary control group within each age, sex, and muscle using a two-sided t-test. We will then adjust p-values across fiber types within each age, sex, and muscle group using the Holm method.
 
 ```{r}
 # Estimated marginal means
@@ -202,7 +203,9 @@ model_df <- data.frame(response = "Mean Fiber Area",
          fixed = sub(".*fixed = ([^,]+),.*", "\\1", model),
          random = "~1 | pid") %>% 
   dplyr::select(-model)
+```
 
+```{r}
 FIBER_AREA_STATS <- FIBER_AREA_EMM %>% 
   contrast(method = "trt.vs.ctrl") %>% 
   summary(infer = TRUE) %>% 
@@ -213,7 +216,8 @@ FIBER_AREA_STATS <- FIBER_AREA_EMM %>%
                        names = c("muscle", "type")) %>%
   mutate(muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL")),
          type = factor(type, levels = c("I", "IIa", "IIx", "IIb"))) %>% 
-  # Holm-adjust p-values across fiber types
+  # Holm-adjust p-values across fiber types within each age, sex, and muscle
+  # combination
   group_by(age, sex, muscle) %>% 
   mutate(p.adj = p.adjust(p.value, method = "holm"),
          signif = p.adj < 0.05) %>%
@@ -229,6 +233,7 @@ FIBER_AREA_STATS <- FIBER_AREA_EMM %>%
   mutate(response = "Mean Fiber Area",
          statistic_type = sub("\\.ratio", "", statistic_type)) %>% 
   left_join(model_df, by = "response") %>% 
+  # Reorder columns
   dplyr::select(response, age, sex, muscle, type, contrast, estimate_type, null,
                 estimate, SE, lower.CL, upper.CL, statistic_type, statistic,
                 df, p.value, p.adj, signif, model_type, fixed, random,

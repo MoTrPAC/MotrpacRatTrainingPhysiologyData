@@ -1,5 +1,5 @@
 ---
-title: "Plots of baseline measures"
+title: "Plots of baseline body composition and VO2max testing measures"
 author: Tyler Sagendorf
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -37,6 +37,14 @@ library(latex2exp)
 library(ggpubr)
 ```
 
+# Overview
+
+This article generates plots for all baseline (pre-training) NMR body composition and VO$_2$max testing measures: body mass recorded on the NMR day, NMR lean mass, NMR fat mass, NMR % lean mass, NMR % fat mass, absolute VO$_2$max, relative VO$_2$max, and maximum run speed. A bracket indicates a significant difference between the means of the SED group and a trained group (1W, 2W, 4W, 8W). A significant difference is defined as 1) a Dunnett's test p-value < 0.05 for all body mass and body composition measures or 2) a Holm-adjusted p-value < 0.05 for measures of VO$_2$max and maximum run speed. In the plots displayed, some of the legends may be cut off due to figure width constraints, but we fix this in the published figures. Please refer to the "Statistical analyses of baseline body composition and VO2max testing measures" vignette for code to generate `BASELINE_STATS`.
+
+**Data Preparation:**
+
+We apply the `summary` method to each `emmGrid` object and rename columns to work with `plot_baseline`. In some of the regression models, `age` and `group` were combined to form a single `age_group` variable in cases where data was missing for one or more combinations of the individual variables. We split this column into separate `age` and `sex` columns for the plotting function. Also, some formulas did not include `age` or `sex` as predictors, the entries for those columns are `NA`. We instead modify these entries to include both levels of `age` or `sex` separated by a comma. Using this, we can separate the rows to effectively duplicate the results so that we now have data for all four combinations of `age` and `sex` for each measure. Lastly, we ensure that `group` is a factor to preserve the order when plotting. This list of objects is then converted to a single `data.frame` with the `response` column specifying which measurement is being tested.
+
 ```{r}
 # Reformat confidence interval data
 conf_df <- map(BASELINE_EMM, function(emm_i) {
@@ -56,7 +64,19 @@ conf_df <- map(BASELINE_EMM, function(emm_i) {
                   age_group = NULL)
   }
   
+  # In some cases, age or sex is not included in the model, so their entries
+  # would be NA. We will instead duplicate the results for plotting.
+  # This was already done for ANALYTES_STATS
+  if (!"age" %in% colnames(out)) {
+    out$age <- "6M, 18M"
+  }
+  
+  if (!"sex" %in% colnames(out)) {
+    out$sex <- "Female, Male"
+  }
+  
   out <- out %>% 
+    separate_longer_delim(cols = c(age, sex), delim = ", ") %>% 
     mutate(group = factor(group, 
                           levels = c("SED", paste0(2 ^ (0:3), "W"))))
   
@@ -69,33 +89,46 @@ conf_df <- map(BASELINE_EMM, function(emm_i) {
 
 # NMR Body Mass
 
+Body mass (g) recorded on the same day as the NMR body composition measures.
+
 ## 6M Female
 
 ```{r}
-plot_baseline(x = NMR, response = "pre_body_mass",
+plot_baseline(x = NMR, 
+              response = "pre_body_mass",
               conf = filter(conf_df, response == "NMR Body Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Body Mass"),
               sex = "Female", age = "6M", y_position = 207) +
-  labs(y  = "Body Mass (g)")
+  scale_y_continuous(name = "Body Mass (g)",
+                     breaks = seq(160, 280, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(157, 280), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_body_mass_6M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_body_mass_6M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 6M Male
 
 ```{r}
-plot_baseline(x = NMR, response = "pre_body_mass",
+plot_baseline(x = NMR, 
+              response = "pre_body_mass",
               conf = filter(conf_df, response == "NMR Body Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Body Mass"),
-              sex = "Male", age = "6M", y_position = 415) +
-  labs(y  = "Body Mass (g)")
+              sex = "Male", age = "6M", y_position = 420, 
+              step_increase = 0.06) +
+  scale_y_continuous(name = "Body Mass (g)",
+                     breaks = seq(270, 470, 40),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(270, 470), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_body_mass_6M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_body_mass_6M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -106,11 +139,15 @@ plot_baseline(x = NMR, response = "pre_body_mass",
               conf = filter(conf_df, response == "NMR Body Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Body Mass"),
               sex = "Female", age = "18M", y_position = 265) +
-  labs(y  = "Body Mass (g)")
+  scale_y_continuous(name = "Body Mass (g)",
+                     breaks = seq(160, 280, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(157, 280), clip = "off") +
+  theme(plot.margin = unit(c(5, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_body_mass_18M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_body_mass_18M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -120,16 +157,23 @@ ggsave(file.path("..", "..", "plots", " baseline_NMR_body_mass_18M_female.pdf"),
 plot_baseline(x = NMR, response = "pre_body_mass",
               conf = filter(conf_df, response == "NMR Body Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Body Mass"),
-              sex = "Male", age = "18M") +
-  labs(y  = "Body Mass (g)")
+              sex = "Male", age = "18M", y_position = 472) +
+  scale_y_continuous(name = "Body Mass (g)",
+                     breaks = seq(270, 470, 40),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(270, 470), clip = "off") +
+  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_body_mass_18M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_body_mass_18M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
+
 # NMR Lean Mass
+
+Lean mass (g) recorded via NMR.
 
 ## 6M Female
 
@@ -138,11 +182,15 @@ plot_baseline(x = NMR, response = "pre_lean",
               conf = filter(conf_df, response == "NMR Lean Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Lean Mass"),
               sex = "Female", age = "6M", y_position = 123) +
-  labs(y  = "NMR Lean Mass (g)")
+  scale_y_continuous(name = "NMR Lean Mass (g)",
+                     breaks = seq(90, 150, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(90, 150), clip = "off") +
+  theme(plot.margin = unit(c(12, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_lean_6M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_lean_6M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -153,11 +201,15 @@ plot_baseline(x = NMR, response = "pre_lean",
               conf = filter(conf_df, response == "NMR Lean Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Lean Mass"),
               sex = "Male", age = "6M") +
-  labs(y  = "NMR Lean Mass (g)")
+  scale_y_continuous(name = "NMR Lean Mass (g)",
+                     breaks = seq(150, 240, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(150, 240), clip = "off") +
+  theme(plot.margin = unit(c(10, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_lean_6M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_lean_6M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -168,11 +220,15 @@ plot_baseline(x = NMR, response = "pre_lean",
               conf = filter(conf_df, response == "NMR Lean Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Lean Mass"),
               sex = "Female", age = "18M", y_position = 146) +
-  labs(y  = "NMR Lean Mass (g)")
+  scale_y_continuous(name = "NMR Lean Mass (g)",
+                     breaks = seq(90, 150, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(90, 150), clip = "off") +
+  theme(plot.margin = unit(c(12, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_lean_18M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_lean_18M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -183,16 +239,22 @@ plot_baseline(x = NMR, response = "pre_lean",
               conf = filter(conf_df, response == "NMR Lean Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Lean Mass"),
               sex = "Male", age = "18M") +
-  labs(y  = "NMR Lean Mass (g)")
+  scale_y_continuous(name = "NMR Lean Mass (g)",
+                     breaks = seq(150, 240, 20),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(150, 240), clip = "off") +
+  theme(plot.margin = unit(c(10, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_lean_18M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_lean_18M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
 # NMR Fat Mass
+
+Fat mass (g) recorded via NMR.
 
 ## 6M Female
 
@@ -200,12 +262,16 @@ ggsave(file.path("..", "..", "plots", " baseline_NMR_lean_18M_male.pdf"),
 plot_baseline(x = NMR, response = "pre_fat",
               conf = filter(conf_df, response == "NMR Fat Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Fat Mass"),
-              sex = "Female", age = "6M") +
-  labs(y  = "NMR Fat Mass (g)")
+              sex = "Female", age = "6M", y_position = 33) +
+  scale_y_continuous(name = "NMR Fat Mass (g)",
+                     breaks = seq(10, 60, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(10, 62), clip = "off") +
+  theme(plot.margin = unit(c(6, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_fat_6M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_fat_6M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -216,14 +282,17 @@ plot_baseline(x = NMR, response = "pre_fat",
               conf = filter(conf_df, response == "NMR Fat Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Fat Mass"),
               sex = "Male", age = "6M") +
-  labs(y  = "NMR Fat Mass (g)")
+  scale_y_continuous(name = "NMR Fat Mass (g)",
+                     breaks = seq(40, 100, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(35, 100), clip = "off") +
+  theme(plot.margin = unit(c(10, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_fat_6M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_fat_6M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
-
 
 ## 18M Female
 
@@ -232,14 +301,17 @@ plot_baseline(x = NMR, response = "pre_fat",
               conf = filter(conf_df, response == "NMR Fat Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Fat Mass"),
               sex = "Female", age = "18M", y_position = 57) +
-  labs(y  = "NMR Fat Mass (g)")
+  scale_y_continuous(name = "NMR Fat Mass (g)",
+                     breaks = seq(10, 60, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(10, 62), clip = "off") +
+  theme(plot.margin = unit(c(6, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_fat_18M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_fat_18M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
-
 
 ## 18M Male
 
@@ -248,16 +320,22 @@ plot_baseline(x = NMR, response = "pre_fat",
               conf = filter(conf_df, response == "NMR Fat Mass"),
               stats = filter(BASELINE_STATS, response == "NMR Fat Mass"),
               sex = "Male", age = "18M") +
-  labs(y  = "NMR Fat Mass (g)")
+  scale_y_continuous(name = "NMR Fat Mass (g)",
+                     breaks = seq(40, 100, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(35, 100), clip = "off") +
+  theme(plot.margin = unit(c(10, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_fat_18M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_fat_18M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
 # NMR % Lean
+
+Lean mass (g) recorded via NMR divided by the body mass (g) recorded on the same day and then multiplied by 100%.
 
 ## 6M Female
 
@@ -266,11 +344,15 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
               conf = filter(conf_df, response == "NMR % Lean"),
               stats = filter(BASELINE_STATS, response == "NMR % Lean"),
               sex = "Female", age = "6M") +
-  labs(y  = "NMR % Lean Mass")
+  scale_y_continuous(name = "NMR % Lean Mass",
+                     breaks = seq(48, 64, 4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(48, 64), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_lean_6M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_pct_lean_6M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -281,11 +363,15 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
               conf = filter(conf_df, response == "NMR % Lean"),
               stats = filter(BASELINE_STATS, response == "NMR % Lean"),
               sex = "Male", age = "6M") +
-  labs(y  = "NMR % Lean Mass")
+  scale_y_continuous(name = "NMR % Lean Mass",
+                     breaks = seq(50, 58, 2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(49.7, 58.5), clip = "off") +
+  theme(plot.margin = unit(c(12, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_lean_6M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_pct_lean_6M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -296,11 +382,16 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
               conf = filter(conf_df, response == "NMR % Lean"),
               stats = filter(BASELINE_STATS, response == "NMR % Lean"),
               sex = "Female", age = "18M", y_position = 57.4) +
-  labs(y  = "NMR % Lean Mass")
+  labs(y  = "NMR % Lean Mass") +
+  scale_y_continuous(name = "NMR % Lean Mass",
+                     breaks = seq(48, 64, 4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(48, 64), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_lean_18M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_pct_lean_18M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -311,16 +402,22 @@ plot_baseline(x = NMR, response = "pre_lean_pct",
               conf = filter(conf_df, response == "NMR % Lean"),
               stats = filter(BASELINE_STATS, response == "NMR % Lean"),
               sex = "Male", age = "18M", y_position = 55.7) +
-  labs(y  = "NMR % Lean Mass")
+  scale_y_continuous(name = "NMR % Lean Mass",
+                     breaks = seq(50, 58, 2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(49.7, 58.5), clip = "off") +
+  theme(plot.margin = unit(c(12, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_lean_18M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_pct_lean_18M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
 # NMR % Fat
+
+Fat mass (g) recorded via NMR divided by the body mass (g) recorded on the same day and then multiplied by 100%.
 
 ## 6M Female
 
@@ -329,11 +426,15 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
               conf = filter(conf_df, response == "NMR % Fat"),
               stats = filter(BASELINE_STATS, response == "NMR % Fat"),
               sex = "Female", age = "6M") +
-  labs(y  = "NMR % Fat Mass")
+  scale_y_continuous(name = "NMR % Fat Mass",
+                     breaks = seq(8, 24, 4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(6.7, 24), clip = "off") +
+  theme(plot.margin = unit(c(5, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_fat_6M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_pct_fat_6M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -344,11 +445,15 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
               conf = filter(conf_df, response == "NMR % Fat"),
               stats = filter(BASELINE_STATS, response == "NMR % Fat"),
               sex = "Male", age = "6M") +
-  labs(y  = "NMR % Fat Mass")
+  scale_y_continuous(name = "NMR % Fat Mass",
+                     breaks = seq(12, 22, 2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(11.3, 22), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_fat_6M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_pct_fat_6M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -358,12 +463,16 @@ ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_fat_6M_male.pdf"),
 plot_baseline(x = NMR, response = "pre_fat_pct",
               conf = filter(conf_df, response == "NMR % Fat"),
               stats = filter(BASELINE_STATS, response == "NMR % Fat"),
-              sex = "Female", age = "18M") +
-  labs(y  = "NMR % Fat Mass")
+              sex = "Female", age = "18M", y_position = 23) +
+  scale_y_continuous(name = "NMR % Fat Mass",
+                     breaks = seq(8, 24, 4),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(6.7, 24), clip = "off") +
+  theme(plot.margin = unit(c(5, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_fat_18M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_pct_fat_18M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -374,16 +483,22 @@ plot_baseline(x = NMR, response = "pre_fat_pct",
               conf = filter(conf_df, response == "NMR % Fat"),
               stats = filter(BASELINE_STATS, response == "NMR % Fat"),
               sex = "Male", age = "18M") +
-  labs(y  = "NMR % Fat Mass")
+  scale_y_continuous(name = "NMR % Fat Mass",
+                     breaks = seq(12, 22, 2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(11.3, 22), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_NMR_pct_fat_18M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_NMR_pct_fat_18M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 
 # Absolute VO$_2$max
+
+Absolute VO$_2$max is calculated by multiplying relative VO$_2$max ($mL \cdot kg^{-1} \cdot min^{-1}$) by body mass (kg).
 
 ## 6M Female
 
@@ -392,11 +507,15 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
               conf = filter(conf_df, response == "Absolute VO2max"),
               stats = filter(BASELINE_STATS, response == "Absolute VO2max"),
               sex = "Female", age = "6M") +
-  labs(y  = TeX("VO$_2$max (mL/min)"))
+  scale_y_continuous(name = TeX("VO$_2$max (mL/min)"),
+                     breaks = seq(11, 16, 1),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(10.8, 16), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_absolute_VO2max_6M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_absolute_VO2max_6M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -407,45 +526,61 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
               conf = filter(conf_df, response == "Absolute VO2max"),
               stats = filter(BASELINE_STATS, response == "Absolute VO2max"),
               sex = "Male", age = "6M", y_position = 26) +
-  labs(y  = TeX("VO$_2$max (mL/min)"))
+  scale_y_continuous(name = TeX("VO$_2$max (mL/min)"),
+                     breaks = seq(18, 30, 2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(17.5, 30), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_absolute_VO2max_6M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_absolute_VO2max_6M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Female
 
-```{r, fig.width=1}
+```{r, fig.height=1.8, fig.width=1}
 plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
               conf = filter(conf_df, response == "Absolute VO2max"),
               stats = filter(BASELINE_STATS, response == "Absolute VO2max"),
               sex = "Female", age = "18M") +
-  labs(y  = TeX("VO$_2$max (mL/min)"))
+  scale_y_continuous(name = TeX("VO$_2$max (mL/min)"),
+                     breaks = seq(11, 16, 1),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(10.8, 16), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_absolute_VO2max_18M_female.pdf"),
+ggsave(file.path("..", "..", "plots", 
+                 "baseline_absolute_VO2max_18M_female.pdf"),
        height = 1.8, width = 1, family = "ArialMT")
 ```
 
 ## 18M Male
 
-```{r, fig.width=1}
+```{r, fig.height=1.8, fig.width=1}
 plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
               conf = filter(conf_df, response == "Absolute VO2max"),
               stats = filter(BASELINE_STATS, response == "Absolute VO2max"),
               sex = "Male", age = "18M") +
-  labs(y  = TeX("VO$_2$max (mL/min)"))
+  scale_y_continuous(name = TeX("VO$_2$max (mL/min)"),
+                     breaks = seq(18, 30, 2),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(17.5, 30), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_absolute_VO2max_18M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_absolute_VO2max_18M_male.pdf"),
        height = 1.8, width = 1, family = "ArialMT")
 ```
 
+
 # Relative VO$_2$max
+
+Relative VO$_2$max (mL/kg body mass/min).
 
 ## 6M Female
 
@@ -454,11 +589,15 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
               conf = filter(conf_df, response == "Relative VO2max"),
               stats = filter(BASELINE_STATS, response == "Relative VO2max"),
               sex = "Female", age = "6M") +
-  labs(y  = TeX("VO$_2$max (mL/kg/min)"))
+  scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)"),
+                     breaks = seq(45, 85, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(45, 85), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_relative_VO2max_6M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_relative_VO2max_6M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
@@ -469,46 +608,60 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
               conf = filter(conf_df, response == "Relative VO2max"),
               stats = filter(BASELINE_STATS, response == "Relative VO2max"),
               sex = "Male", age = "6M") +
-  labs(y  = TeX("VO$_2$max (mL/kg/min)"))
+  scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)"),
+                     breaks = seq(40, 80, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(40, 80), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_relative_VO2max_6M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_relative_VO2max_6M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
-
 ## 18M Female
 
-```{r, fig.width=1}
+```{r, fig.height=1.8, fig.width=1}
 plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
               conf = filter(conf_df, response == "Relative VO2max"),
               stats = filter(BASELINE_STATS, response == "Relative VO2max"),
-              sex = "Female", age = "18M") +
-  labs(y  = TeX("VO$_2$max (mL/kg/min)"))
+              sex = "Female", age = "18M", y_position = 66) +
+  scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)"),
+                     breaks = seq(45, 85, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(45, 85), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_relative_VO2max_18M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_relative_VO2max_18M_female.pdf"),
        height = 1.8, width = 1, family = "ArialMT")
 ```
 
 ## 18M Male
 
-```{r, fig.width=1}
+```{r, fig.height=1.8, fig.width=1}
 plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
               conf = filter(conf_df, response == "Relative VO2max"),
               stats = filter(BASELINE_STATS, response == "Relative VO2max"),
               sex = "Male", age = "18M") +
-  labs(y  = TeX("VO$_2$max (mL/kg/min)"))
+  scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)"),
+                     breaks = seq(40, 80, 10),
+                     expand = expansion(mult = 1e-2)) +
+  coord_cartesian(ylim = c(40, 80), clip = "off") +
+  theme(plot.margin = unit(c(3, 3, 3, 3), units = "pt"))
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_relative_VO2max_18M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_relative_VO2max_18M_male.pdf"),
        height = 1.8, width = 1, family = "ArialMT")
 ```
 
+
 # Maximum Run Speed
+
+The maximum running speed reached by each rat (m/min). Speed was increased by 1.8 m/min increments, so the non-parametric Wilcoxon Rank Sum test was used. Rather than plotting the individual points, since they can only take on a few different values, we will instead count the number of samples that take on a particular value in each group and scale the points accordingly.
 
 ```{r}
 # Custom theme for maximum run speed plots
@@ -550,53 +703,55 @@ VO2MAX %>%
   geom_point(shape = 16, color = "#ff6eff") +
   scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
-                     breaks = seq(19.8, 36, 1.8),
-                     limits = c(19.8, 28.8)) +
+                     breaks = seq(12.6, 36, 3.6),
+                     limits = c(12.6, 28.8)) +
   labs(x = NULL) +
   theme_bw(base_size = 7) +
   t1
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_max_run_speed_6M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_max_run_speed_6M_female.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
-
 ## 6M Male
 
-```{r}
+```{r, fig.height=1.8, fig.width=1.1}
 VO2MAX %>% 
   filter(sex == "Male", age == "6M") %>% 
   count(age, sex, group, pre_speed_max) %>% 
   ggplot(aes(x = group, y = pre_speed_max, size = n)) +
   geom_point(shape = 16, color = "#5555ff") +
   ggpubr::stat_pvalue_manual(
-    data = data.frame(y.position = c(23.4, 25.2) + 0.5,
+    data = data.frame(y.position = c(23.4, 25.2) + 1.2,
                       group1 = rep("SED", 2),
                       group2 = c("1W", "2W"),
-                      label = c("Wilcoxon p = 0.002", 
-                                "Wilcoxon p = 0.001")),
-    label.size = 7 / .pt, vjust = -0.25
+                      label = rep("", 2))
   ) +
+  # geom_text(aes(x = x, y = y, label = label),
+  #           data = data.frame(x = c(1, 1), 
+  #                             y = c(23.4, 25.2) + 2,
+  #                             label = c("Wilcoxon p = 0.002", 
+  #                                       "Wilcoxon p = 0.001")),
+  #           hjust = 0, size = 7 / .pt) +
   scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
-                     breaks = seq(19.8, 25.2, 1.8)) +
-  coord_cartesian(ylim = c(19.7, 25.2), clip = "off") +
+                     breaks = seq(12.6, 36, 3.6),
+                     limits = c(12.6, 28.8)) +
   labs(x = NULL) +
   theme_bw(base_size = 6) +
-  t1 +
-  theme(plot.margin = unit(c(12, 5, 5, 5), units = "pt"))
+  t1
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_max_run_speed_6M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_max_run_speed_6M_male.pdf"),
        height = 1.8, width = 1.1, family = "ArialMT")
 ```
 
 ## 18M Female
 
-```{r, fig.width=1.2}
+```{r, fig.height=1.8, fig.width=1.2}
 VO2MAX %>% 
   filter(sex == "Female", age == "18M") %>% 
   count(age, sex, group, pre_speed_max) %>% 
@@ -604,21 +759,21 @@ VO2MAX %>%
   geom_point(shape = 16, color = "#ff6eff") +
   scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
-                     limits = c(16.2, 21.6),
-                     breaks = seq(16.2, 21.6, 1.8)) +
+                     breaks = seq(12.6, 36, 3.6),
+                     limits = c(12.6, 28.8)) +
   labs(x = NULL) +
   theme_bw(base_size = 7) +
   t1
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_max_run_speed_18M_female.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_max_run_speed_18M_female.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```
 
 ## 18M Male
 
-```{r, fig.width=1.2}
+```{r, fig.height=1.8, fig.width=1.2}
 VO2MAX %>% 
   filter(sex == "Male", age == "18M") %>% 
   count(age, sex, group, pre_speed_max) %>% 
@@ -626,14 +781,14 @@ VO2MAX %>%
   geom_point(shape = 16, color = "#5555ff", na.rm = TRUE) +
   scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
-                     limits = c(12.6, 18),
-                     breaks = seq(12.6, 18, 1.8)) +
+                     breaks = seq(12.6, 36, 3.6),
+                     limits = c(12.6, 28.8)) +
   labs(x = NULL) +
   theme_bw(base_size = 7) +
   t1
 ```
 
 ```{r eval=save_plots}
-ggsave(file.path("..", "..", "plots", " baseline_max_run_speed_18M_male.pdf"),
+ggsave(file.path("..", "..", "plots", "baseline_max_run_speed_18M_male.pdf"),
        height = 1.8, width = 1.2, family = "ArialMT")
 ```

@@ -12,6 +12,8 @@
 #' @param age character; the age of the samples to plot: "6M" or "18M".
 #' @param y_position numeric; manually specify starting y position of p-value
 #'   brackets.
+#' @param step_increase numeric; increase in fraction of total height for every
+#'   additional comparison to minimize overlap.
 #'
 #' @import ggplot2
 #' @importFrom dplyr %>% rename filter
@@ -27,7 +29,8 @@ plot_baseline <- function(x,
                           stats,
                           sex = c("Female", "Male"),
                           age = c("6M", "18M"),
-                          y_position = NULL)
+                          y_position = NULL,
+                          step_increase = 0.08)
 {
   x <- x %>%
     dplyr::rename(response = !!sym(response)) %>%
@@ -110,7 +113,7 @@ plot_baseline <- function(x,
           vjust = 0.25,
           color = "black",
           size = 0.3,
-          step_increase = 0.08,
+          step_increase = step_increase,
           y_position = y_position,
           annotations = rep("", nrow(stats)),
           comparisons = stats$comparisons

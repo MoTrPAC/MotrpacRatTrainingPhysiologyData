@@ -90,6 +90,11 @@ plot_pre_post <- function(x,
       geom_point(aes(x = group_num, y = y_position),
                  data = stats, size = 3.5, color = "black",
                  shape = "*")
+
+    # Add vertical lines to separate groups
+    p <- p +
+      geom_vline(xintercept = 0.5 + seq_len(nlevels(x$group) - 1),
+                 color = "grey90", lwd = 0.3)
   }
 
   # Modify appearance

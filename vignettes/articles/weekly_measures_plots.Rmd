@@ -46,7 +46,7 @@ Body mass (g) was measured at the start of each week prior to training.
 WEEKLY_BODY_MASS_EMM %>% 
   summary(type = "response", infer = TRUE) %>% 
   as.data.frame() %>% 
-  dplyr::rename(week = fweek, 
+  dplyr::rename(week = week, 
                 response_mean = response) %>% 
   filter(age == "6M", sex == "Female") %>% 
   ggplot(aes(x = week, y = response_mean)) +
@@ -56,8 +56,8 @@ WEEKLY_BODY_MASS_EMM %>%
   facet_grid(~ group) +
   scale_y_continuous(name = "Body Mass (g)",
                      expand = expansion(mult = 5e-3),
-                     breaks = seq(180, 210, 10)) +
-  coord_cartesian(ylim = c(175, 210), clip = "off") +
+                     breaks = seq(180, 250, 20)) +
+  coord_cartesian(ylim = c(175, 255), clip = "off") +
   labs(x = "Week") +
   theme_bw(base_size = 7) +
   theme(text = element_text(color = "black"),
@@ -83,7 +83,7 @@ WEEKLY_BODY_MASS_EMM %>%
   summary(type = "response", infer = TRUE) %>% 
   as.data.frame() %>% 
   filter(age == "6M", sex == "Male") %>% 
-  dplyr::rename(week = fweek,
+  dplyr::rename(week = week,
                 response_mean = response) %>% 
   ggplot(aes(x = week, y = response_mean)) +
   geom_crossbar(aes(ymin = lower.CL, ymax = upper.CL),
@@ -91,9 +91,9 @@ WEEKLY_BODY_MASS_EMM %>%
                 width = 0.7, linewidth = 0.4) +
   facet_grid(~ group) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(300, 370, 10),
+                     breaks = seq(300, 440, 40),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(308, 376), clip = "off") +
+  coord_cartesian(ylim = c(300, 450), clip = "off") +
   labs(x = "Week") +
   theme_bw(base_size = 7) +
   theme(text = element_text(color = "black"),
@@ -119,7 +119,7 @@ WEEKLY_BODY_MASS_EMM %>%
   summary(type = "response", infer = TRUE) %>% 
   as.data.frame() %>% 
   filter(age == "18M", sex == "Female") %>% 
-  dplyr::rename(week = fweek,
+  dplyr::rename(week = week,
                 response_mean = response) %>% 
   ggplot(aes(x = week, y = response_mean)) +
   geom_crossbar(aes(ymin = lower.CL, ymax = upper.CL),
@@ -127,9 +127,9 @@ WEEKLY_BODY_MASS_EMM %>%
                 width = 0.7, linewidth = 0.4) +
   facet_grid(~ group) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(220, 250, 10),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(220, 255), clip = "off") +
+                     expand = expansion(mult = 5e-3),
+                     breaks = seq(180, 250, 20)) +
+  coord_cartesian(ylim = c(175, 255), clip = "off") +
   labs(x = "Week") +
   theme_bw(base_size = 7) +
   theme(text = element_text(color = "black"),
@@ -154,7 +154,7 @@ ggsave(file.path("..", "..", "plots", "weekly_body_mass_18M_female.pdf"),
 WEEKLY_BODY_MASS_EMM %>% 
   summary(type = "response", infer = TRUE) %>% 
   as.data.frame() %>% 
-  dplyr::rename(week = fweek, 
+  dplyr::rename(week = week, 
                 response_mean = response) %>% 
   filter(age == "18M", sex == "Male") %>% 
   ggplot(aes(x = week, y = response_mean)) +
@@ -163,9 +163,9 @@ WEEKLY_BODY_MASS_EMM %>%
                 width = 0.7, linewidth = 0.4) +
   facet_grid(~ group) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(380, 440, 20),
+                     breaks = seq(300, 440, 40),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(375, 450), clip = "off") +
+  coord_cartesian(ylim = c(300, 450), clip = "off") +
   labs(x = "Week") +
   theme_bw(base_size = 7) +
   theme(text = element_text(color = "black"),
@@ -191,8 +191,8 @@ ggsave(file.path("..", "..", "plots", "weekly_body_mass_18M_male.pdf"),
 WEEKLY_BODY_MASS_STATS %>%
   mutate(age = factor(age, levels = c("6M", "18M"),
                       labels = c("Adult", "Aged"))) %>% 
-  ggplot(aes(x = week, y = estimate, color = sex)) +
-  geom_line(aes(x = week, group = sex),
+  ggplot(aes(x = as.numeric(week), y = estimate, color = sex)) +
+  geom_line(aes(x = as.numeric(week), group = sex),
             position = position_dodge(width = 0.5)) +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL,
                     color = sex), width = 0.6, linewidth = 0.5,
@@ -203,15 +203,15 @@ WEEKLY_BODY_MASS_STATS %>%
   facet_grid(~ age) +
   geom_hline(yintercept = 1, lty = "dashed") +
   scale_color_manual(values = c("#ff6eff", "#556eff")) +
-  scale_shape_manual(name = "Holm-Adjusted P-value:",
+  scale_shape_manual(name = "Benjamini-Yekutieli-adjusted P-value:",
                      values = c(21, 16),
                      labels = c(latex2exp::TeX("$\\geq 0.05$"), "< 0.05")) +
   guides(color = guide_none()) +
   scale_y_continuous(limits = c(0.85, 1.05),
                      breaks = seq(0.85, 1.05, 0.05),
                      expand = expansion(mult = 5e-3)) +
-  labs(x = "Week", y = "8W / SED") +
-  theme_bw(base_size = 7) +  
+  labs(x = "Week", y = "8W / SED Mean Ratio") +
+  theme_bw(base_size = 7) +
   theme(panel.border = element_rect(color = NA),
         panel.grid = element_blank(),
         axis.line = element_line(color = "black"),
@@ -234,14 +234,12 @@ ggsave(filename = file.path("..", "..", "plots", "weekly_body_mass_tests.pdf"),
        height = 2.4, width = 3.8, family = "ArialMT")
 ```
 
-Importantly, both males and females responded the same to the exercise intervention regardless of whether they were 6 or 18 months old at the beginning of the protocol. This can be seen in `WEEKLY_BODY_MASS_STATS` where the results are the same for 6M and 18M animals. 
-
 Both sexes lose a significant amount of body mass after 3 weeks of exercise. While males continue to lose body mass throughout the protocol, female body mass appears to stabilize starting after 4 weeks of exercise. That is, they experience an initial decrease in body mass that is maintained with training.
 
 
 # Lactate
 
-Blood lactate was recorded at the start (prior to any training) and end of each week. For the SED group, blood lactate was only recorded in 18M males, so we will not plot SED values.
+Blood lactate was recorded at the start and end of each week at the end of the training bout. For the SED group, blood lactate was only recorded in 18M males, so we will not plot SED values.
 
 ```{r}
 lact_df <- WEEKLY_MEASURES %>% 
@@ -280,14 +278,12 @@ plot_lactate <- function(x) {
           line = element_line(linewidth = 0.3, color = "black"),
           axis.ticks = element_line(linewidth = 0.3, color = "black"),
           panel.grid = element_blank(),
-          # panel.border = element_blank(),
           panel.border = element_rect(color = "black", fill = NA, 
                                       linewidth = 0.3),
           axis.ticks.x = element_blank(),
           axis.text = element_text(size = 7, color = "black"),
           axis.title = element_text(size = 7, margin = margin(),
                                     color = "black"),
-          # axis.line = element_line(color = "black", linewidth = 0.3),
           strip.background = element_blank(),
           strip.text = element_text(size = 7, color = "black",
                                     margin = margin(b = 2, t = 2)),
@@ -306,8 +302,8 @@ lact_df %>%
   plot_lactate() + 
   scale_y_continuous(name = "Lactate (mM)",
                      expand = expansion(mult = 5e-3),
-                     breaks = seq(0, 8, 2)) +
-  coord_cartesian(ylim = c(0, 8), clip = "off")
+                     breaks = seq(0, 10, 2)) +
+  coord_cartesian(ylim = c(0, 10), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -322,10 +318,10 @@ ggsave(file.path("..", "..", "plots", "weekly_lactate_6M_female.pdf"),
 lact_df %>% 
   filter(age == "6M", sex == "Male") %>% 
   plot_lactate() +
-  coord_cartesian(ylim = c(0, 12), clip = "off") +
   scale_y_continuous(name = "Lactate (mM)",
-                     breaks = seq(0, 12, 4),
-                     expand = expansion(mult = 5e-3))
+                     expand = expansion(mult = 5e-3),
+                     breaks = seq(0, 10, 2)) +
+  coord_cartesian(ylim = c(0, 10), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -340,10 +336,10 @@ ggsave(file.path("..", "..", "plots", "weekly_lactate_6M_male.pdf"),
 lact_df %>% 
   filter(age == "18M", sex == "Female") %>% 
   plot_lactate() +
-  coord_cartesian(ylim = c(0, 12), clip = "off") +
   scale_y_continuous(name = "Lactate (mM)",
-                     breaks = seq(0, 12, 4),
-                     expand = expansion(mult = 5e-3))
+                     expand = expansion(mult = 5e-3),
+                     breaks = seq(0, 10, 2)) +
+  coord_cartesian(ylim = c(0, 10), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -358,10 +354,10 @@ ggsave(file.path("..", "..", "plots", "weekly_lactate_18M_female.pdf"),
 lact_df %>% 
   filter(age == "18M", sex == "Male") %>% 
   plot_lactate() +
-  coord_cartesian(ylim = c(0, 8), clip = "off") +
   scale_y_continuous(name = "Lactate (mM)",
-                     breaks = seq(0, 8, 2),
-                     expand = expansion(mult = 5e-3))
+                     expand = expansion(mult = 5e-3),
+                     breaks = seq(0, 10, 2)) +
+  coord_cartesian(ylim = c(0, 10), clip = "off")
 ```
 
 ```{r eval=save_plots}

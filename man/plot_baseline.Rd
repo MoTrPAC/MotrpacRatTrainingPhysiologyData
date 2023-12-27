@@ -11,7 +11,8 @@ plot_baseline(
   stats,
   sex = c("Female", "Male"),
   age = c("6M", "18M"),
-  y_position = NULL
+  y_position = NULL,
+  step_increase = 0.08
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ filtered to the response of interest.}
 
 \item{y_position}{numeric; manually specify starting y position of p-value
 brackets.}
+
+\item{step_increase}{numeric; increase in fraction of total height for every
+additional comparison to minimize overlap.}
 }
 \description{
 Plot baseline or pre-training measures.

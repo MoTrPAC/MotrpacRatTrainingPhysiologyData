@@ -1,5 +1,5 @@
 ---
-title: "Plots of post - pre differences"
+title: "Plots of post- vs. pre-training body composition and VO2max testing measures"
 author: Tyler Sagendorf
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -34,7 +34,14 @@ library(latex2exp)
 ```
 
 
+# Overview
+
+This article generates all plots of pre- and post-training NMR body composition and VO$_2$max testing measures: body mass recorded on the NMR day, NMR lean mass, NMR fat mass, NMR % lean mass, NMR % fat mass, absolute VO$_2$max, relative VO$_2$max, and maximum run speed. The line segments span from the pre to post value of each sample, with red indicating an increase, blue indicating a decrease, and a black point indicating no change. An asterisk indicates the mean of the (post - pre) differences is significantly different from zero (Holm-adjusted p-value < 0.05), and the direction of change is determined by the majority color (red or blue) of the line segments. Please refer to the "Statistical analyses of post- vs. pre-training body composition and VO2max testing measures" vignette for code to generate `PRE_POST_STATS`.
+
+
 # NMR Body Mass
+
+Body mass (g) recorded on the same day as the NMR body composition measures.
 
 ## 6M Female
 
@@ -45,9 +52,9 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
                              age == "6M", sex == "Female")) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(160, 240, 20),
+                     breaks = seq(160, 280, 20),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(157, 240), clip = "off") +
+  coord_cartesian(ylim = c(155, 280), clip = "off") +
   geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
 ```
 
@@ -65,10 +72,11 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
                              age == "6M", sex == "Male")) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(260, 400, 40),
+                     breaks = seq(270, 470, 40),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(260, 405), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(270, 470), clip = "off") +
+  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3) +
+  theme(plot.margin = unit(c(8, 2, 2, 2), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -85,10 +93,9 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
                              age == "18M", sex == "Female")) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(200, 280, 20),
+                     breaks = seq(160, 280, 20),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(200, 280), clip = "off") +   
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(155, 280), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -105,10 +112,10 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "NMR Body Mass", 
                              age == "18M", sex == "Male")) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(360, 460, 20),
+                     breaks = seq(270, 470, 40),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(356, 475), clip = "off") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(270, 470), clip = "off") +
+  theme(plot.margin = unit(c(8, 2, 2, 2), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -118,6 +125,8 @@ ggsave(file.path("..", "..", "plots", "NMR_body_mass_18M_male.pdf"),
 
 
 # 1W, 2W: Terminal - Pre NMR Body Mass
+
+Pre: body mass recorded on the same day as the NMR body composition measures in the 1W and 2W groups. Post: body mass recorded upon death (terminal body mass).
 
 ## 6M Female
 
@@ -130,10 +139,9 @@ plot_pre_post(x = filter(BODY_MASSES, age == "6M", sex == "Female",
                              response == "Term - NMR Pre Body Mass", 
                              age == "6M", sex == "Female")) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(170, 210, 10),
+                     breaks = seq(160, 270, 20),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(170, 210), clip = "off") +   
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(155, 275), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -152,10 +160,9 @@ plot_pre_post(x = filter(BODY_MASSES, age == "6M", sex == "Male",
                              response == "Term - NMR Pre Body Mass", 
                              age == "6M", sex == "Male")) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(300, 440, 40),
+                     breaks = seq(300, 470, 40),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(295, 440), clip = "off") +   
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(295, 472), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -174,10 +181,9 @@ plot_pre_post(x = filter(BODY_MASSES, age == "18M", sex == "Female",
                              response == "Term - NMR Pre Body Mass", 
                              age == "18M", sex == "Female")) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(200, 260, 20),
+                     breaks = seq(160, 270, 20),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(194, 274), clip = "off") +   
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(155, 275), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -196,10 +202,9 @@ plot_pre_post(x = filter(BODY_MASSES, age == "18M", sex == "Male",
                              response == "Term - NMR Pre Body Mass", 
                              age == "18M", sex == "Male")) +
   scale_y_continuous(name = "Body Mass (g)",
-                     breaks = seq(360, 460, 20),
+                     breaks = seq(300, 470, 40),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(355, 472), clip = "off") +   
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(295, 472), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -208,8 +213,9 @@ ggsave(file.path("..", "..", "plots", "terminal_NMR_body_mass_18M_male.pdf"),
 ```
 
 
-
 # NMR Fat
+
+Fat mass (g) recorded via NMR.
 
 ## 6M Female
 
@@ -220,17 +226,15 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR Fat Mass", 
                              age == "6M", sex == "Female")) +
   scale_y_continuous(name = "NMR Fat Mass (g)",
-                     breaks = seq(10, 35, 5),
+                     breaks = seq(10, 60, 10),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(10, 37), clip = "off") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(10, 64), clip = "off")
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "NMR_fat_6M_female.pdf"),
        height = 1.6, width = 1.8, family = "ArialMT")
 ```
-
 
 ## 6M Male
 
@@ -241,10 +245,9 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "NMR Fat Mass", 
                              age == "6M", sex == "Male")) +
   scale_y_continuous(name = "NMR Fat Mass (g)",
-                     breaks = seq(20, 80, 10),
+                     breaks = seq(20, 100, 20),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(18, 80), clip = "off") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(18, 105), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -261,10 +264,9 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR Fat Mass", 
                              age == "18M", sex == "Female")) +
   scale_y_continuous(name = "NMR Fat Mass (g)",
-                     breaks = seq(30, 60, 10),
+                     breaks = seq(10, 60, 10),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(28, 64), clip = "off") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(10, 64), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -281,10 +283,9 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "NMR Fat Mass", 
                              age == "18M", sex == "Male")) +
   scale_y_continuous(name = "NMR Fat Mass (g)",
-                     breaks = seq(40, 100, 10),
+                     breaks = seq(20, 100, 20),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(40, 105), clip = "off") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(18, 105), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -295,6 +296,8 @@ ggsave(file.path("..", "..", "plots", "NMR_fat_18M_male.pdf"),
 
 # NMR Lean
 
+Lean mass (g) recorded via NMR.
+
 ## 6M Female
 
 ```{r}
@@ -304,10 +307,9 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR Lean Mass", 
                              age == "6M", sex == "Female")) +
   scale_y_continuous(name = "NMR Lean Mass (g)",
-                     breaks = seq(90, 130, 10),
+                     breaks = seq(90, 150, 10),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(90, 135), clip = "off") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(90, 153), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -323,8 +325,10 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
               pre = "pre_lean", post = "post_lean", 
               stats = filter(PRE_POST_STATS, response == "NMR Lean Mass", 
                              age == "6M", sex == "Male")) +
-  scale_y_continuous(name = "NMR Lean Mass (g)") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  scale_y_continuous(name = "NMR Lean Mass (g)",
+                     breaks = seq(150, 250, 20),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(149, 256), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -340,8 +344,10 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
               pre = "pre_lean", post = "post_lean", 
               stats = filter(PRE_POST_STATS, response == "NMR Lean Mass", 
                              age == "18M", sex == "Female")) +
-  scale_y_continuous(name = "NMR Lean Mass (g)") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  scale_y_continuous(name = "NMR Lean Mass (g)",
+                     breaks = seq(90, 150, 10),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(90, 153), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -357,8 +363,10 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
               pre = "pre_lean", post = "post_lean", 
               stats = filter(PRE_POST_STATS, response == "NMR Lean Mass", 
                              age == "18M", sex == "Male")) +
-  scale_y_continuous(name = "NMR Lean Mass (g)") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  scale_y_continuous(name = "NMR Lean Mass (g)",
+                     breaks = seq(150, 250, 20),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(149, 256), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -369,6 +377,8 @@ ggsave(file.path("..", "..", "plots", "NMR_lean_18M_male.pdf"),
 
 # NMR % Fat
 
+Fat mass (g) recorded via NMR divided by the body mass (g) recorded on the same day and then multiplied by 100%.
+
 ## 6M Female
 
 ```{r}
@@ -378,10 +388,9 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR % Fat", 
                              age == "6M", sex == "Female")) +
   scale_y_continuous(name = "NMR % Fat Mass",
-                     breaks = seq(6, 18, 2),
+                     breaks = seq(6, 24, 4),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(6, 18), clip = "off") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(6, 24), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -398,10 +407,9 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "NMR % Fat", 
                              age == "6M", sex == "Male")) +
   scale_y_continuous(name = "NMR % Fat Mass",
-                     breaks = seq(6, 20, 2),
+                     breaks = seq(6, 22, 4),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(6, 20.5), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(6, 22.2), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -418,10 +426,9 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR % Fat", 
                              age == "18M", sex == "Female")) +
   scale_y_continuous(name = "NMR % Fat Mass",
-                     breaks = seq(14, 24, 2),
+                     breaks = seq(6, 24, 4),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(13.7, 24), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(6, 24), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -438,10 +445,9 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "NMR % Fat", 
                              age == "18M", sex == "Male")) +
   scale_y_continuous(name = "NMR % Fat Mass",
-                     breaks = seq(12, 22, 2),
+                     breaks = seq(6, 22, 4),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(11.5, 22.2), clip = "off") + 
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(6, 22.2), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -452,6 +458,8 @@ ggsave(file.path("..", "..", "plots", "NMR_pct_fat_18M_male.pdf"),
 
 # NMR % Lean
 
+Lean mass (g) recorded via NMR divided by the body mass (g) recorded on the same day and then multiplied by 100%.
+
 ## 6M Female
 
 ```{r}
@@ -461,10 +469,9 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR % Lean", 
                              age == "6M", sex == "Female")) +
   scale_y_continuous(name = "NMR % Lean Mass",
-                     breaks = seq(52, 64, 2),
+                     breaks = seq(50, 64, 2),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(51.9, 64), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(50, 64), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -481,10 +488,9 @@ plot_pre_post(x = filter(NMR, age == "6M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "NMR % Lean", 
                              age == "6M", sex == "Male")) +
   scale_y_continuous(name = "NMR % Lean Mass",
-                     breaks = seq(52, 64, 2),
+                     breaks = seq(50, 64, 2),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(52, 64), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(49.5, 64), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -501,10 +507,9 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "NMR % Lean", 
                              age == "18M", sex == "Female")) +
   scale_y_continuous(name = "NMR % Lean Mass",
-                     breaks = seq(50, 60, 2),
+                     breaks = seq(50, 64, 2),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(50, 60), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(50, 64), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -521,11 +526,9 @@ plot_pre_post(x = filter(NMR, age == "18M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "NMR % Lean", 
                              age == "18M", sex == "Male")) +
   scale_y_continuous(name = "NMR % Lean Mass",
-                     breaks = seq(50, 57, 1),
-                     expand = expansion(mult = 5e-3),
-                     labels = seq(50, 57, 1)) +
-  coord_cartesian(ylim = c(49.5, 57), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+                     breaks = seq(50, 64, 2),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(49.5, 64), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -536,6 +539,8 @@ ggsave(file.path("..", "..", "plots", "NMR_pct_lean_18M_male.pdf"),
 
 
 # Absolute VO2max
+
+Absolute VO$_2$max is calculated by multiplying relative VO$_2$max ($mL \cdot kg^{-1} \cdot min^{-1}$) by body mass (kg).
 
 ## 6M Female
 
@@ -550,7 +555,7 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Female"),
                      breaks = seq(10, 18, 2),
                      expand = expansion(mult = 5e-3)) +
   coord_cartesian(ylim = c(10, 18), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  theme(plot.margin = unit(c(6, 3, 3, 3), "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -570,8 +575,7 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Male"),
   scale_y_continuous(name = TeX("VO$_2$max (mL/min)"),
                      breaks = seq(18, 26, 2),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(17.8, 27), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(17.5, 27), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -588,11 +592,14 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "Absolute VO2max", 
                              age == "18M") %>% 
                 mutate(sex = "Female")) +
-  scale_y_continuous(name = TeX("VO$_2$max (mL/min)")) + 
-  geom_vline(xintercept = 1.5, color = "grey90", lwd = 0.3) +
+  scale_y_continuous(name = TeX("VO$_2$max (mL/min)"),
+                     breaks = seq(10, 18, 2),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(10, 18), clip = "off") +
   theme(legend.position = "right",
         legend.direction = "vertical",
-        legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
+        legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"),
+        plot.margin = unit(c(6, 3, 3, 3), "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -610,10 +617,9 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Male"),
                              age == "18M") %>% 
                 mutate(sex = "Male")) +
   scale_y_continuous(name = TeX("VO$_2$max (mL/min)"),
-                     breaks = seq(18, 24, 2),
+                     breaks = seq(18, 26, 2),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(17.5, 24), clip = "off") +
-  geom_vline(xintercept = 1.5, color = "grey90", lwd = 0.3) +
+  coord_cartesian(ylim = c(17.5, 27), clip = "off") +
   theme(legend.position = "right",
         legend.direction = "vertical",
         legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
@@ -627,6 +633,8 @@ ggsave(file.path("..", "..", "plots", "absolute_VO2max_18M_male.pdf"),
 
 # Relative VO2max
 
+Relative VO$_2$max (mL/kg body mass/min).
+
 ## 6M Female
 
 ```{r}
@@ -637,10 +645,9 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Female"),
                              age == "6M") %>% 
                 mutate(sex = "Female")) +
   scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)"),
-                     breaks = seq(60, 90, 5),
+                     breaks = seq(50, 90, 10),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(60, 91), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(44.5, 91), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -658,10 +665,9 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Male"),
                              age == "6M") %>% 
                 mutate(sex = "Male")) +
   scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)"),
-                     breaks = seq(50, 85, 5),
+                     breaks = seq(40, 80, 10),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(50, 85), clip = "off") +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(40, 83), clip = "off")
 ```
 
 ```{r eval=save_plots}
@@ -678,8 +684,10 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "Relative VO2max", 
                              age == "18M") %>% 
                 mutate(sex = "Female")) +
-  scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)")) +
-  geom_vline(xintercept = 1.5, color = "grey90", lwd = 0.3) +
+  scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)"),
+                     breaks = seq(50, 90, 10),
+                     expand = expansion(mult = 5e-3)) +
+  coord_cartesian(ylim = c(44, 91), clip = "off") +
   theme(legend.position = "right",
         legend.direction = "vertical",
         legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
@@ -700,10 +708,9 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Male"),
                              age == "18M") %>% 
                 mutate(sex = "Male")) +
   scale_y_continuous(name = TeX("VO$_2$max (mL/kg/min)"),
-                     breaks = seq(40, 65, 5),
+                     breaks = seq(40, 80, 10),
                      expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(40, 65), clip = "off") +
-  geom_vline(xintercept = 1.5, color = "grey90", lwd = 0.3) +
+  coord_cartesian(ylim = c(40, 83), clip = "off") +
   theme(legend.position = "right",
         legend.direction = "vertical",
         legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
@@ -717,6 +724,8 @@ ggsave(file.path("..", "..", "plots", "relative_VO2max_18M_male.pdf"),
 
 # Maximum Run Speed
 
+Maximum run speed (m/min) reached during the VO$_2$max test.
+
 ## 6M Female
 
 ```{r}
@@ -726,15 +735,15 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "Maximum Run Speed", 
                              age == "6M", sex == "Female")) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
-                     breaks = seq(21.6, 36, 3.6)) +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+                     breaks = seq(12.6, 36, 3.6)) +
+  coord_cartesian(ylim = c(12.6, 36), clip = "off") +
+  theme(plot.margin = unit(c(10, 2, 2, 2), units = "pt"))
 ```
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "max_run_speed_6M_female.pdf"),
        height = 1.6, width = 1.8, family = "ArialMT")
 ```
-
 
 ## 6M Male
 
@@ -745,8 +754,9 @@ plot_pre_post(x = filter(VO2MAX, age == "6M", sex == "Male"),
               stats = filter(PRE_POST_STATS, response == "Maximum Run Speed", 
                              age == "6M", sex == "Male")) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
-                     breaks = seq(18, 36, 3.6)) +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+                     breaks = seq(12.6, 36, 3.6)) +
+  coord_cartesian(ylim = c(12.6, 36), clip = "off") +
+  theme(plot.margin = unit(c(10, 2, 2, 2), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -763,8 +773,9 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Female"),
               stats = filter(PRE_POST_STATS, response == "Maximum Run Speed", 
                              age == "18M", sex == "Female")) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
-                     breaks = seq(16.2, 36, 3.6)) +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+                     breaks = seq(12.6, 36, 3.6)) +
+  coord_cartesian(ylim = c(12.6, 36), clip = "off") +
+  theme(plot.margin = unit(c(10, 2, 2, 2), units = "pt"))
 ```
 
 ```{r eval=save_plots}
@@ -782,7 +793,8 @@ plot_pre_post(x = filter(VO2MAX, age == "18M", sex == "Male"),
                              age == "18M", sex == "Male")) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
                      breaks = seq(12.6, 36, 3.6)) +
-  geom_vline(xintercept = c(1.5, 2.5), color = "grey90", lwd = 0.3)
+  coord_cartesian(ylim = c(12.6, 36), clip = "off") +
+  theme(plot.margin = unit(c(10, 2, 2, 2), units = "pt"))
 ```
 
 ```{r eval=save_plots}

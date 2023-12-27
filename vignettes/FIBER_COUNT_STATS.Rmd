@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
   fig.height = 4,
   message = FALSE,
   warning = FALSE,
-  res = 300
+  res = 400
 )
 ```
 
@@ -43,7 +43,7 @@ theme_set(theme_bw() + theme(panel.grid.minor = element_blank()))
 
 # Compositional Data Analysis
 
-[@aitchison_compositional_1982; @boogaart_compositional_2013]
+Compositional data analysis was introduced by Aitchison in 1982[@aitchison_compositional_1982]. We also make use of material from Boogaart (2013)[@boogaart_compositional_2013].
 
 ```{r}
 x <- FIBER_TYPES %>% 
@@ -238,18 +238,23 @@ The values in the `emmean` column are the estimated marginal means of the ilr co
 The P-values are testing whether the means of the groups are different from 0, which is not of interest, in this case. We want to know if there are differences between the 8W and SED groups. 
 
 ```{r}
+# Extract model info
 model_df <- fit.count %>% 
   map_chr(.f = ~ paste(deparse(.x[["call"]]), collapse = "")) %>% 
   enframe(name = "muscle", value = "model") %>% 
   mutate(model = gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", model, perl = TRUE),
          model_type = "mlm",
          formula = sub(".*formula = ([^,]+),.*", "\\1", model),
-         formula = sub("y", "ilr(cbind(tI, tIIa, tIIx, tIIb))", formula)) %>% 
-  select(-model)
+         formula = sub("y", "ilr(cbind(tI, tIIa, tIIx, tIIb))", formula),
+         formula = ifelse(muscle == "SOL", 
+                          sub(", tIIx, tIIb", "", formula), 
+                          formula),
+         muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL"))) %>% 
+  dplyr::select(-model)
 ```
 
-
 ```{r}
+# t-tests (SOL) or multivariate F-tests (LG, MG, PL)
 FIBER_COUNT_MVT <- map(FIBER_COUNT_EMM, function(emm_i) {
   
   if ("balance" %in% colnames(attr(emm_i, "grid"))) {
@@ -264,6 +269,7 @@ FIBER_COUNT_MVT <- map(FIBER_COUNT_EMM, function(emm_i) {
 }) %>%
   enframe(name = "muscle") %>% 
   unnest(value) %>% 
+  # Adjust p-values across balances within each combination of age and sex
   group_by(age, sex) %>% 
   mutate(p.adj = p.adjust(p.value, method = "holm"),
          signif = p.adj < 0.05) %>% 
@@ -283,12 +289,12 @@ FIBER_COUNT_MVT <- map(FIBER_COUNT_EMM, function(emm_i) {
   mutate(statistic_type = sub("\\.ratio", "", statistic_type),
          estimate_type = ifelse(estimate_type == "estimate", 
                                 "difference of means", estimate_type),
-         response = "Fiber Count") %>% 
+         response = "Fiber Count",
+         muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL"))) %>% 
   left_join(model_df, by = "muscle") %>% 
   dplyr::select(response, age, sex, muscle, contrast, estimate_type, estimate, 
                 SE, statistic_type, statistic, df1, df2, p.value, p.adj,
                 signif, everything()) %>% 
-  mutate(muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL"))) %>% 
   arrange(age, sex, muscle) %>% 
   as.data.frame()
 ```
@@ -303,8 +309,11 @@ FIBER_COUNT_STATS <- map(FIBER_COUNT_EMM, function(emm_i) {
 }) %>%
   enframe(name = "muscle") %>% 
   unnest(value) %>%
+  # Adjust p-values across balances within each combination of age, sex, and
+  # muscle
   group_by(age, sex, muscle) %>% 
-  mutate(p.adj = p.adjust(p.value, method = "holm")) %>% 
+  mutate(p.adj = p.adjust(p.value, method = "holm"),
+         signif = p.adj < 0.05) %>% 
   ungroup() %>% 
   pivot_longer(cols = estimate,
                names_to = "estimate_type",
@@ -317,15 +326,14 @@ FIBER_COUNT_STATS <- map(FIBER_COUNT_EMM, function(emm_i) {
   mutate(statistic_type = sub("\\.ratio", "", statistic_type),
          estimate_type = ifelse(estimate_type == "estimate", 
                                 "difference of means", estimate_type),
-         signif = p.adj < 0.05,
          muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL")),
          response = "Fiber Count",
          balance = ifelse(is.na(balance), 1, balance)) %>% 
   left_join(model_df, by = "muscle") %>% 
+  # Reorder columns
   dplyr::select(response, age, sex, muscle, balance, contrast, estimate_type,
                 estimate, SE, lower.CL, upper.CL, statistic_type, statistic, df,
                 p.value, p.adj, everything()) %>%
-  mutate(muscle = factor(muscle, levels = c("LG", "MG", "PL", "SOL"))) %>%
   arrange(age, sex, muscle, balance) %>% 
   as.data.frame()
 ```
