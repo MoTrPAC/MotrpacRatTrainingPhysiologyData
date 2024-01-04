@@ -80,10 +80,13 @@ PHYSIO <- plyr::rbind.fill(PHYSIO) %>%
          # Remove glycogen values if they are negative (assay artifact caused
          # over-correcting when there is a lot of glucose)
          across(.cols = starts_with("glyc_"), ~ ifelse(.x < 0, NA, .x)),
+         # Pre values
          nmr_pre_fat = nmr_pre_fat_pct / 100 * nmr_pre_weight,
-         nmr_post_fat = nmr_post_fat_pct / 100 * nmr_pre_weight,
          nmr_pre_lean = nmr_pre_lean_pct / 100 * nmr_pre_weight,
-         nmr_post_lean = nmr_post_lean_pct / 100 * nmr_pre_weight) %>%
+
+         # Post values
+         nmr_post_fat = nmr_post_fat_pct / 100 * nmr_post_weight,
+         nmr_post_lean = nmr_post_lean_pct / 100 * nmr_post_weight) %>%
   select(-ends_with("_d")) %>%
   relocate(nmr_pre_fat, nmr_pre_lean, .after = nmr_pre_weight) %>%
   relocate(nmr_post_fat, nmr_post_lean, .after = nmr_post_weight) %>%

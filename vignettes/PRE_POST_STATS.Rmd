@@ -179,7 +179,7 @@ NMR %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
 
-We observe several outlying values in several of the 6M male groups, as well as in 18M 8W males.
+We observe several outlying values in several of the 6M male groups.
 
 ```{r}
 fit.lean <- lm(I(post_lean - pre_lean) ~ age * sex * group,
@@ -187,10 +187,10 @@ fit.lean <- lm(I(post_lean - pre_lean) ~ age * sex * group,
 plot_lm(fit.lean)
 ```
 
-Observations 80 and 140 are outlying, and greatly impact group variances. We will try WLS.
+Observations 80, 89, and 140 are outlying, and greatly impact group variances. We will try WLS.
 
 ```{r}
-NMR[c(80, 140), ] %>% 
+NMR[c(80, 89, 140), ] %>% 
   select(pid, iowa_id, age, sex, group, pre_lean, post_lean) %>% 
   mutate(diff = post_lean - pre_lean)
 ```
@@ -273,12 +273,7 @@ fit.1 <- update(fit.fat, formula = . ~ group * (sex + age))
 anova(fit.1, fit.fat, test = "F")
 ```
 
-There is no significant difference between the models, so we will use the simpler one.
-
-```{r}
-fit.fat <- fit.1
-plot_lm(fit.fat)
-```
+We will use the full model, though the p-value is just above 0.05.
 
 ```{r}
 summary(fit.fat)
@@ -421,6 +416,7 @@ VO2MAX %>%
   ggplot(aes(x = group, y = post_vo2max_ml_min - pre_vo2max_ml_min)) +
   geom_point(position = position_jitter(width = 0.15, height = 0),
              na.rm = TRUE, alpha = 0.5) +
+  geom_hline(yintercept = 0, lty = "dashed", color = "red") +
   facet_wrap(~ sex + age, nrow = 1) +
   labs(y = TeX("Absolute VO$_2$max (post - pre)")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
@@ -476,6 +472,7 @@ VO2MAX %>%
              y = post_vo2max_ml_kg_min - pre_vo2max_ml_kg_min)) +
   geom_point(position = position_jitter(width = 0.15, height = 0),
              na.rm = TRUE, alpha = 0.5) +
+  geom_hline(yintercept = 0, lty = "dashed", color = "red") +
   facet_grid(~ sex + age) +
   labs(y = "Relative VO2max (post - pre)") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
