@@ -253,7 +253,7 @@ model_df <- fit.count %>%
   dplyr::select(-model)
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 # t-tests (SOL) or multivariate F-tests (LG, MG, PL)
 FIBER_COUNT_MVT <- map(FIBER_COUNT_EMM, function(emm_i) {
   
@@ -343,8 +343,8 @@ FIBER_COUNT_STATS <- map(FIBER_COUNT_EMM, function(emm_i) {
 usethis::use_data(FIBER_COUNT_EMM, internal = FALSE, overwrite = TRUE,
                   compress = "bzip2", version = 3)
 
-usethis::use_data(FIBER_COUNT_MVT, internal = FALSE, overwrite = TRUE,
-                  compress = "bzip2", version = 3)
+# usethis::use_data(FIBER_COUNT_MVT, internal = FALSE, overwrite = TRUE,
+#                   compress = "bzip2", version = 3)
 
 usethis::use_data(FIBER_COUNT_STATS, internal = FALSE, overwrite = TRUE,
                   compress = "bzip2", version = 3)

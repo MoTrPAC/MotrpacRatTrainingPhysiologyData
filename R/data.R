@@ -378,49 +378,6 @@
 "FIBER_COUNT_EMM"
 
 
-#' @title Muscle fiber count multivariate t-test results
-#'
-#' @description Muscle fiber count multivariate t-test results.
-#'
-#' @usage FIBER_COUNT_MVT
-#'
-#' @format An object of class \code{data.frame} with 16 rows and 17 columns:
-#'
-#' \describe{
-#'   \item{response}{character; the measure being tested. All "Fiber Count".}
-#'   \item{age}{factor; the age of the rat at the beginning of the training
-#'   protocol. Levels: "6M" (Adult) and "18M" (Aged).}
-#'   \item{sex}{factor; the sex of the rat with levels "Female" and "Male".}
-#'   \item{muscle}{factor; the muscle that was sampled with levels "LG" (lateral
-#'   gastrocnemius), "MG" (medial gastrocnemius), "PL" (plantaris), and "SOL"
-#'   (soleus).}
-#'   \item{contrast}{factor; the comparison between groups. All contrasts are
-#'   ratios between the 8W and SED group means ("8W / SED").}
-#'   \item{estimate_type}{character; interpretation of the value in the
-#'   \code{estimate} column. All "ratio" (ratio between group means, as
-#'   specified by \code{contrast}).}
-#'   \item{estimate}{numeric; ratio between the means of the groups as specified
-#'   by \code{contrast}.}
-#'   \item{SE}{numeric; the standard error of the estimate. Only applicable when
-#'   \code{statistic_type} = "t".}
-#'   \item{statistic_type}{character; the type of statistical test.}
-#'   \item{statistic}{numeric; the value of the test statistic.}
-#'   \item{df1, df2}{numeric; the degrees of freedom. See \code{help("FDist")}
-#'   for details. If \code{statistic_type == "t"}, then \code{df1} is not
-#'   applicable.}
-#'   \item{p.value}{numeric; the p-value associated with the statistical
-#'   test.}
-#'   \item{p.adj}{numeric; the Holm-adjusted p-value.}
-#'   \item{signif}{logical; \code{TRUE} if \code{p.adj} < 0.05.}
-#'   \item{model_type}{character; the statistical model used for testing.}
-#'   \item{formula}{character; the model formula. Includes the response
-#'   variable, any transformations, and predictors.}
-#' }
-#'
-#' @keywords datasets
-"FIBER_COUNT_MVT"
-
-
 #' @title Statistical analysis results of muscle fiber counts
 #'
 #' @description Statistical analysis results of muscle fiber counts.
