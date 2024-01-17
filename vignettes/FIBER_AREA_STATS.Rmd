@@ -160,24 +160,10 @@ mtext("Standardized residuals", side = 2, line = -1, outer = TRUE)
 par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
 ```
 
-The diagnostic plots look fine. We will try to simplify the model.
+The diagnostic plots look fine.
 
 ```{r}
 anova(fit.area)
-```
-
-```{r}
-fit.area <- update(fit.area, method = "ML")
-fit.area.1 <- update(fit.area, 
-                     fixed = . ~ (age + sex + group + muscle_type) ^ 3 -
-                       sex:group:muscle_type)
-anova(fit.area, fit.area.1)
-```
-
-Removal of the 4-way interaction and the least significant 3-way interaction does not lead to a significant difference between the full and reduced models at the 0.05 level, but we will not remove any terms.
-
-```{r}
-fit.area <- update(fit.area, method = "REML")
 VarCorr(fit.area)
 ```
 
