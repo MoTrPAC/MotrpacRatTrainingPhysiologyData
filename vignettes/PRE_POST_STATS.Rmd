@@ -74,21 +74,10 @@ fit.body_mass <- lm(I(post_body_mass - pre_body_mass) ~ age * sex * group,
 plot_lm(fit.body_mass)
 ```
 
-The diagnostic plots appear fine. We will try to simplify the model.
+The diagnostic plots appear fine.
 
 ```{r}
 anova(fit.body_mass, test = "F")
-```
-
-The 3-way interaction is not significant, so we will remove it.
-
-```{r}
-fit.body_mass <- update(fit.body_mass, formula = . ~ . - age:sex:group)
-plot_lm(fit.body_mass)
-```
-
-```{r}
-summary(fit.body_mass)
 ```
 
 
@@ -149,16 +138,10 @@ fit.term_nmr <- lm(I(term_body_mass - nmr_pre_body_mass) ~ age * sex * group,
 plot_lm(fit.term_nmr)
 ```
 
-The diagnostic plots look mostly fine. We will try to simplify the model.
+The diagnostic plots look mostly fine.
 
 ```{r}
 anova(fit.term_nmr, test = "F")
-```
-
-The 3-way interaction is significant, so we will not remove any terms.
-
-```{r}
-summary(fit.term_nmr)
 ```
 
 
@@ -187,7 +170,7 @@ fit.lean <- lm(I(post_lean - pre_lean) ~ age * sex * group,
 plot_lm(fit.lean)
 ```
 
-Observations 80, 89, and 140 are outlying, and greatly impact group variances. We will try WLS.
+Observations 80, 89, and 140 are outlying, and greatly impact group variances. We will try inverse group variance weights.
 
 ```{r}
 NMR[c(80, 89, 140), ] %>% 
@@ -205,27 +188,10 @@ fit.lean <- update(fit.lean, weights = wt.lean)
 plot_lm(fit.lean)
 ```
 
-The diagnostic plots seem mostly fine. We will try to simplify the model.
+The diagnostic plots seem mostly fine.
 
 ```{r}
 anova(fit.lean, test = "F")
-```
-
-```{r}
-fit.lean.1 <- update(fit.lean, formula = . ~ sex * (age + group))
-fit.lean.2 <- update(fit.lean.1, formula = . ~ . + age:group)
-anova(fit.lean.1, fit.lean.2, fit.lean, test = "F")
-```
-
-There is no significant difference between the second and third models, so we will use the simpler one.
-
-```{r}
-fit.lean <- fit.lean.2
-plot_lm(fit.lean)
-```
-
-```{r}
-summary(fit.lean)
 ```
 
 
@@ -260,23 +226,10 @@ fit.fat <- lm(I(post_fat - pre_fat) ~ age * sex * group,
 plot_lm(fit.fat)
 ```
 
-The diagnostic plots seem mostly fine. We will try to simplify the model.
+The diagnostic plots seem mostly fine.
 
 ```{r}
 anova(fit.fat, test = "F")
-```
-
-We will remove the 3-way interaction and the `sex:age` interaction.
-
-```{r}
-fit.1 <- update(fit.fat, formula = . ~ group * (sex + age))
-anova(fit.1, fit.fat, test = "F")
-```
-
-We will use the full model, though the p-value is just above 0.05.
-
-```{r}
-summary(fit.fat)
 ```
 
 
@@ -311,23 +264,10 @@ fit.lean_pct <- lm(I(post_lean_pct - pre_lean_pct) ~ age * sex * group,
 plot_lm(fit.lean_pct)
 ```
 
-The diagnostic plots look mostly fine. We will try to simplify the model.
+The diagnostic plots look mostly fine.
 
 ```{r}
 anova(fit.lean_pct, test = "F")
-```
-
-We will remove the 3-way interaction.
-
-```{r}
-fit.lean_pct.1 <- update(fit.lean_pct, formula = . ~ . - sex:group:age)
-plot_lm(fit.lean_pct.1)
-```
-
-The QQ-plot looks slightly worse, so we will retain all terms.
-
-```{r}
-summary(fit.lean_pct)
 ```
 
 
@@ -384,23 +324,10 @@ fit.fat_pct <- update(fit.fat_pct,
 plot_lm(fit.fat_pct)
 ```
 
-The diagnostic plots look fine. We will try to simplify the model.
+The diagnostic plots look fine.
 
 ```{r}
 anova(fit.fat_pct, test = "F")
-```
-
-We will remove the 3-way interaction.
-
-```{r}
-fit.fat_pct <- update(fit.fat_pct, formula = . ~ . - age:sex:group)
-plot_lm(fit.fat_pct)
-```
-
-The diagnostic plots still look fine.
-
-```{r}
-summary(fit.fat_pct)
 ```
 
 
@@ -434,28 +361,10 @@ fit.vo2max_abs <- lm(I(post_vo2max_ml_min - pre_vo2max_ml_min) ~
 plot_lm(fit.vo2max_abs)
 ```
 
-The diagnostic plots look mostly fine. We will try to simplify the model.
+The diagnostic plots look mostly fine.
 
 ```{r}
 anova(fit.vo2max_abs, test = "F")
-```
-
-```{r}
-fit.vo2max_abs.1 <- update(fit.vo2max_abs, formula = . ~ age_group)
-anova(fit.vo2max_abs.1, fit.vo2max_abs, test = "F")
-```
-
-There is no significant difference between the models, so we will use the simpler one.
-
-```{r}
-fit.vo2max_abs <- fit.vo2max_abs.1
-plot_lm(fit.vo2max_abs)
-```
-
-The diagnostic plots look fine.
-
-```{r}
-summary(fit.vo2max_abs)
 ```
 
 
@@ -487,7 +396,7 @@ fit.vo2max_rel <- lm(I(post_vo2max_ml_kg_min - pre_vo2max_ml_kg_min) ~
 plot_lm(fit.vo2max_rel)
 ```
 
-The diagnostic plots look mostly fine, though we observe unequal group variances. We will try a WLS model.
+The diagnostic plots look mostly fine, though we observe unequal group variances. We will include inverse group variance weights in an attempt to stabilize the variance.
 
 ```{r}
 wt.vo2max_rel <- VO2MAX %>%
@@ -500,28 +409,10 @@ fit.vo2max_rel <- update(fit.vo2max_rel, weights = wt.vo2max_rel)
 plot_lm(fit.vo2max_rel)
 ```
 
-The diagnostic plots look a bit better, and the mean-variance relationship appears constant. We will try to simplify the model.
+The diagnostic plots look a bit better, and the mean-variance relationship appears constant.
 
 ```{r}
 anova(fit.vo2max_rel, test = "F")
-```
-
-```{r}
-fit.vo2max_rel.1 <- update(fit.vo2max_rel, formula = . ~ age_group)
-anova(fit.vo2max_rel.1, fit.vo2max_rel, test = "F")
-```
-
-There is no significant difference between the models, so we will use the simpler one.
-
-```{r}
-fit.vo2max_rel <- fit.vo2max_rel.1 
-plot_lm(fit.vo2max_rel)
-```
-
-The diagnostic plots look about the same.
-
-```{r}
-summary(fit.vo2max_rel)
 ```
 
 
