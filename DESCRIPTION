@@ -1,8 +1,8 @@
 Package: MotrpacRatTrainingPhysiologyData
 Type: Package
-Title: MoTrPAC PASS1B Rat Physiology Data
-Version: 0.1.0
-Date: 2023-10-20
+Title: MoTrPAC PASS1B Rat Endurance Exercise Training Physiology Data
+Version: 2.0.0
+Date: 2024-01-18
 Authors@R: 
   c(
     person(given = "Tyler J.", family = "Sagendorf",
@@ -20,7 +20,9 @@ Authors@R:
            comment = c("Provided clinical analyte data."),
            role = "dtc"))
 Maintainer: Tyler Sagendorf <tyler.sagendorf@pnnl.gov>
-Description: Data and analyses for the MoTrPAC PASS1B rat physiology manuscript.
+Description: Data and analyses for "Physiological adaptations to progressive
+    endurance exercise in adult and aged rats - insights from the Molecular 
+    Transducers of Physical Activity Consortium (MoTrPAC)".
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -42,6 +44,7 @@ Imports:
 Suggests:
     compositions,
     emmeans,
+    ggh4x,
     Hmisc,
     hms,
     knitr,
@@ -58,5 +61,5 @@ RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 URL:
-    https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/,
-    https://pnnl-comp-mass-spec.github.io/MotrpacRatTrainingPhysiologyData/
+    https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/,
+    https://motrpac.github.io/MotrpacRatTrainingPhysiologyData/
