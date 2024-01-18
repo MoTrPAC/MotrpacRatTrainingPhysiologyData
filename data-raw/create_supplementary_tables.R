@@ -6,18 +6,18 @@ library(tidyr)
 library(writexl)
 library(emmeans)
 
-## Supplementary Table 2: post - pre training differences ======================
+## Supplementary Table 3: post - pre training differences ======================
 # Get pre-training means to calculate % change
 x <- BASELINE_EMM %>%
   map(function(.x) {
     out <- summary(.x) %>%
       dplyr::rename(any_of(c("pre_mean" = "response",
                              "pre_mean" = "rate")))
-    if ("age_group" %in% colnames(out)) {
+
+    if ("age_group" %in% colnames(out))
       out <- mutate(out,
                     age = sub("_.*", "", age_group),
                     group = sub(".*_", "", age_group))
-    }
 
     return(out)
   }) %>%
@@ -30,7 +30,7 @@ x2 <- filter(x, response == "NMR Body Mass") %>%
 
 x <- rbind(x, x2)
 
-s2 <- PRE_POST_STATS %>%
+s3 <- PRE_POST_STATS %>%
   left_join(x, by = c("response", "age", "sex", "group")) %>%
   mutate(pct_change = 100 * estimate / pre_mean,
          across(.cols = c(where(is.numeric), -starts_with("p.")),
@@ -47,13 +47,13 @@ s2 <- PRE_POST_STATS %>%
   arrange(response, age, sex, group)
 
 # Save
-write_xlsx(s2, path = file.path("supplementary-tables",
-                                "supplementary_table_2.xlsx"),
+write_xlsx(s3, path = file.path("supplementary-tables",
+                                "supplementary_table_3.xlsx"),
            col_names = TRUE, format_headers = TRUE)
 
 
-## Supplementary Table 3: trained vs. SED comparisons ==========================
-s3 <- list(
+## Supplementary Table 4: trained vs. SED comparisons ==========================
+s4 <- list(
   "NMR & VO2max" = BASELINE_STATS,
   "Weekly Body Mass" = WEEKLY_BODY_MASS_STATS,
   "Muscle Measures" = mutate(MUSCLES_STATS,
@@ -85,8 +85,8 @@ s3 <- list(
   })
 
 # Save
-write_xlsx(s3, path = file.path("supplementary-tables",
-                                "supplementary_table_3.xlsx"),
+write_xlsx(s4, path = file.path("supplementary-tables",
+                                "supplementary_table_4.xlsx"),
            col_names = TRUE, format_headers = TRUE)
 
 
