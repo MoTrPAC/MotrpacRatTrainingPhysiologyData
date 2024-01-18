@@ -42,7 +42,6 @@ print.data.frame(head(FIBER_TYPES))
 }
 \seealso{
 \code{\link{FIBER_AREA_EMM}}, \code{\link{FIBER_AREA_STATS}},
-\code{\link{FIBER_COUNT_EMM}}, \code{\link{FIBER_COUNT_STATS}},
-\code{\link{FIBER_COUNT_MVT}}
+\code{\link{FIBER_COUNT_EMM}}, \code{\link{FIBER_COUNT_STATS}}
 }
 \keyword{datasets}
