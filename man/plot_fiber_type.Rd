@@ -12,7 +12,8 @@ plot_fiber_type(
   muscle = "MG",
   sex = "Female",
   age = "6M",
-  bracket.nudge.y = 0
+  ymin,
+  ymax
 )
 }
 \arguments{
@@ -36,9 +37,9 @@ individual data points.}
 
 \item{age}{character; age of rats to plot. Either "6M" or "18M".}
 
-\item{bracket.nudge.y}{Vertical adjustment to nudge brackets by. Useful to
-move up or move down the bracket. If positive value, brackets will be moved
-up; if negative value, brackets are moved down.}
+\item{ymin}{numeric; lower y-axis limit.}
+
+\item{ymax}{numeric; upper y-axis limit.}
 }
 \description{
 Plot fiber area by fiber type and group
