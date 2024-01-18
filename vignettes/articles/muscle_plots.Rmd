@@ -1155,7 +1155,8 @@ plot_function <- function(response,
                           age, 
                           conf_df, 
                           stats_df,
-                          bracket.nudge.y = 0) {
+                          ymin, 
+                          ymax) {
   
   x <- MUSCLES %>% 
     dplyr::rename(response = !!sym(response)) %>% 
@@ -1165,18 +1166,6 @@ plot_function <- function(response,
   
   conf_df <- filter(conf_df, age == !!age, sex == !!sex)
   
-  y_pos <- x %>% 
-    group_by(muscle) %>% 
-    summarise(y.position = max(response))
-  
-  stats_df <- stats_df %>%
-    filter(signif) %>% 
-    filter(age == !!age, sex == !!sex) %>% 
-    mutate(contrast = as.character(contrast),
-           group1 = sub(" .*", "", contrast),
-           group2 = sub(".* ", "", contrast)) %>% 
-    left_join(y_pos, by = "muscle")
-  
   p <- ggplot(x, aes(x = group, y = response)) +
     geom_crossbar(data = conf_df,
                   aes(x = group, y = response_mean, 
@@ -1185,20 +1174,54 @@ plot_function <- function(response,
                   fatten = 1, linewidth = 0.5, width = 0.7) +
     geom_point(shape = 16, size = 0.5,
                position = ggbeeswarm::position_beeswarm(cex = 6, 
-                                                        dodge.width = 0.7)) +
+                                                        dodge.width = 0.7))
+  
+  # Y-axis limits
+  ylims <- layer_scales(p)$y$range$range
+  
+  if (missing(ymin))
+    ymin <- ylims[1]
+  
+  if (missing(ymax))
+    ymax <- ylims[2]
+  
+  # y_pos <- x %>% 
+  #   group_by(muscle) %>% 
+  #   summarise(y.position = max(response))
+  y_position <- x %>%
+    left_join(select(conf_df, muscle, group, upper.CL),
+              by = c("group", "muscle")) %>%
+    group_by(muscle) %>%
+    summarise(y.position = max(c(response, upper.CL), na.rm = TRUE) +
+                0.1 * (ymax - ymin))
+  
+  stats_df <- stats_df %>%
+    filter(signif) %>% 
+    filter(age == !!age, sex == !!sex) %>% 
+    mutate(contrast = as.character(contrast),
+           group1 = sub(" .*", "", contrast),
+           group2 = sub(".* ", "", contrast)) %>% 
+    left_join(y_position, by = "muscle")
+  
+  p <- p +
     ggpubr::stat_pvalue_manual(data = stats_df, 
                                label = NULL, 
                                size = 0, # hide asterisks
-                               bracket.nudge.y = bracket.nudge.y) +
+                               bracket.nudge.y = 0,
+                               bracket.size = 0.6) +
     annotation_custom(grob = linesGrob(x = c(0, 1), 
                                        y = unit(-20, "pt"),
                                        gp = gpar(lwd = 0.9)), 
                       xmin = -Inf, xmax = Inf, 
-                      ymin = -Inf, ymax = Inf) +
+                      ymin = -Inf, ymax = Inf)
+  
+  ## Modify appearance
+  p <- p +
     facet_grid(~ muscle, switch = "x") +
     scale_color_manual(values = c("#ff6eff", "#5555ff"),
                        breaks = c("Female", "Male")) +
     labs(x = NULL) +
+    coord_cartesian(ylim = c(ymin, ymax), clip = "off") +
     theme_bw(base_size = 7) +
     theme(text = element_text(size = 7, color = "black"),
           line = element_line(linewidth = 0.3, color = "black"),
@@ -1234,11 +1257,10 @@ plot_function(
   response = "mean_CSA", sex = "Female", age = "6M", 
   conf_df = filter(conf_df, response == "Mean CSA"), 
   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
-  bracket.nudge.y = 70) +
+  ymin = 1000, ymax = 2500) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 2500, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(1000, 2500), clip = "off")
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}
@@ -1253,11 +1275,10 @@ plot_function(
   response = "mean_CSA", sex = "Male", age = "6M", 
   conf_df = filter(conf_df, response == "Mean CSA"), 
   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"),
-  bracket.nudge.y = 85) +
+  ymin = 1500, ymax = 3500) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1500, 3500, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(1500, 3500), clip = "off")
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}
@@ -1272,11 +1293,10 @@ plot_function(
   response = "mean_CSA", sex = "Female", age = "18M", 
   conf_df = filter(conf_df, response == "Mean CSA"), 
   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
-  bracket.nudge.y = 60) +
+  ymin = 1000, ymax = 2500) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1000, 2500, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(1000, 2500), clip = "off")
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}
@@ -1291,11 +1311,10 @@ plot_function(
   response = "mean_CSA", sex = "Male", age = "18M", 
   conf_df = filter(conf_df, response == "Mean CSA"), 
   stats_df = filter(MUSCLES_STATS, response == "Mean CSA"), 
-  bracket.nudge.y = 60) +
+  ymin = 1500, ymax = 3500) +
   scale_y_continuous(name = TeX("Mean CSA ($\\mu m^2$)"),
                      breaks = seq(1500, 3500, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(1500, 3500), clip = "off")
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}

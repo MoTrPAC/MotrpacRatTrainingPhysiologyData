@@ -34,6 +34,7 @@ library(latex2exp)
 library(tidyr)
 library(tibble)
 library(purrr)
+library(emmeans)
 ```
 
 # Overview
@@ -65,17 +66,16 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "6M", sex = "Female", muscle = "LG",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, 
-                               response == "Mean Fiber Area")) + 
+                               response == "Mean Fiber Area"),
+                ymin = 500, ymax = 3300) + 
   scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
                      breaks = seq(500, 3000, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 3200), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_LG_6M_female.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -86,17 +86,16 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "6M", sex = "Male", muscle = "LG",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, 
-                               response == "Mean Fiber Area")) + 
+                               response == "Mean Fiber Area"),
+                ymin = 1000, ymax = 5000) + 
   scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
                      breaks = 1000 * 1:5,
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(700, 5000), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_LG_6M_male.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -107,17 +106,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "18M", sex = "Female", muscle = "LG",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 150) + 
+                ymin = 1000, ymax = 3500) + 
   scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
-                     breaks = seq(500, 3000, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 3200), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(1000, 3500, 500),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_LG_18M_female.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -128,17 +125,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "18M", sex = "Male", muscle = "LG",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 120) + 
+                ymin = 1000, ymax = 4000) + 
   scale_y_continuous(name = TeX("LG CSA ($\\mu m^2$)"),
-                     breaks = 1000 * 1:5,
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(700, 5000), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = 1000 * 1:4,
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_LG_18M_male.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 
@@ -152,17 +147,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "6M", sex = "Female", muscle = "MG",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 150) + 
+                ymin = 700, ymax = 3200) + 
   scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
-                     breaks = seq(500, 3000, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 3200), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_MG_6M_female.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -173,17 +166,16 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "6M", sex = "Male", muscle = "MG",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, 
-                               response == "Mean Fiber Area")) + 
+                               response == "Mean Fiber Area"),
+                ymin = 1000, ymax = 5000) + 
   scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
                      breaks = 1000 * 1:5,
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(700, 5000), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_MG_6M_male.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -194,17 +186,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "18M", sex = "Female", muscle = "MG",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 120) + 
+                ymin = 1000, ymax = 3200) + 
   scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
-                     breaks = seq(500, 3000, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 3200), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_MG_18M_female.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -215,17 +205,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "18M", sex = "Male", muscle = "MG",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 120) + 
+                ymin = 1000, ymax = 3600) + 
   scale_y_continuous(name = TeX("MG CSA ($\\mu m^2$)"),
-                     breaks = 1000 * 1:5,
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(700, 5000), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(1000, 3500, 500),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_MG_18M_male.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 
@@ -239,17 +227,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "6M", sex = "Female", muscle = "PL",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 100) + 
+                ymin = 500, ymax = 2700) + 
   scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
-                     breaks = seq(500, 3000, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 3200), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(500, 2500, 500),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_PL_6M_female.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -260,17 +246,16 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "6M", sex = "Male", muscle = "PL",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, 
-                               response == "Mean Fiber Area")) + 
+                               response == "Mean Fiber Area"),
+                ymin = 700, ymax = 5000) + 
   scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
                      breaks = 1000 * 1:5,
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(700, 5000), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_PL_6M_male.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -281,17 +266,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "18M", sex = "Female", muscle = "PL",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 150) + 
+                ymin = 750, ymax = 3200) + 
   scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
-                     breaks = seq(500, 3000, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 3200), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_PL_18M_female.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -302,17 +285,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "18M", sex = "Male", muscle = "PL",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 140) + 
+                ymin = 750, ymax = 4050) + 
   scale_y_continuous(name = TeX("PL CSA ($\\mu m^2$)"),
-                     breaks = 1000 * 1:5,
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(700, 5000), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = 1000 * 1:4,
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_PL_18M_male.pdf"), 
-       height = 1.7, width = 1.4, family = "ArialMT")
+       height = 1.7, width = 1.6, family = "ArialMT")
 ```
 
 
@@ -326,17 +307,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "6M", sex = "Female", muscle = "SOL",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 100) + 
+                ymin = 750, ymax = 1900) + 
   scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
-                     breaks = seq(500, 3000, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 3200), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(800, 1800, 200),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_SOL_6M_female.pdf"), 
-       height = 1.7, width = 1.2, family = "ArialMT")
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -347,17 +326,16 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "6M", sex = "Male", muscle = "SOL",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, 
-                               response == "Mean Fiber Area")) + 
+                               response == "Mean Fiber Area"),
+                ymin = 1200, ymax = 2200) + 
   scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
-                     breaks = 1000 * 1:5,
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(700, 5000), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(1200, 2200, 200),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_SOL_6M_male.pdf"), 
-       height = 1.7, width = 1.2, family = "ArialMT")
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -368,17 +346,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "18M", sex = "Female", muscle = "SOL",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, response == "Mean Fiber Area"),
-                bracket.nudge.y = 90) + 
+                ymin = 750, ymax = 2000) + 
   scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
-                     breaks = seq(500, 3000, 500),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(500, 3200), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(800, 2000, 200),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_SOL_18M_female.pdf"),
-       height = 1.7, width = 1.2, family = "ArialMT")
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -389,16 +365,15 @@ plot_fiber_type(x = FIBER_TYPES,
                 age = "18M", sex = "Male", muscle = "SOL",
                 conf = filter(conf_df, response == "Mean Fiber Area"),
                 stats = filter(FIBER_AREA_STATS, 
-                               response == "Mean Fiber Area")) + 
+                               response == "Mean Fiber Area"),
+                ymin = 1000, ymax = 3200) + 
   scale_y_continuous(name = TeX("SOL CSA ($\\mu m^2$)"),
-                     breaks = 1000 * 1:5,
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(700, 5000), clip = "off") +
-  theme(plot.margin = margin(t = 3, r = 3, b = 3, l = 3))
+                     breaks = seq(1000, 3000, 500),
+                     expand = expansion(mult = c(0, 5e-3)))
 ```
 
 ```{r eval=save_plots}
 ggsave(filename = file.path("..", "..", "plots", "fiber_CSA_SOL_18M_male.pdf"), 
-       height = 1.7, width = 1.2, family = "ArialMT")
+       height = 1.7, width = 1.4, family = "ArialMT")
 ```
 

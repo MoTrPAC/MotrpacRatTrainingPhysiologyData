@@ -516,7 +516,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_absolute_VO2max_6M_female.pdf"),
-       height = 1.8, width = 1.1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -535,7 +535,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_absolute_VO2max_6M_male.pdf"),
-       height = 1.8, width = 1.1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -555,7 +555,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", 
                  "baseline_absolute_VO2max_18M_female.pdf"),
-       height = 1.8, width = 1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -574,7 +574,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_min",
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_absolute_VO2max_18M_male.pdf"),
-       height = 1.8, width = 1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 
@@ -598,7 +598,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_relative_VO2max_6M_female.pdf"),
-       height = 1.8, width = 1.1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -617,7 +617,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_relative_VO2max_6M_male.pdf"),
-       height = 1.8, width = 1.1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -636,7 +636,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_relative_VO2max_18M_female.pdf"),
-       height = 1.8, width = 1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -655,7 +655,7 @@ plot_baseline(x = VO2MAX, response = "pre_vo2max_ml_kg_min",
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_relative_VO2max_18M_male.pdf"),
-       height = 1.8, width = 1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 
@@ -712,7 +712,7 @@ VO2MAX %>%
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_max_run_speed_6M_female.pdf"),
-       height = 1.8, width = 1.1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 6M Male
@@ -729,12 +729,6 @@ VO2MAX %>%
                       group2 = c("1W", "2W"),
                       label = rep("", 2))
   ) +
-  # geom_text(aes(x = x, y = y, label = label),
-  #           data = data.frame(x = c(1, 1), 
-  #                             y = c(23.4, 25.2) + 2,
-  #                             label = c("Wilcoxon p = 0.002", 
-  #                                       "Wilcoxon p = 0.001")),
-  #           hjust = 0, size = 7 / .pt) +
   scale_size_area(max_size = 4, breaks = seq(2, 10, 4)) +
   scale_y_continuous(name = "Maximum Run Speed (m/min)",
                      breaks = seq(12.6, 36, 3.6),
@@ -746,7 +740,7 @@ VO2MAX %>%
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_max_run_speed_6M_male.pdf"),
-       height = 1.8, width = 1.1, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 18M Female
@@ -768,7 +762,7 @@ VO2MAX %>%
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_max_run_speed_18M_female.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
 
 ## 18M Male
@@ -790,5 +784,5 @@ VO2MAX %>%
 
 ```{r eval=save_plots}
 ggsave(file.path("..", "..", "plots", "baseline_max_run_speed_18M_male.pdf"),
-       height = 1.8, width = 1.2, family = "ArialMT")
+       height = 1.8, width = 1.9, family = "ArialMT")
 ```
