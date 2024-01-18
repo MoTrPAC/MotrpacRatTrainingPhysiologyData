@@ -45,7 +45,7 @@ plot_baseline <- function(x,
     p <- p +
       stat_summary(fun.data = ~ exp(mean_cl_normal(log(.x))),
                    geom = "crossbar", fatten = 1, linewidth = 0.4,
-                   color = ifelse(sex == "Female", "#ff63ff", "#5555ff"))
+                   color = ifelse(sex == "Female", "#ff6eff", "#5555ff"))
 
   } else {
     conf <- conf %>%
