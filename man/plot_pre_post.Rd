@@ -4,7 +4,7 @@
 \alias{plot_pre_post}
 \title{Plot pre and post-training values}
 \usage{
-plot_pre_post(x, pre, post, stats = NULL)
+plot_pre_post(x, pre, post, stats = NULL, ymin, ymax)
 }
 \arguments{
 \item{x}{\code{data.frame} with pre and post values. The data should be
@@ -18,6 +18,10 @@ values.}
 
 \item{stats}{\code{data.frame} with post - pre stats for each training group.
 The data should be filtered to a specific measure, age, and sex.}
+
+\item{ymin}{numeric; lower bound on y-axis.}
+
+\item{ymax}{numeric; lower bound on y-axis.}
 }
 \value{
 A \code{ggplot} object.
