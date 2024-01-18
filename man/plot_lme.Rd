@@ -2,12 +2,13 @@
 % Please edit documentation in R/plot_lme.R
 \name{plot_lme}
 \alias{plot_lme}
-\title{Plot LMM or GLS diagnostic plots}
+\title{Linear mixed model diagnostic plots}
 \usage{
 plot_lme(model)
 }
+\arguments{
+\item{model}{output of \code{\link[nlme]{lme}}.}
+}
 \description{
-Plot LMM or GLS diagnostic plots
-
 Linear mixed model diagnostic plots
 }

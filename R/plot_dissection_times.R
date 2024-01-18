@@ -4,6 +4,9 @@
 #'   elapsed between tissue collection and freezing or death and freezing (if
 #'   tissue collection was performed post-mortem).
 #'
+#' @param x \code{data.frame} of dissection times.
+#' @param ymax numeric; upper bound on y-axis (in minutes).
+#'
 #' @import ggplot2
 #' @importFrom dplyr %>% mutate
 #' @importFrom scales label_time
@@ -14,7 +17,9 @@ plot_dissection_times <- function(x, ymax = 12) {
   x <- x %>%
     droplevels.data.frame() %>%
     mutate(color = ifelse(aliquotdescription %in%
-                            levels(DISSECTION_TIMES$aliquotdescription)[1:8],
+                            c("Gastrocnemius", "White Adipose", "Liver",
+                              "Vena Cava", "Lung", "Heart", "Hypothalamus",
+                              "Hippocampus"),
                           "anesthesia", "death"))
 
   # Mean +/- 2 SD

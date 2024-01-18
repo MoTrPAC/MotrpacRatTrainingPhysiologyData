@@ -6,6 +6,11 @@
 \usage{
 plot_dissection_times(x, ymax = 12)
 }
+\arguments{
+\item{x}{\code{data.frame} of dissection times.}
+
+\item{ymax}{numeric; upper bound on y-axis (in minutes).}
+}
 \description{
 Plot the tissue dissection times. This is the amount of time
 elapsed between tissue collection and freezing or death and freezing (if

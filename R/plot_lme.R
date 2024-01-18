@@ -1,7 +1,9 @@
-#' @title Plot LMM or GLS diagnostic plots
 #' @title Linear mixed model diagnostic plots
 #'
+#' @param model output of \code{\link[nlme]{lme}}.
+#'
 #' @importFrom stats resid fitted loess.smooth qqnorm qqline
+#' @importFrom graphics lines
 #'
 #' @export plot_lme
 
