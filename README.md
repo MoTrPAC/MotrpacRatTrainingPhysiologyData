@@ -26,7 +26,7 @@
 
 This package contains all input data, analysis steps (in the form of vignettes), and results for the MoTrPAC PASS1B Physiology manuscript. This includes data from both male and female Fischer 344 (F344) rats that were either sedentary or completed an endurance exercise training intervention. Training began at 6 or 18 months of age and lasted for a duration of 1, 2, 4, or 8 weeks.
 
-The [data-raw/](https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/tree/master/data-raw) directory contains R scripts that detail how most of the exported datasets were created. For data objects that end in `"_STATS"` or `"_EMM"`, please refer to the appropriate vignette. Vignettes contain all details of the statistical analyses while the online-only articles generate most of the manuscript figures. Vignettes and articles can be viewed on the [pkgdown website](https://pnnl-comp-mass-spec.github.io/MotrpacRatTrainingPhysiologyData/) under the "Articles" tab. This website also includes data and function documentation and news regarding new releases.
+The [data-raw/](https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/tree/master/data-raw) directory contains R scripts that detail how most of the exported datasets were created. For data objects that end in `"_STATS"` or `"_EMM"`, please refer to the appropriate vignette. Vignettes contain all details of the statistical analyses while the online-only articles generate most of the manuscript figures. Vignettes and articles can be viewed on the [pkgdown website](https://motrpac.github.io/MotrpacRatTrainingPhysiologyData/) under the "Articles" tab. This website also includes data and function documentation and news regarding new releases.
 
 **Vignettes:**
 
@@ -62,12 +62,12 @@ You can install the development version of MotrpacRatTrainingPhysiologyData like
 if (!require("devtools", quietly = TRUE))
     install.packages("devtools")
 
-devtools::install_github("PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData")
+devtools::install_github("MoTrPAC/MotrpacRatTrainingPhysiologyData")
 ```
 
 ## Getting Help
 
-For questions, bug reporting, and data requests for this package, please [submit a new issue](https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/issues) and include as many details as possible, including a minimal reproducible example, if applicable.
+For questions, bug reporting, and data requests for this package, please [submit a new issue](https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/issues) and include as many details as possible, including a minimal reproducible example, if applicable.
 
 ## Acknowledgements
 
@@ -82,3 +82,10 @@ Recipients and their Agents agree that in publications using **any** data from M
 -   Data used in the preparation of this article were obtained from the Molecular Transducers of Physical Activity Consortium (MoTrPAC) database, which is available for public access at [motrpac-data.org](motrpac-data.org). Specific datasets used are [version numbers].
 
 -   Data used in the preparation of this article were obtained from the Molecular Transducers of Physical Activity Consortium (MoTrPAC) MotrpacRatTrainingPhysiologyData R package [version number].
+
+## See Also
+
+- [MotrpacRatTraining6mo](https://github.com/MoTrPAC/MotrpacRatTraining6mo/)
+- [MotrpacRatTraining6moData](https://github.com/MoTrPAC/MotrpacRatTraining6moData/)
+- [MotrpacRatTraining6moWAT](https://github.com/MoTrPAC/MotrpacRatTraining6moWAT/)
+- [MotrpacRatTraining6moWATData](https://github.com/MoTrPAC/MotrpacRatTraining6moWATData/)
