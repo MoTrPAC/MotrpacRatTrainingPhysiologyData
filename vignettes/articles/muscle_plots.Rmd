@@ -1334,11 +1334,10 @@ plot_function(
   response = "capillary_contacts", sex = "Female", age = "6M", 
   conf_df = filter(conf_df, response == "Capillary Contacts"), 
   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
-  bracket.nudge.y = 0.1) +
+  ymin = 3, ymax = 5.5) +
   scale_y_continuous(name = "Capillary Contacts (#/fiber)",
                      breaks = seq(3, 5.5, 0.5),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}
@@ -1353,11 +1352,10 @@ plot_function(
   response = "capillary_contacts", sex = "Male", age = "6M", 
   conf_df = filter(conf_df, response == "Capillary Contacts"), 
   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
-  bracket.nudge.y = 0.15) +
+  ymin = 3, ymax = 5.5) +
   scale_y_continuous(name = "Capillary Contacts (#/fiber)",
                      breaks = seq(3, 5.5, 0.5),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}
@@ -1372,11 +1370,10 @@ plot_function(
   response = "capillary_contacts", sex = "Female", age = "18M", 
   conf_df = filter(conf_df, response == "Capillary Contacts"), 
   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
-  bracket.nudge.y = 0.08) +
+  ymin = 3, ymax = 5.5) +
   scale_y_continuous(name = "Capillary Contacts (#/fiber)",
                      breaks = seq(3, 5.5, 0.5),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}
@@ -1391,11 +1388,10 @@ plot_function(
   response = "capillary_contacts", sex = "Male", age = "18M", 
   conf_df = filter(conf_df, response == "Capillary Contacts"), 
   stats_df = filter(MUSCLES_STATS, response == "Capillary Contacts"),
-  bracket.nudge.y = 0.1) +
+  ymin = 3, ymax = 5.5) +
   scale_y_continuous(name = "Capillary Contacts (#/fiber)",
                      breaks = seq(3, 5.5, 0.5),
-                     expand = expansion(mult = 5e-3)) +
-  coord_cartesian(ylim = c(2.95, 5.5), clip = "off")
+                     expand = expansion(mult = 5e-3))
 ```
 
 ```{r eval=save_plots}
