@@ -21,7 +21,7 @@ speed."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/math
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MotrpacRatTrainingPhysiologyData</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -60,22 +60,22 @@ speed."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/math
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
-      <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+      <a href="../articles/baseline_plots.html">Plots of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
     </li>
     <li>
+      <a href="../articles/fiber_area_plots.html">Plots of fiber area by muscle and fiber type</a>
+    </li>
+    <li>
       <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
-      <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
+      <a href="../articles/muscle_plots.html">Plots of muscle-specific measures</a>
     </li>
     <li>
-      <a href="../articles/muscle_plots.html">Plots of muscle measures</a>
-    </li>
-    <li>
-      <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
+      <a href="../articles/pre_post_plots.html">Plots of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
@@ -85,7 +85,7 @@ speed."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/math
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">
+  <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -100,7 +100,7 @@ speed."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/math
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Statistical analysis results of post - pre training differences</h1>
-    <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
     <div class="hidden name"><code>PRE_POST_STATS.Rd</code></div>
     </div>
 
@@ -206,12 +206,12 @@ analysis, they are listed here.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 20</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   response      age   sex   group estimate_type estimate    SE lower.CL upper.CL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Absolute VO2… 6M    Fema… SED   (post - pre)…   0.031<span style="text-decoration: underline;">9</span> 0.243   -<span style="color: #BB0000;">0.449</span>    0.513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Absolute VO2… 6M    Fema… 4W    (post - pre)…   0.642  0.193    0.260    1.02 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Absolute VO2… 6M    Fema… 8W    (post - pre)…   2.55   0.218    2.12     2.98 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Absolute VO2… 6M    Male  SED   (post - pre)…   0.031<span style="text-decoration: underline;">9</span> 0.243   -<span style="color: #BB0000;">0.449</span>    0.513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Absolute VO2… 6M    Male  4W    (post - pre)…   0.642  0.193    0.260    1.02 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Absolute VO2… 6M    Male  8W    (post - pre)…   2.55   0.218    2.12     2.98 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Absolute VO2… 6M    Fema… SED   (post - pre)…   0.131  0.339  -<span style="color: #BB0000;">0.539</span>     0.802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Absolute VO2… 6M    Fema… 4W    (post - pre)…   0.504  0.263  -<span style="color: #BB0000;">0.015</span><span style="color: #BB0000; text-decoration: underline;">7</span>    1.02 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Absolute VO2… 6M    Fema… 8W    (post - pre)…   2.59   0.285   2.03      3.16 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Absolute VO2… 6M    Male  SED   (post - pre)…  -<span style="color: #BB0000;">0.067</span><span style="color: #BB0000; text-decoration: underline;">7</span> 0.339  -<span style="color: #BB0000;">0.738</span>     0.603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Absolute VO2… 6M    Male  4W    (post - pre)…   0.796  0.277   0.248     1.34 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Absolute VO2… 6M    Male  8W    (post - pre)…   2.50   0.326   1.86      3.14 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 11 more variables: statistic_type &lt;chr&gt;, statistic &lt;dbl&gt;, df &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   n &lt;int&gt;, p.value &lt;dbl&gt;, p.adj &lt;dbl&gt;, signif &lt;lgl&gt;, model_type &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   formula &lt;chr&gt;, weights &lt;chr&gt;, obs_removed &lt;chr&gt;</span></span>

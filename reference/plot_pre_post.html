@@ -18,7 +18,7 @@ spans from its pre-training to post-training value."><!-- mathjax --><script src
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MotrpacRatTrainingPhysiologyData</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -57,22 +57,22 @@ spans from its pre-training to post-training value."><!-- mathjax --><script src
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
-      <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+      <a href="../articles/baseline_plots.html">Plots of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
     </li>
     <li>
+      <a href="../articles/fiber_area_plots.html">Plots of fiber area by muscle and fiber type</a>
+    </li>
+    <li>
       <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
-      <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
+      <a href="../articles/muscle_plots.html">Plots of muscle-specific measures</a>
     </li>
     <li>
-      <a href="../articles/muscle_plots.html">Plots of muscle measures</a>
-    </li>
-    <li>
-      <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
+      <a href="../articles/pre_post_plots.html">Plots of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
@@ -82,7 +82,7 @@ spans from its pre-training to post-training value."><!-- mathjax --><script src
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">
+  <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -97,7 +97,7 @@ spans from its pre-training to post-training value."><!-- mathjax --><script src
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot pre and post-training values</h1>
-    <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/R/plot_pre_post.R" class="external-link"><code>R/plot_pre_post.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/blob/HEAD/R/plot_pre_post.R" class="external-link"><code>R/plot_pre_post.R</code></a></small>
     <div class="hidden name"><code>plot_pre_post.Rd</code></div>
     </div>
 
@@ -107,7 +107,7 @@ spans from its pre-training to post-training value.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_pre_post</span><span class="op">(</span><span class="va">x</span>, <span class="va">pre</span>, <span class="va">post</span>, stats <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_pre_post</span><span class="op">(</span><span class="va">x</span>, <span class="va">pre</span>, <span class="va">post</span>, stats <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">ymin</span>, <span class="va">ymax</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -130,6 +130,14 @@ values.</p></dd>
 <dt>stats</dt>
 <dd><p><code>data.frame</code> with post - pre stats for each training group.
 The data should be filtered to a specific measure, age, and sex.</p></dd>
+
+
+<dt>ymin</dt>
+<dd><p>numeric; lower bound on y-axis.</p></dd>
+
+
+<dt>ymax</dt>
+<dd><p>numeric; lower bound on y-axis.</p></dd>
 
 </dl></div>
     <div id="value">

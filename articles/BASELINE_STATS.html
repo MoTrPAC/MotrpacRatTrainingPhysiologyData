@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MotrpacRatTrainingPhysiologyData</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -74,22 +74,22 @@
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
-      <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+      <a href="../articles/baseline_plots.html">Plots of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
     </li>
     <li>
+      <a href="../articles/fiber_area_plots.html">Plots of fiber area by muscle and fiber type</a>
+    </li>
+    <li>
       <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
-      <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
+      <a href="../articles/muscle_plots.html">Plots of muscle-specific measures</a>
     </li>
     <li>
-      <a href="../articles/muscle_plots.html">Plots of muscle measures</a>
-    </li>
-    <li>
-      <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
+      <a href="../articles/pre_post_plots.html">Plots of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
@@ -102,7 +102,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">
+  <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -125,9 +125,9 @@ composition and VO2max testing measures</h1>
                         <h4 data-toc-skip class="author">Tyler
 Sagendorf</h4>
             
-            <h4 data-toc-skip class="date">27 October, 2023</h4>
+            <h4 data-toc-skip class="date">19 January, 2024</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/BASELINE_STATS.Rmd" class="external-link"><code>vignettes/BASELINE_STATS.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/BASELINE_STATS.Rmd" class="external-link"><code>vignettes/BASELINE_STATS.Rmd</code></a></small>
       <div class="hidden name"><code>BASELINE_STATS.Rmd</code></div>
 
     </div>
@@ -136,7 +136,7 @@ Sagendorf</h4>
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Required packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">MotrpacRatTrainingPhysiologyData</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">MotrpacRatTrainingPhysiologyData</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">MASS</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -157,19 +157,19 @@ appropriate log-link GLM. This allows us to back-transform the means
 without introducing bias, unlike when the response is transformed. Also,
 the log-link allows us to test ratios between means, rather than their
 absolute differences.</p>
-<p>Since neither percentage fat mass nor percentage lean mass approach
-either of their boundaries of 0 and 100%, we will treat them as if they
-could take on any positive value. That is, the modeling process will be
-the same as for the other measures.</p>
+<p>Since neither percent fat mass nor percent lean mass approach either
+of their boundaries of 0 and 100%, we will treat them as if they could
+take on any positive value. That is, the modeling process will be the
+same as for the other measures.</p>
 <p>If there are obvious problems with the model diagnostic plots, or the
 mean–variance relationship does not correspond to an exponential family
 distribution, we will include reciprocal group variances as weights in a
 log-link Gaussian GLM. Finally, we will remove insignificant predictors
 to achieve model parsimony based on ANOVA F-tests.</p>
 <div class="section level3">
-<h3 id="body-mass-nmr-day">Body Mass (NMR Day)<a class="anchor" aria-label="anchor" href="#body-mass-nmr-day"></a>
+<h3 id="nmr-body-mass">NMR Body Mass<a class="anchor" aria-label="anchor" href="#nmr-body-mass"></a>
 </h3>
-<p>Body mass recorded on the same day as the NMR body composition
+<p>Body mass (g) recorded on the same day as the NMR body composition
 measures.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
@@ -288,6 +288,7 @@ the simpler one.</p>
 <div class="section level3">
 <h3 id="nmr-lean-mass">NMR Lean Mass<a class="anchor" aria-label="anchor" href="#nmr-lean-mass"></a>
 </h3>
+<p>Lean mass (g) recorded via NMR.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">NMR</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">pre_lean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -400,6 +401,7 @@ terms.</p>
 <div class="section level3">
 <h3 id="nmr-fat-mass">NMR Fat Mass<a class="anchor" aria-label="anchor" href="#nmr-fat-mass"></a>
 </h3>
+<p>Fat mass (g) recorded via NMR.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">NMR</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">pre_fat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -516,6 +518,8 @@ at the 0.05 level.</p>
 <div class="section level3">
 <h3 id="nmr-lean-mass-1">NMR % Lean Mass<a class="anchor" aria-label="anchor" href="#nmr-lean-mass-1"></a>
 </h3>
+<p>Lean mass (g) recorded via NMR divided by the body mass (g) recorded
+on the same day and then multiplied by 100%.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">NMR</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">pre_lean_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -631,6 +635,8 @@ model.</p>
 <div class="section level3">
 <h3 id="nmr-fat-mass-1">NMR % Fat Mass<a class="anchor" aria-label="anchor" href="#nmr-fat-mass-1"></a>
 </h3>
+<p>Fat mass (g) recorded via NMR divided by the body mass (g) recorded
+on the same day and then multiplied by 100%.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">NMR</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">pre_fat_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -740,8 +746,10 @@ the simpler one.</p>
 <div class="section level3">
 <h3 id="absolute-vo_2max">Absolute VO<span class="math inline">\(_2\)</span>max<a class="anchor" aria-label="anchor" href="#absolute-vo_2max"></a>
 </h3>
-<p>Absolute VO2max is calculated by multiplying relative VO2max (<span class="math inline">\(mL \cdot kg^{-1} \cdot min^{-1}\)</span>) by body
-mass (kg).</p>
+<p>Absolute VO<span class="math inline">\(_2\)</span>max is calculated
+by multiplying relative VO<span class="math inline">\(_2\)</span>max
+(<span class="math inline">\(mL \cdot kg^{-1} \cdot min^{-1}\)</span>)
+by body mass (kg).</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">VO2MAX</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">pre_vo2max_ml_min</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -855,9 +863,10 @@ model.</p>
 <span><span class="co">#&gt; Number of Fisher Scoring iterations: 3</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="vo_2max-relative-to-total-body-mass">VO<span class="math inline">\(_2\)</span>max (relative to total body
-mass)<a class="anchor" aria-label="anchor" href="#vo_2max-relative-to-total-body-mass"></a>
+<h3 id="relative-vo_2max">Relative VO<span class="math inline">\(_2\)</span>max<a class="anchor" aria-label="anchor" href="#relative-vo_2max"></a>
 </h3>
+<p>Relative VO<span class="math inline">\(_2\)</span>max (mL/kg body
+mass/min).</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">VO2MAX</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">pre_vo2max_ml_kg_min</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -961,11 +970,11 @@ model.</p>
 <h3 id="maximum-run-speed">Maximum Run Speed<a class="anchor" aria-label="anchor" href="#maximum-run-speed"></a>
 </h3>
 <p>Since run speed was increased in 1.8 m/min increments, as defined in
-the training protocol, it may be better to use a non-parametric test.
-Rather than plotting the individual points, since they can only take on
-a few different values, we will instead count the number of samples that
-take on a particular value in each group and scale the points
-accordingly.</p>
+the training protocol, it may be preferable to use a non-parametric
+test. Rather than plotting the individual points, since they can only
+take on a few different values, we will instead count the number of
+samples that take on a particular value in each group and scale the
+points accordingly.</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot points</span></span>
 <span><span class="va">VO2MAX</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -994,6 +1003,7 @@ and sex group after we set up comparisons for all measures.</p>
 <span>                W.ratio <span class="op">=</span> <span class="va">statistic</span>,</span>
 <span>                n_SED <span class="op">=</span> <span class="va">n1</span>,</span>
 <span>                n_trained <span class="op">=</span> <span class="va">n2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Adjust p-values for multiple comparisons</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">sex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>p.adj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">p.value</span>, method <span class="op">=</span> <span class="st">"holm"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -1028,7 +1038,7 @@ and sex group after we set up comparisons for all measures.</p>
 sex-matched sedentary controls within each age group using the Dunnett
 test. Only maximum run speed and the VO<span class="math inline">\(_2\)</span>max measures will not use the Dunnett
 test. The former because it uses the nonparametric Wilcoxon Rank Sum
-test, and the latter because we concatenated age and group, so we will
+test and the latter because we concatenated age and group, so we will
 need to manually set up the correct contrasts.</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We will include the maximum run speed test results at the end</span></span>
@@ -1054,6 +1064,7 @@ need to manually set up the correct contrasts.</p>
 <span>         weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"weights = "</span>, <span class="va">model</span><span class="op">)</span>, </span>
 <span>                          <span class="st">"reciprocal group variances"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="co"># Note any observations that were removed when fitting the models</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>obs_removed <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>    <span class="va">response</span> <span class="op">==</span> <span class="st">"Absolute VO2max"</span> <span class="op">~</span> <span class="va">VO2MAX</span><span class="op">$</span><span class="va">iowa_id</span><span class="op">[</span><span class="fl">119</span><span class="op">]</span>,</span>
 <span>    <span class="va">response</span> <span class="op">==</span> <span class="st">"Relative VO2max"</span> <span class="op">~</span> <span class="va">VO2MAX</span><span class="op">$</span><span class="va">iowa_id</span><span class="op">[</span><span class="fl">153</span><span class="op">]</span></span>
@@ -1088,7 +1099,7 @@ need to manually set up the correct contrasts.</p>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">vo2max_stats</span> <span class="op">&lt;-</span> <span class="va">BASELINE_EMM</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">vo2max_stats</span> <span class="op">&lt;-</span> <span class="va">BASELINE_EMM</span><span class="op">[</span><span class="fl">6</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">emm_i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/contrast.html" class="external-link">contrast</a></span><span class="op">(</span><span class="va">emm_i</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      <span class="st">"18M: 8W / SED"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
@@ -1134,6 +1145,7 @@ need to manually set up the correct contrasts.</p>
 <span>         p.value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">statistic_type</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="st">"z"</span><span class="op">)</span>, </span>
 <span>                          <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/TDist.html" class="external-link">pt</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">statistic</span>, df <span class="op">=</span> <span class="va">df</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>                          <span class="va">p.value</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="co"># Reorder columns</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="va">contrast</span>, <span class="va">estimate_type</span>, <span class="va">null</span>, <span class="va">estimate</span>, .after <span class="op">=</span> <span class="va">sex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="va">statistic_type</span>, <span class="va">statistic</span>, <span class="va">n_SED</span>, <span class="va">n_trained</span>, <span class="va">df</span>, <span class="va">p.value</span>, </span>
 <span>           .before <span class="op">=</span> <span class="va">p.adj</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -1202,7 +1214,7 @@ need to manually set up the correct contrasts.</p>
 </h2>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.3.1 (2023-06-16)</span></span>
+<span><span class="co">#&gt; R version 4.3.2 (2023-10-31)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
 <span><span class="co">#&gt; Running under: Ubuntu 22.04.3 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1228,28 +1240,28 @@ need to manually set up the correct contrasts.</p>
 <span><span class="co">#&gt;  [3] purrr_1.0.2                           </span></span>
 <span><span class="co">#&gt;  [4] tidyr_1.3.0                           </span></span>
 <span><span class="co">#&gt;  [5] tibble_3.2.1                          </span></span>
-<span><span class="co">#&gt;  [6] emmeans_1.8.9                         </span></span>
-<span><span class="co">#&gt;  [7] dplyr_1.1.3                           </span></span>
+<span><span class="co">#&gt;  [6] emmeans_1.9.0                         </span></span>
+<span><span class="co">#&gt;  [7] dplyr_1.1.4                           </span></span>
 <span><span class="co">#&gt;  [8] MASS_7.3-60                           </span></span>
 <span><span class="co">#&gt;  [9] ggplot2_3.4.4                         </span></span>
-<span><span class="co">#&gt; [10] MotrpacRatTrainingPhysiologyData_0.1.0</span></span>
+<span><span class="co">#&gt; [10] MotrpacRatTrainingPhysiologyData_2.0.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] sass_0.4.7         utf8_1.2.4         generics_0.1.3     stringi_1.7.12    </span></span>
-<span><span class="co">#&gt;  [5] digest_0.6.33      magrittr_2.0.3     estimability_1.4.1 evaluate_0.22     </span></span>
-<span><span class="co">#&gt;  [9] grid_4.3.1         mvtnorm_1.2-3      fastmap_1.1.1      rprojroot_2.0.3   </span></span>
-<span><span class="co">#&gt; [13] jsonlite_1.8.7     backports_1.4.1    fansi_1.0.5        scales_1.2.1      </span></span>
-<span><span class="co">#&gt; [17] textshaping_0.3.7  jquerylib_0.1.4    abind_1.4-5        cli_3.6.1         </span></span>
-<span><span class="co">#&gt; [21] rlang_1.1.1        munsell_0.5.0      withr_2.5.1        cachem_1.0.8      </span></span>
-<span><span class="co">#&gt; [25] yaml_2.3.7         ggbeeswarm_0.7.2   tools_4.3.1        memoise_2.0.1     </span></span>
-<span><span class="co">#&gt; [29] ggsignif_0.6.4     colorspace_2.1-0   ggpubr_0.6.0       broom_1.0.5       </span></span>
-<span><span class="co">#&gt; [33] vctrs_0.6.4        R6_2.5.1           lifecycle_1.0.3    stringr_1.5.0     </span></span>
-<span><span class="co">#&gt; [37] car_3.1-2          fs_1.6.3           vipor_0.4.5        ragg_1.2.6        </span></span>
-<span><span class="co">#&gt; [41] pkgconfig_2.0.3    beeswarm_0.4.0     desc_1.4.2         pkgdown_2.0.7     </span></span>
-<span><span class="co">#&gt; [45] pillar_1.9.0       bslib_0.5.1        gtable_0.3.4       glue_1.6.2        </span></span>
-<span><span class="co">#&gt; [49] systemfonts_1.0.5  xfun_0.40          tidyselect_1.2.0   knitr_1.44        </span></span>
-<span><span class="co">#&gt; [53] farver_2.1.1       htmltools_0.5.6.1  labeling_0.4.3     carData_3.0-5     </span></span>
-<span><span class="co">#&gt; [57] rmarkdown_2.25     compiler_4.3.1</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] sass_0.4.8         utf8_1.2.4         generics_0.1.3     stringi_1.8.3     </span></span>
+<span><span class="co">#&gt;  [5] digest_0.6.34      magrittr_2.0.3     estimability_1.4.1 evaluate_0.23     </span></span>
+<span><span class="co">#&gt;  [9] grid_4.3.2         mvtnorm_1.2-4      fastmap_1.1.1      jsonlite_1.8.8    </span></span>
+<span><span class="co">#&gt; [13] backports_1.4.1    fansi_1.0.6        scales_1.3.0       textshaping_0.3.7 </span></span>
+<span><span class="co">#&gt; [17] jquerylib_0.1.4    abind_1.4-5        cli_3.6.2          rlang_1.1.3       </span></span>
+<span><span class="co">#&gt; [21] munsell_0.5.0      withr_3.0.0        cachem_1.0.8       yaml_2.3.8        </span></span>
+<span><span class="co">#&gt; [25] ggbeeswarm_0.7.2   tools_4.3.2        memoise_2.0.1      ggsignif_0.6.4    </span></span>
+<span><span class="co">#&gt; [29] colorspace_2.1-0   ggpubr_0.6.0       broom_1.0.5        vctrs_0.6.5       </span></span>
+<span><span class="co">#&gt; [33] R6_2.5.1           lifecycle_1.0.4    stringr_1.5.1      car_3.1-2         </span></span>
+<span><span class="co">#&gt; [37] fs_1.6.3           vipor_0.4.7        ragg_1.2.7         pkgconfig_2.0.3   </span></span>
+<span><span class="co">#&gt; [41] beeswarm_0.4.0     desc_1.4.3         pkgdown_2.0.7      pillar_1.9.0      </span></span>
+<span><span class="co">#&gt; [45] bslib_0.6.1        gtable_0.3.4       glue_1.7.0         systemfonts_1.0.5 </span></span>
+<span><span class="co">#&gt; [49] highr_0.10         xfun_0.41          tidyselect_1.2.0   knitr_1.45        </span></span>
+<span><span class="co">#&gt; [53] farver_2.1.1       htmltools_0.5.7    labeling_0.4.3     carData_3.0-5     </span></span>
+<span><span class="co">#&gt; [57] rmarkdown_2.25     compiler_4.3.2</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

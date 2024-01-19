@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MotrpacRatTrainingPhysiologyData</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -74,22 +74,22 @@
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
-      <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+      <a href="../articles/baseline_plots.html">Plots of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
     </li>
     <li>
+      <a href="../articles/fiber_area_plots.html">Plots of fiber area by muscle and fiber type</a>
+    </li>
+    <li>
       <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
-      <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
+      <a href="../articles/muscle_plots.html">Plots of muscle-specific measures</a>
     </li>
     <li>
-      <a href="../articles/muscle_plots.html">Plots of muscle measures</a>
-    </li>
-    <li>
-      <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
+      <a href="../articles/pre_post_plots.html">Plots of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
@@ -102,7 +102,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">
+  <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -125,9 +125,9 @@ measures</h1>
                         <h4 data-toc-skip class="author">Tyler
 Sagendorf</h4>
             
-            <h4 data-toc-skip class="date">27 October, 2023</h4>
+            <h4 data-toc-skip class="date">19 January, 2024</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/MUSCLES_STATS.Rmd" class="external-link"><code>vignettes/MUSCLES_STATS.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/MUSCLES_STATS.Rmd" class="external-link"><code>vignettes/MUSCLES_STATS.Rmd</code></a></small>
       <div class="hidden name"><code>MUSCLES_STATS.Rmd</code></div>
 
     </div>
@@ -136,7 +136,7 @@ Sagendorf</h4>
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Required packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">MotrpacRatTrainingPhysiologyData</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">MotrpacRatTrainingPhysiologyData</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">MASS</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -146,20 +146,6 @@ Sagendorf</h4>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co"># base plot theme</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">f1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">standard_resid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">standard_resid</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">fitted</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>,</span>
-<span>       xlab <span class="op">=</span> <span class="st">"Fitted Values"</span>, ylab <span class="op">=</span> <span class="st">"Standardized Pearson Residuals"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"Residuals vs. Fitted"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/scatter.smooth.html" class="external-link">loess.smooth</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">fitted</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>,</span>
-<span>                     y <span class="op">=</span> <span class="va">standard_resid</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>        lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqnorm</a></span><span class="op">(</span><span class="va">standard_resid</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqline</a></span><span class="op">(</span><span class="va">standard_resid</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="regression-models">Regression Models<a class="anchor" aria-label="anchor" href="#regression-models"></a>
 </h2>
@@ -172,20 +158,21 @@ citrate synthase concentration.</p>
 (LMMs) with a random intercept for each rat. Since all response
 variables are strictly positive, we will use an appropriate
 variance-stabilizing transformation on each response. Weights will be
-included if we observe heterogeneity.</p>
+included if we still observe heterogeneity.</p>
 <p>Outliers will be inspected and removed if there is a valid reason. We
 will report all observations that were removed, as well as the reason
 for doing so, in the final results table.</p>
 <div class="section level3">
 <h3 id="terminal-muscle-mass">Terminal Muscle Mass<a class="anchor" aria-label="anchor" href="#terminal-muscle-mass"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>Mass (mg) of dissected muscles.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">MUSCLES</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">term_muscle_mass</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>             position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitter.html" class="external-link">position_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.1</span>, height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">muscle</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-2-1.png" width="672"></p>
 <p>There are two observations with lower weights than expected. However,
 when we investigated these values, we found that they agree with what
 was recorded on the data collection sheets. Additionally, any strange
@@ -194,7 +181,7 @@ observations come from the same group (18M SED male), though they are
 not from the same rat, so this may be biological.</p>
 <p>Note that the variance appears to increase as the mean increases, so
 we will check the mean-variance relationship.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">MUSCLES</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">sex</span>, <span class="va">group</span>, <span class="va">muscle</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">term_muscle_mass</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -204,23 +191,23 @@ we will check the mean-variance relationship.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; (Intercept)     log(mn) </span></span>
 <span><span class="co">#&gt;   -3.654075    1.671691</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">vr</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">mn</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mv</span>, las <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>     xlab <span class="op">=</span> <span class="st">"log(group means)"</span>, ylab <span class="op">=</span> <span class="st">"log(group variances)"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-5-1.png" width="384"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-4-1.png" width="384"></p>
 <p>The slope is close to 2, so we will log-transform the response and
 use <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">nlme::lme</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">term_muscle_mass</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span> <span class="op">*</span> <span class="va">muscle</span>,</span>
 <span>                random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">pid</span>,</span>
 <span>                data <span class="op">=</span> <span class="va">MUSCLES</span>,</span>
 <span>                na.action <span class="op">=</span> <span class="va">na.exclude</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.term</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.term</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 <p>There are two outliers. We will investigate further.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out.term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.term</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">5</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out.term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.term</span>, type <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">out.term.df</span> <span class="op">&lt;-</span> <span class="va">MUSCLES</span><span class="op">[</span><span class="va">out.term</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">sex</span>, <span class="va">group</span>, <span class="va">muscle</span><span class="op">)</span></span>
 <span></span>
@@ -261,7 +248,7 @@ the 18M8T3 SOL terminal weight and the second lowest value (130 - 73 =
 excluded (167 - 130). In both cases, these values seem unreasonable
 given the values from other rats. We will also compare the different
 muscles within these two rats.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MUSCLES</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">iowa_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"18M4T18"</span>, <span class="st">"18M8T3"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">iowa_id</span>, <span class="va">muscle</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -286,7 +273,7 @@ are outlying in 3/6 pairwise comparisons will be investigated. This
 would mean that one of the muscles is much lower or much higher than
 expected. The ratios will be constructed so that the larger muscle is
 always in the numerator: LG &gt; MG &gt; PL &gt; SOL.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identify boxplot outliers</span></span>
 <span><span class="va">boxplot_outlier</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">0.25</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1.5</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">|</span> </span>
@@ -353,51 +340,51 @@ SED males, it is likely that the reason for the low values is due to
 some unknown biological factor. However, rather than keep these two
 observations in the model, we will remove them and report our decision
 in the final results table.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.term</span>, subset <span class="op">=</span> <span class="op">-</span><span class="va">out.term</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.term</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.term</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
 <p>The residuals vs. fitted plot looks fine. The QQ-plot has slightly
 heavier tails than expected. We will look at plots of residuals
 vs. predictor levels to identify potential heterogeneity.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">MUSCLES</span><span class="op">[</span><span class="op">-</span><span class="va">out.term</span>, <span class="op">]</span></span>
-<span><span class="va">r.term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.term</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">r.term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.term</span>, type <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.term</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">df</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.term</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">df</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.term</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">df</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.term</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">df</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>There may be differences in the variability between the muscles (SOL
 is clearly more variable), so we will include weights for each muscle
 type.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.term1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.term</span>, </span>
 <span>                    weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/varIdent.html" class="external-link">varIdent</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">muscle</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.term1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.term1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
 <p>The QQ-plot no longer has those heavy tails. We will examine the
 boxplots of residuals vs. predictor levels again.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r.term1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.term1</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r.term1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.term1</span>, type <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.term1</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">df</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.term1</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">df</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.term1</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">df</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.term1</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">df</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>That took care of the heteroscedasticity. The diagnostic plots look
 fine now, so we will try to simplify the model.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.term1</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                      numDF denDF F-value p-value</span></span>
 <span><span class="co">#&gt; (Intercept)              1   775 3530896  &lt;.0001</span></span>
@@ -420,7 +407,7 @@ fine now, so we will try to simplify the model.</p>
 terms. Our final model has a random intercept for each rat and allows
 for different standard deviations for each muscle. Additionally, two
 extremely small terminal weights were removed.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.term</span> <span class="op">&lt;-</span> <span class="va">fit.term1</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr</a></span><span class="op">(</span><span class="va">fit.term</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pid = pdLogChol(1) </span></span>
@@ -431,7 +418,9 @@ extremely small terminal weights were removed.</p>
 <div class="section level3">
 <h3 id="mean-cross-sectional-area">Mean Cross-Sectional Area<a class="anchor" aria-label="anchor" href="#mean-cross-sectional-area"></a>
 </h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<p>Mean muscle cross-sectional area (<span class="math inline">\(\mu
+m^2\)</span>).</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MUSCLES</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">mean_CSA</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">mean_CSA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -439,12 +428,12 @@ extremely small terminal weights were removed.</p>
 <span>             position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitter.html" class="external-link">position_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.1</span>, height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">muscle</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-16-1.png" width="480"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-15-1.png" width="480"></p>
 <p>There appears to be an outlier in the 6M 8W male plantaris measures.
 We may need to investigate that later. Based on the plots, the variance
 increases as some function of the mean. We will check the mean-variance
 relationship.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">MUSCLES</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">sex</span>, <span class="va">group</span>, <span class="va">age</span>, <span class="va">muscle</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mean_CSA</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -454,26 +443,26 @@ relationship.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; (Intercept)     log(mn) </span></span>
 <span><span class="co">#&gt;   -8.772808    2.523308</span></span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">vr</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">mn</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mv</span>, las <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>     xlab <span class="op">=</span> <span class="st">"log(group means)"</span>, ylab <span class="op">=</span> <span class="st">"log(group variances)"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-18-1.png" width="384"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-17-1.png" width="384"></p>
 <p>The slope suggests a variance function approximately of the form
 <span class="math inline">\(V(\mu) = \mu^{2.5}\)</span>. We will try a
 log transformation to stabilize the variance.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">mean_CSA</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span> <span class="op">*</span> <span class="va">muscle</span>,</span>
 <span>                random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">pid</span>,</span>
 <span>                data <span class="op">=</span> <span class="va">MUSCLES</span>,</span>
 <span>                na.action <span class="op">=</span> <span class="va">na.exclude</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.area</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.area</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
 <p>The diagnostic plots look mostly fine, though we see that observation
 we mentioned before is slightly outlying. We will check boxplots of
 residuals vs. predictor levels to identify potential sources of
 heterogeneity.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r.area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.area</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -481,17 +470,17 @@ heterogeneity.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.area</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.area</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.area</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We will include weights for the different muscle groups and then
 reexamine the boxplots.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.area1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.area</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/varIdent.html" class="external-link">varIdent</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">muscle</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.area1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-21-1.png" width="672"></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.area1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r.area1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.area1</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -499,16 +488,16 @@ reexamine the boxplots.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.area1</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.area1</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.area1</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-22-1.png" width="672"></p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-21-1.png" width="672"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>There does not appear to be any heterogeneity now. We will try to
 simplify the model formula.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.area1</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                      numDF denDF  F-value p-value</span></span>
-<span><span class="co">#&gt; (Intercept)              1   120 792937.6  &lt;.0001</span></span>
+<span><span class="co">#&gt; (Intercept)              1   120 792937.5  &lt;.0001</span></span>
 <span><span class="co">#&gt; age                      1    40      0.3  0.5682</span></span>
 <span><span class="co">#&gt; sex                      1    40    161.4  &lt;.0001</span></span>
 <span><span class="co">#&gt; group                    1    40      2.8  0.1050</span></span>
@@ -526,26 +515,27 @@ simplify the model formula.</p>
 <span><span class="co">#&gt; age:sex:group:muscle     3   120      3.2  0.0252</span></span></code></pre></div>
 <p>The 4-way interaction is significant, so we will not remove any
 terms. We will not remove any observations either.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.area</span> <span class="op">&lt;-</span> <span class="va">fit.area1</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr</a></span><span class="op">(</span><span class="va">fit.area</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pid = pdLogChol(1) </span></span>
 <span><span class="co">#&gt;             Variance    StdDev    </span></span>
 <span><span class="co">#&gt; (Intercept) 0.001408801 0.03753399</span></span>
-<span><span class="co">#&gt; Residual    0.005564422 0.07459505</span></span></code></pre></div>
+<span><span class="co">#&gt; Residual    0.005564422 0.07459506</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="glycogen">Glycogen<a class="anchor" aria-label="anchor" href="#glycogen"></a>
 </h3>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<p>Muscle glycogen concentration (ng glycogen/<span class="math inline">\(\mu\)</span>L supernatant/mg tissue).</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">MUSCLES</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">glycogen</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>             position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitter.html" class="external-link">position_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.1</span>, height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">muscle</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
 <p>We will check the mean-variance relationship.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">MUSCLES</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">sex</span>, <span class="va">group</span>, <span class="va">age</span>, <span class="va">muscle</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">glycogen</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -555,33 +545,33 @@ terms. We will not remove any observations either.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; (Intercept)     log(mn) </span></span>
 <span><span class="co">#&gt;  -0.6326815   1.4008057</span></span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">vr</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">mn</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mv</span>, las <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>     xlab <span class="op">=</span> <span class="st">"log(group means)"</span>, ylab <span class="op">=</span> <span class="st">"log(group variances)"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-27-1.png" width="384"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-26-1.png" width="384"></p>
 <p>The slope suggests a variance function approximately of the form
 <span class="math inline">\(V(\mu) = \mu^{1.4}\)</span>. This is
 intermediate between the Poisson and gamma distributions. We will
 log-transform the response.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.glyc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">glycogen</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span> <span class="op">*</span> <span class="va">muscle</span>,</span>
 <span>                random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">pid</span>,</span>
 <span>                data <span class="op">=</span> <span class="va">MUSCLES</span>,</span>
 <span>                na.action <span class="op">=</span> <span class="va">na.exclude</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.glyc</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.glyc</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-27-1.png" width="672"></p>
 <p>It appears that the log-transformation over-corrects for the
 mean-variance relationship at higher values. We will try a square root
 transformation instead.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.glyc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.glyc</span>, fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">glycogen</span><span class="op">)</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.glyc1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.glyc1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
 <p>The diagnostic plots look much better, though the QQ-plots have
 somewhat heavy tails. We will check for heteroscedasticity in the
 boxplots of residuals vs. predictor levels.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r.glyc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.glyc1</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -589,22 +579,22 @@ boxplots of residuals vs. predictor levels.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.glyc1</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.glyc1</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.glyc1</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-30-1.png" width="672"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>There appears to be heterogeneity between the muscles and possibly
 between the groups. We will allow for separate weights for each sex and
 muscle combination.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.glyc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.glyc1</span>, </span>
 <span>                    weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/varIdent.html" class="external-link">varIdent</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">muscle</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.glyc2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-31-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.glyc2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-30-1.png" width="672"></p>
 <p>The QQ-plot looks a bit better, though there is an observation with a
 large negative residual. We will investigate the boxplots of residuals
 vs. predictor levels.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r.glyc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.glyc2</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -612,15 +602,15 @@ vs. predictor levels.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.glyc2</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.glyc2</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.glyc2</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-32-1.png" width="672"></p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-31-1.png" width="672"></p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>There no longer appears to be heteroscedasticity between the muscles.
 That 18M Male 8W LG outlier is extreme for the values in that group,
 but, upon investigation, we found it to be similar to values from the 6M
 animals. We will try to simplify the model.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.glyc2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                      numDF denDF  F-value p-value</span></span>
 <span><span class="co">#&gt; (Intercept)              1   521 6875.188  &lt;.0001</span></span>
@@ -641,21 +631,22 @@ animals. We will try to simplify the model.</p>
 <span><span class="co">#&gt; age:sex:group:muscle    12   521    3.283  0.0001</span></span></code></pre></div>
 <p>The 4-way interaction is significant, so we will not remove any
 terms.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.glyc</span> <span class="op">&lt;-</span> <span class="va">fit.glyc2</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="capillary-contacts">Capillary Contacts<a class="anchor" aria-label="anchor" href="#capillary-contacts"></a>
 </h3>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<p>Mean number of muscle capillary contacts (capillaries/fiber).</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MUSCLES</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">capillary_contacts</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">capillary_contacts</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>             position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitter.html" class="external-link">position_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.1</span>, height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">muscle</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-35-1.png" width="480"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-34-1.png" width="480"></p>
 <p>We will check the mean-variance relationship.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">MUSCLES</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">sex</span>, <span class="va">group</span>, <span class="va">age</span>, <span class="va">muscle</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">capillary_contacts</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -665,23 +656,23 @@ terms.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; (Intercept)     log(mn) </span></span>
 <span><span class="co">#&gt;  -3.2282735   0.2335005</span></span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">vr</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">mn</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mv</span>, las <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>     xlab <span class="op">=</span> <span class="st">"log(group means)"</span>, ylab <span class="op">=</span> <span class="st">"log(group variances)"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-37-1.png" width="384"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-36-1.png" width="384"></p>
 <p>The slope is close to 0, indicating constant variance. We will fit a
 log-link Gaussian GLMM.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.cap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">capillary_contacts</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span> <span class="op">*</span> <span class="va">muscle</span>,</span>
 <span>               random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">pid</span>,</span>
 <span>               data <span class="op">=</span> <span class="va">MUSCLES</span>,</span>
 <span>               na.action <span class="op">=</span> <span class="va">na.exclude</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.cap</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-38-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.cap</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-37-1.png" width="672"></p>
 <p>We will look at boxplots of residuals vs. predictors to identify
 potential heterogeneity.</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r.cap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.cap</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -689,19 +680,19 @@ potential heterogeneity.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.cap</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.cap</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.cap</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-39-1.png" width="672"></p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-38-1.png" width="672"></p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>There appears to be heteroscedasticity between the ages and the
 muscles.</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.cap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.cap</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/varIdent.html" class="external-link">varIdent</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">age</span> <span class="op">*</span> <span class="va">muscle</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.cap1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-40-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.cap1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-39-1.png" width="672"></p>
 <p>The diagnostic plots look fine now. We will double-check the
 boxplots.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r.cap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.cap1</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -709,15 +700,15 @@ boxplots.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.cap1</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.cap1</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.cap1</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-41-1.png" width="672"></p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-40-1.png" width="672"></p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The boxplots look fine now. We will try to simplify the model.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.cap1</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                      numDF denDF   F-value p-value</span></span>
-<span><span class="co">#&gt; (Intercept)              1   119 100014.28  &lt;.0001</span></span>
+<span><span class="co">#&gt; (Intercept)              1   119 100014.29  &lt;.0001</span></span>
 <span><span class="co">#&gt; age                      1    40      4.15  0.0484</span></span>
 <span><span class="co">#&gt; sex                      1    40    331.65  &lt;.0001</span></span>
 <span><span class="co">#&gt; group                    1    40      0.08  0.7745</span></span>
@@ -733,7 +724,7 @@ boxplots.</p>
 <span><span class="co">#&gt; age:group:muscle         3   119      2.83  0.0412</span></span>
 <span><span class="co">#&gt; sex:group:muscle         3   119      1.36  0.2592</span></span>
 <span><span class="co">#&gt; age:sex:group:muscle     3   119      0.72  0.5418</span></span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.cap1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.cap1</span>, method <span class="op">=</span> <span class="st">"ML"</span><span class="op">)</span></span>
 <span><span class="va">fit.cap2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.cap1</span>, fixed <span class="op">=</span> <span class="va">.</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">group</span> <span class="op">+</span> <span class="va">muscle</span> <span class="op">+</span> <span class="va">age</span><span class="op">:</span><span class="va">sex</span> <span class="op">+</span> <span class="va">age</span><span class="op">:</span><span class="va">muscle</span> <span class="op">+</span> <span class="va">age</span><span class="op">:</span><span class="va">group</span> <span class="op">+</span> <span class="va">group</span><span class="op">:</span><span class="va">muscle</span> <span class="op">+</span> <span class="va">age</span><span class="op">:</span><span class="va">group</span><span class="op">:</span><span class="va">muscle</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit.cap1</span>, <span class="va">fit.cap2</span><span class="op">)</span></span>
@@ -742,12 +733,12 @@ boxplots.</p>
 <span><span class="co">#&gt; fit.cap2 27 -469.1365</span></span></code></pre></div>
 <p>We will use the simpler model, since they are not significantly
 different.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.cap2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.cap2</span>, method <span class="op">=</span> <span class="st">"REML"</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.cap2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-44-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.cap2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-43-1.png" width="672"></p>
 <p>The diagnostic plots still look fine.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.cap</span> <span class="op">&lt;-</span> <span class="va">fit.cap2</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr</a></span><span class="op">(</span><span class="va">fit.cap</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pid = pdLogChol(1) </span></span>
@@ -758,16 +749,17 @@ different.</p>
 <div class="section level3">
 <h3 id="citrate-synthase">Citrate Synthase<a class="anchor" aria-label="anchor" href="#citrate-synthase"></a>
 </h3>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<p>Muscle citrate synthase concentration (U citrate synthase/<span class="math inline">\(\mu\)</span>g protein <span class="math inline">\(\times 10^3\)</span>).</p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MUSCLES</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">citrate_synthase</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">group</span>, y <span class="op">=</span> <span class="va">citrate_synthase</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>             position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitter.html" class="external-link">position_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.1</span>, height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">muscle</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-46-1.png" width="672"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-45-1.png" width="672"></p>
 <p>We will check the mean-variance relationship.</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">MUSCLES</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">sex</span>, <span class="va">group</span>, <span class="va">age</span>, <span class="va">muscle</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">citrate_synthase</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -777,25 +769,25 @@ different.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; (Intercept)     log(mn) </span></span>
 <span><span class="co">#&gt;   -1.637787    1.752179</span></span></code></pre></div>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">vr</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">mn</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mv</span>, las <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>     xlab <span class="op">=</span> <span class="st">"log(group means)"</span>, ylab <span class="op">=</span> <span class="st">"log(group variances)"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit.mv</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-48-1.png" width="384"></p>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-47-1.png" width="384"></p>
 <p>The slope is close to 2, so we will try a log transformation.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.citrate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span></span>
 <span>  fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">citrate_synthase</span><span class="op">)</span> <span class="op">~</span> <span class="op">(</span><span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">group</span> <span class="op">+</span> <span class="va">muscle</span><span class="op">)</span> <span class="op">^</span> <span class="fl">4</span>,</span>
 <span>  random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">pid</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">MUSCLES</span>,</span>
 <span>  na.action <span class="op">=</span> <span class="va">na.exclude</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.citrate</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-49-1.png" width="672"></p>
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.citrate</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-48-1.png" width="672"></p>
 <p>While the residuals vs. fitted plot appears mostly fine, the tails of
 the QQ-plot are heavier than expected. We will check the boxplots of
 residuals vs. predictor levels to see if it is caused by
 heteroscedasticity.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r.citrate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.citrate</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -803,18 +795,18 @@ heteroscedasticity.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.citrate</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.citrate</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.citrate</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-50-1.png" width="672"></p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-49-1.png" width="672"></p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>There appear to be differences in the muscles and perhaps in the
 groups as well.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit.citrate1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.citrate</span>, </span>
 <span>                       weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/varIdent.html" class="external-link">varIdent</a></span><span class="op">(</span>form <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">group</span> <span class="op">*</span> <span class="va">muscle</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">f1</span><span class="op">(</span><span class="va">fit.citrate1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-51-1.png" width="672"></p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="../reference/plot_lme.html">plot_lme</a></span><span class="op">(</span><span class="va">fit.citrate1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-50-1.png" width="672"></p>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r.citrate1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.citrate1</span>, type <span class="op">=</span> <span class="st">"pearson"</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -822,15 +814,15 @@ groups as well.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.citrate1</span> <span class="op">~</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.citrate1</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">r.citrate1</span> <span class="op">~</span> <span class="va">muscle</span>, data <span class="op">=</span> <span class="va">MUSCLES</span>, ylab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Scaled Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-52-1.png" width="672"></p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Pearson Residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="MUSCLES_STATS_files/figure-html/unnamed-chunk-51-1.png" width="672"></p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The boxplots look fine. We will try to simplify the model.</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.citrate1</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                      numDF denDF   F-value p-value</span></span>
-<span><span class="co">#&gt; (Intercept)              1   525 257227.31  &lt;.0001</span></span>
+<span><span class="co">#&gt; (Intercept)              1   525 257226.96  &lt;.0001</span></span>
 <span><span class="co">#&gt; age                      1   175      0.48  0.4871</span></span>
 <span><span class="co">#&gt; sex                      1   175    274.13  &lt;.0001</span></span>
 <span><span class="co">#&gt; group                    4   175    149.79  &lt;.0001</span></span>
@@ -853,7 +845,7 @@ model.</p>
 <div class="section level2">
 <h2 id="hypothesis-testing">Hypothesis Testing<a class="anchor" aria-label="anchor" href="#hypothesis-testing"></a>
 </h2>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Terminal Muscle Mass"</span> <span class="op">=</span> <span class="va">fit.term</span>,</span>
 <span>                   <span class="st">"Mean CSA"</span> <span class="op">=</span> <span class="va">fit.area</span>,</span>
 <span>                   <span class="st">"Glycogen"</span> <span class="op">=</span> <span class="va">fit.glyc</span>,</span>
@@ -872,9 +864,9 @@ model.</p>
 <span>    <span class="co"># Calculate estimated marginal means on the square-root scale,</span></span>
 <span>    <span class="co"># back-transform, and convert to log-scale</span></span>
 <span>    <span class="va">em_i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_i</span>, specs <span class="op">=</span> <span class="st">"group"</span>, </span>
-<span>              by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"muscle"</span><span class="op">)</span>, </span>
-<span>              type <span class="op">=</span> <span class="st">"response"</span>, bias.adj <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>              infer <span class="op">=</span> <span class="cn">TRUE</span>, data <span class="op">=</span> <span class="va">data_i</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"muscle"</span><span class="op">)</span>, </span>
+<span>                    type <span class="op">=</span> <span class="st">"response"</span>, bias.adj <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                    infer <span class="op">=</span> <span class="cn">TRUE</span>, data <span class="op">=</span> <span class="va">data_i</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/regrid.html" class="external-link">regrid</a></span><span class="op">(</span>transform <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>    <span class="va">em_i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">mod_i</span>, specs <span class="op">=</span> <span class="st">"group"</span>, </span>
@@ -884,7 +876,7 @@ model.</p>
 <span>  </span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">em_i</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract model info</span></span>
 <span><span class="va">model_df</span> <span class="op">&lt;-</span> <span class="va">model_list</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span>.f <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse</a></span><span class="op">(</span><span class="va">.x</span><span class="op">[[</span><span class="st">"call"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -901,12 +893,12 @@ model.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>obs_removed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"Terminal Muscle Mass"</span>, </span>
 <span>                              <span class="st">"18M8T3 SOL = 73, 18M4T18 PL = 210"</span>,</span>
 <span>                              <span class="cn">NA_character_</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Results</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Results</span></span>
 <span><span class="va">MUSCLES_STATS</span> <span class="op">&lt;-</span> <span class="va">MUSCLES_EMM</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">emm_i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/contrast.html" class="external-link">contrast</a></span><span class="op">(</span><span class="va">emm_i</span>, method <span class="op">=</span> <span class="st">"dunnett"</span>, </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/contrast.html" class="external-link">contrast</a></span><span class="op">(</span><span class="va">emm_i</span>, method <span class="op">=</span> <span class="st">"trt.vs.ctrl"</span>, </span>
 <span>             ratios <span class="op">=</span> <span class="cn">TRUE</span>, bias.adj <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span>infer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -914,10 +906,7 @@ model.</p>
 <span>                      upper.CL <span class="op">=</span> <span class="st">"asymp.UCL"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html" class="external-link">enframe</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">age</span>, <span class="va">sex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>p.adj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">p.value</span>, method <span class="op">=</span> <span class="st">"holm"</span><span class="op">)</span>,</span>
-<span>         signif <span class="op">=</span> <span class="va">p.adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="va">ratio</span>, </span>
 <span>               names_to <span class="op">=</span> <span class="st">"estimate_type"</span>, </span>
@@ -926,9 +915,22 @@ model.</p>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">".ratio"</span><span class="op">)</span>, </span>
 <span>               names_to <span class="op">=</span> <span class="st">"statistic_type"</span>, </span>
 <span>               values_to <span class="op">=</span> <span class="st">"statistic"</span>, </span>
-<span>               values_drop_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>               values_drop_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># Holm-adjust p-values for capillary contacts and cross-sectional area.</span></span>
+<span>  <span class="co"># The other measures use adjusted p-values from Dunnett's test.</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">age</span>, <span class="va">sex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>p.adj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">response</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Capillary Contacts"</span>, </span>
+<span>                                        <span class="st">"Mean CSA"</span><span class="op">)</span>, </span>
+<span>                        <span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">p.value</span>, method <span class="op">=</span> <span class="st">"holm"</span><span class="op">)</span>, <span class="va">p.value</span><span class="op">)</span>,</span>
+<span>         p.value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">response</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Capillary Contacts"</span>, </span>
+<span>                                          <span class="st">"Mean CSA"</span><span class="op">)</span>,</span>
+<span>                          <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/TDist.html" class="external-link">pt</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">estimate</span>, df <span class="op">=</span> <span class="va">df</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>                          <span class="va">p.value</span><span class="op">)</span>,</span>
+<span>         signif <span class="op">=</span> <span class="va">p.adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>statistic_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">"\\.ratio"</span>, <span class="st">""</span>, <span class="va">statistic_type</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">model_df</span>, by <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="co"># Reorder columns</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">muscle</span>, <span class="va">contrast</span>, <span class="va">estimate_type</span>, <span class="va">null</span>,</span>
 <span>                <span class="va">estimate</span>, <span class="va">SE</span>, <span class="va">lower.CL</span>, <span class="va">upper.CL</span>, <span class="va">statistic_type</span>, <span class="va">statistic</span>, <span class="va">df</span>,</span>
 <span>                <span class="va">p.value</span>, <span class="va">p.adj</span>, <span class="va">signif</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -943,13 +945,13 @@ model.</p>
 <span><span class="co">#&gt; 4 Capillary Contacts  6M Female    SOL 8W / SED         ratio    1 1.0500027</span></span>
 <span><span class="co">#&gt; 5 Capillary Contacts  6M   Male     LG 8W / SED         ratio    1 1.0503636</span></span>
 <span><span class="co">#&gt; 6 Capillary Contacts  6M   Male     MG 8W / SED         ratio    1 0.9743145</span></span>
-<span><span class="co">#&gt;           SE  lower.CL upper.CL statistic_type  statistic df    p.value</span></span>
-<span><span class="co">#&gt; 1 0.02572250 0.9997154 1.103578              t  2.0064577 42 0.05127437</span></span>
-<span><span class="co">#&gt; 2 0.04009022 0.8966773 1.058674              t -0.6323917 42 0.53055884</span></span>
-<span><span class="co">#&gt; 3 0.02259141 0.9034282 0.994646              t -2.2433407 42 0.03020713</span></span>
-<span><span class="co">#&gt; 4 0.03594224 0.9799169 1.125101              t  1.4254112 42 0.16142826</span></span>
-<span><span class="co">#&gt; 5 0.02572250 0.9997154 1.103578              t  2.0064577 42 0.05127437</span></span>
-<span><span class="co">#&gt; 6 0.04009022 0.8966773 1.058674              t -0.6323917 42 0.53055884</span></span>
+<span><span class="co">#&gt;           SE  lower.CL upper.CL statistic_type  statistic df   p.value</span></span>
+<span><span class="co">#&gt; 1 0.02572250 0.9997154 1.103578              t  2.0064577 42 0.2995573</span></span>
+<span><span class="co">#&gt; 2 0.04009022 0.8966773 1.058674              t -0.6323917 42 0.3354788</span></span>
+<span><span class="co">#&gt; 3 0.02259141 0.9034282 0.994646              t -2.2433407 42 0.3485823</span></span>
+<span><span class="co">#&gt; 4 0.03594224 0.9799169 1.125101              t  1.4254112 42 0.2997213</span></span>
+<span><span class="co">#&gt; 5 0.02572250 0.9997154 1.103578              t  2.0064577 42 0.2995573</span></span>
+<span><span class="co">#&gt; 6 0.04009022 0.8966773 1.058674              t -0.6323917 42 0.3354788</span></span>
 <span><span class="co">#&gt;       p.adj signif model_type</span></span>
 <span><span class="co">#&gt; 1 0.1538231  FALSE        lme</span></span>
 <span><span class="co">#&gt; 2 0.5305588  FALSE        lme</span></span>
@@ -977,7 +979,7 @@ model.</p>
 </h2>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.3.1 (2023-06-16)</span></span>
+<span><span class="co">#&gt; R version 4.3.2 (2023-10-31)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
 <span><span class="co">#&gt; Running under: Ubuntu 22.04.3 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1001,29 +1003,29 @@ model.</p>
 <span><span class="co">#&gt; [1] purrr_1.0.2                           </span></span>
 <span><span class="co">#&gt; [2] tidyr_1.3.0                           </span></span>
 <span><span class="co">#&gt; [3] tibble_3.2.1                          </span></span>
-<span><span class="co">#&gt; [4] emmeans_1.8.9                         </span></span>
-<span><span class="co">#&gt; [5] nlme_3.1-162                          </span></span>
-<span><span class="co">#&gt; [6] dplyr_1.1.3                           </span></span>
+<span><span class="co">#&gt; [4] emmeans_1.9.0                         </span></span>
+<span><span class="co">#&gt; [5] nlme_3.1-163                          </span></span>
+<span><span class="co">#&gt; [6] dplyr_1.1.4                           </span></span>
 <span><span class="co">#&gt; [7] MASS_7.3-60                           </span></span>
 <span><span class="co">#&gt; [8] ggplot2_3.4.4                         </span></span>
-<span><span class="co">#&gt; [9] MotrpacRatTrainingPhysiologyData_0.1.0</span></span>
+<span><span class="co">#&gt; [9] MotrpacRatTrainingPhysiologyData_2.0.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] sass_0.4.7         utf8_1.2.4         generics_0.1.3     rstatix_0.7.2     </span></span>
-<span><span class="co">#&gt;  [5] lattice_0.21-8     stringi_1.7.12     digest_0.6.33      magrittr_2.0.3    </span></span>
-<span><span class="co">#&gt;  [9] estimability_1.4.1 evaluate_0.22      grid_4.3.1         mvtnorm_1.2-3     </span></span>
-<span><span class="co">#&gt; [13] fastmap_1.1.1      rprojroot_2.0.3    jsonlite_1.8.7     backports_1.4.1   </span></span>
-<span><span class="co">#&gt; [17] fansi_1.0.5        scales_1.2.1       textshaping_0.3.7  jquerylib_0.1.4   </span></span>
-<span><span class="co">#&gt; [21] abind_1.4-5        cli_3.6.1          rlang_1.1.1        munsell_0.5.0     </span></span>
-<span><span class="co">#&gt; [25] withr_2.5.1        cachem_1.0.8       yaml_2.3.7         ggbeeswarm_0.7.2  </span></span>
-<span><span class="co">#&gt; [29] tools_4.3.1        memoise_2.0.1      ggsignif_0.6.4     colorspace_2.1-0  </span></span>
-<span><span class="co">#&gt; [33] ggpubr_0.6.0       broom_1.0.5        vctrs_0.6.4        R6_2.5.1          </span></span>
-<span><span class="co">#&gt; [37] lifecycle_1.0.3    stringr_1.5.0      car_3.1-2          fs_1.6.3          </span></span>
-<span><span class="co">#&gt; [41] vipor_0.4.5        ragg_1.2.6         pkgconfig_2.0.3    beeswarm_0.4.0    </span></span>
-<span><span class="co">#&gt; [45] desc_1.4.2         pkgdown_2.0.7      pillar_1.9.0       bslib_0.5.1       </span></span>
-<span><span class="co">#&gt; [49] gtable_0.3.4       glue_1.6.2         systemfonts_1.0.5  xfun_0.40         </span></span>
-<span><span class="co">#&gt; [53] tidyselect_1.2.0   knitr_1.44         farver_2.1.1       htmltools_0.5.6.1 </span></span>
-<span><span class="co">#&gt; [57] labeling_0.4.3     carData_3.0-5      rmarkdown_2.25     compiler_4.3.1</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] gtable_0.3.4       beeswarm_0.4.0     xfun_0.41          bslib_0.6.1       </span></span>
+<span><span class="co">#&gt;  [5] rstatix_0.7.2      lattice_0.21-9     vctrs_0.6.5        tools_4.3.2       </span></span>
+<span><span class="co">#&gt;  [9] generics_0.1.3     fansi_1.0.6        highr_0.10         pkgconfig_2.0.3   </span></span>
+<span><span class="co">#&gt; [13] desc_1.4.3         lifecycle_1.0.4    compiler_4.3.2     farver_2.1.1      </span></span>
+<span><span class="co">#&gt; [17] stringr_1.5.1      textshaping_0.3.7  munsell_0.5.0      carData_3.0-5     </span></span>
+<span><span class="co">#&gt; [21] vipor_0.4.7        htmltools_0.5.7    sass_0.4.8         yaml_2.3.8        </span></span>
+<span><span class="co">#&gt; [25] pillar_1.9.0       pkgdown_2.0.7      car_3.1-2          ggpubr_0.6.0      </span></span>
+<span><span class="co">#&gt; [29] jquerylib_0.1.4    cachem_1.0.8       abind_1.4-5        tidyselect_1.2.0  </span></span>
+<span><span class="co">#&gt; [33] digest_0.6.34      mvtnorm_1.2-4      stringi_1.8.3      labeling_0.4.3    </span></span>
+<span><span class="co">#&gt; [37] fastmap_1.1.1      grid_4.3.2         colorspace_2.1-0   cli_3.6.2         </span></span>
+<span><span class="co">#&gt; [41] magrittr_2.0.3     utf8_1.2.4         broom_1.0.5        withr_3.0.0       </span></span>
+<span><span class="co">#&gt; [45] scales_1.3.0       backports_1.4.1    ggbeeswarm_0.7.2   estimability_1.4.1</span></span>
+<span><span class="co">#&gt; [49] rmarkdown_2.25     ggsignif_0.6.4     ragg_1.2.7         memoise_2.0.1     </span></span>
+<span><span class="co">#&gt; [53] evaluate_0.23      knitr_1.45         rlang_1.1.3        glue_1.7.0        </span></span>
+<span><span class="co">#&gt; [57] jsonlite_1.8.8     R6_2.5.1           systemfonts_1.0.5  fs_1.6.3</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

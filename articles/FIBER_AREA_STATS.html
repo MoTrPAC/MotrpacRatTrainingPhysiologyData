@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MotrpacRatTrainingPhysiologyData</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -74,22 +74,22 @@
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
-      <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+      <a href="../articles/baseline_plots.html">Plots of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
     </li>
     <li>
+      <a href="../articles/fiber_area_plots.html">Plots of fiber area by muscle and fiber type</a>
+    </li>
+    <li>
       <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
-      <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
+      <a href="../articles/muscle_plots.html">Plots of muscle-specific measures</a>
     </li>
     <li>
-      <a href="../articles/muscle_plots.html">Plots of muscle measures</a>
-    </li>
-    <li>
-      <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
+      <a href="../articles/pre_post_plots.html">Plots of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
@@ -102,7 +102,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">
+  <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -125,9 +125,9 @@ muscle and fiber type</h1>
                         <h4 data-toc-skip class="author">Tyler
 Sagendorf</h4>
             
-            <h4 data-toc-skip class="date">27 October, 2023</h4>
+            <h4 data-toc-skip class="date">19 January, 2024</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/FIBER_AREA_STATS.Rmd" class="external-link"><code>vignettes/FIBER_AREA_STATS.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/blob/HEAD/vignettes/FIBER_AREA_STATS.Rmd" class="external-link"><code>vignettes/FIBER_AREA_STATS.Rmd</code></a></small>
       <div class="hidden name"><code>FIBER_AREA_STATS.Rmd</code></div>
 
     </div>
@@ -136,7 +136,7 @@ Sagendorf</h4>
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Required packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">MotrpacRatTrainingPhysiologyData</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">MotrpacRatTrainingPhysiologyData</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">MASS</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -233,11 +233,12 @@ and <code>type</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">FIBER_TYPES</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">FIBER_TYPES</span>, muscle_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">muscle</span>, <span class="st">"."</span>, <span class="va">type</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit.area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span></span>
-<span>  fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">fiber_area</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span> <span class="op">*</span> <span class="va">muscle_type</span>,</span>
-<span>  random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">pid</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">FIBER_TYPES</span>,</span>
-<span>  na.action <span class="op">=</span> <span class="va">na.exclude</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">fit.area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">fiber_area</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">group</span> <span class="op">*</span> <span class="va">muscle_type</span>,</span>
+<span>                random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">pid</span>,</span>
+<span>                data <span class="op">=</span> <span class="va">FIBER_TYPES</span>,</span>
+<span>                na.action <span class="op">=</span> <span class="va">na.exclude</span><span class="op">)</span></span></code></pre></div>
+<p>We will check regression diagnostic plots and plots of residuals
+vs. predictor levels.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">resid</a></span><span class="op">(</span><span class="va">fit.area</span>, scaled <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
 <span></span>
@@ -269,8 +270,7 @@ and <code>type</code>.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Standardized residuals"</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, outer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="FIBER_AREA_STATS_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
-<p>The diagnostic plots look fine. We will try to simplify the
-model.</p>
+<p>The diagnostic plots look fine.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.area</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                           numDF denDF  F-value p-value</span></span>
@@ -289,22 +289,7 @@ model.</p>
 <span><span class="co">#&gt; age:sex:muscle_type          13   518      7.7  &lt;.0001</span></span>
 <span><span class="co">#&gt; age:group:muscle_type        13   518      2.6  0.0017</span></span>
 <span><span class="co">#&gt; sex:group:muscle_type        13   518      0.9  0.5899</span></span>
-<span><span class="co">#&gt; age:sex:group:muscle_type    13   518      1.6  0.0821</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.area</span>, method <span class="op">=</span> <span class="st">"ML"</span><span class="op">)</span></span>
-<span><span class="va">fit.area.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.area</span>, </span>
-<span>                     fixed <span class="op">=</span> <span class="va">.</span> <span class="op">~</span> <span class="op">(</span><span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">group</span> <span class="op">+</span> <span class="va">muscle_type</span><span class="op">)</span> <span class="op">^</span> <span class="fl">3</span> <span class="op">-</span></span>
-<span>                       <span class="va">sex</span><span class="op">:</span><span class="va">group</span><span class="op">:</span><span class="va">muscle_type</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit.area</span>, <span class="va">fit.area.1</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            Model  df       AIC       BIC   logLik   Test  L.Ratio p-value</span></span>
-<span><span class="co">#&gt; fit.area       1 114 -980.3958 -466.5662 604.1979                        </span></span>
-<span><span class="co">#&gt; fit.area.1     2  88 -995.1090 -598.4686 585.5545 1 vs 2 37.28679  0.0704</span></span></code></pre></div>
-<p>Removal of the 4-way interaction and the least significant 3-way
-interaction does not lead to a significant difference between the full
-and reduced models at the 0.05 level, but we will not remove any
-terms.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">fit.area</span>, method <span class="op">=</span> <span class="st">"REML"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; age:sex:group:muscle_type    13   518      1.6  0.0821</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr</a></span><span class="op">(</span><span class="va">fit.area</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pid = pdLogChol(1) </span></span>
 <span><span class="co">#&gt;             Variance    StdDev    </span></span>
@@ -315,14 +300,15 @@ terms.</p>
 <h2 id="hypothesis-testing">Hypothesis Testing<a class="anchor" aria-label="anchor" href="#hypothesis-testing"></a>
 </h2>
 <p>We will compare the 8W trained to the sedentary control group within
-each age, sex, and muscle. We will then adjust p-values across fiber
-types within each age, sex, and muscle group using the Holm method.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+each age, sex, and muscle using a two-sided t-test. We will then adjust
+p-values across fiber types within each age, sex, and muscle group using
+the Holm method.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimated marginal means</span></span>
 <span><span class="va">FIBER_AREA_EMM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span><span class="va">fit.area</span>, specs <span class="op">=</span> <span class="st">"group"</span>, </span>
 <span>                          by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"muscle_type"</span><span class="op">)</span>,</span>
 <span>                          type <span class="op">=</span> <span class="st">"response"</span>, infer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract model info</span></span>
 <span><span class="va">model_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Mean Fiber Area"</span>,</span>
 <span>                       model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse</a></span><span class="op">(</span><span class="va">fit.area</span><span class="op">[[</span><span class="st">"call"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, </span>
@@ -331,9 +317,9 @@ types within each age, sex, and muscle group using the Holm method.</p>
 <span>         model_type <span class="op">=</span> <span class="st">"lme"</span>,</span>
 <span>         fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">".*fixed = ([^,]+),.*"</span>, <span class="st">"\\1"</span>, <span class="va">model</span><span class="op">)</span>,</span>
 <span>         random <span class="op">=</span> <span class="st">"~1 | pid"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">FIBER_AREA_STATS</span> <span class="op">&lt;-</span> <span class="va">FIBER_AREA_EMM</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">FIBER_AREA_STATS</span> <span class="op">&lt;-</span> <span class="va">FIBER_AREA_EMM</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/contrast.html" class="external-link">contrast</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"trt.vs.ctrl"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span>infer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -343,7 +329,8 @@ types within each age, sex, and muscle group using the Holm method.</p>
 <span>                       names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"muscle"</span>, <span class="st">"type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>muscle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">muscle</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LG"</span>, <span class="st">"MG"</span>, <span class="st">"PL"</span>, <span class="st">"SOL"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>         type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">type</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"I"</span>, <span class="st">"IIa"</span>, <span class="st">"IIx"</span>, <span class="st">"IIb"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="co"># Holm-adjust p-values across fiber types</span></span>
+<span>  <span class="co"># Holm-adjust p-values across fiber types within each age, sex, and muscle</span></span>
+<span>  <span class="co"># combination</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">sex</span>, <span class="va">muscle</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>p.adj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a></span><span class="op">(</span><span class="va">p.value</span>, method <span class="op">=</span> <span class="st">"holm"</span><span class="op">)</span>,</span>
 <span>         signif <span class="op">=</span> <span class="va">p.adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -359,6 +346,7 @@ types within each age, sex, and muscle group using the Holm method.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>response <span class="op">=</span> <span class="st">"Mean Fiber Area"</span>,</span>
 <span>         statistic_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">"\\.ratio"</span>, <span class="st">""</span>, <span class="va">statistic_type</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">model_df</span>, by <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="co"># Reorder columns</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">muscle</span>, <span class="va">type</span>, <span class="va">contrast</span>, <span class="va">estimate_type</span>, <span class="va">null</span>,</span>
 <span>                <span class="va">estimate</span>, <span class="va">SE</span>, <span class="va">lower.CL</span>, <span class="va">upper.CL</span>, <span class="va">statistic_type</span>, <span class="va">statistic</span>,</span>
 <span>                <span class="va">df</span>, <span class="va">p.value</span>, <span class="va">p.adj</span>, <span class="va">signif</span>, <span class="va">model_type</span>, <span class="va">fixed</span>, <span class="va">random</span>,</span>
@@ -366,7 +354,7 @@ types within each age, sex, and muscle group using the Holm method.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">age</span>, <span class="va">sex</span>, <span class="va">muscle</span>, <span class="va">type</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>See <code><a href="../reference/FIBER_AREA_STATS.html">?FIBER_AREA_STATS</a></code> for details.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.dataframe.html" class="external-link">print.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">FIBER_AREA_STATS</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          response age    sex muscle type contrast estimate_type null  estimate</span></span>
 <span><span class="co">#&gt; 1 Mean Fiber Area  6M Female     LG    I 8W / SED         ratio    1 0.9858807</span></span>
@@ -400,9 +388,9 @@ types within each age, sex, and muscle group using the Holm method.</p>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.3.1 (2023-06-16)</span></span>
+<span><span class="co">#&gt; R version 4.3.2 (2023-10-31)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
 <span><span class="co">#&gt; Running under: Ubuntu 22.04.3 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -423,32 +411,32 @@ types within each age, sex, and muscle group using the Holm method.</p>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] nlme_3.1-162                          </span></span>
-<span><span class="co">#&gt; [2] emmeans_1.8.9                         </span></span>
+<span><span class="co">#&gt; [1] nlme_3.1-163                          </span></span>
+<span><span class="co">#&gt; [2] emmeans_1.9.0                         </span></span>
 <span><span class="co">#&gt; [3] purrr_1.0.2                           </span></span>
 <span><span class="co">#&gt; [4] tidyr_1.3.0                           </span></span>
 <span><span class="co">#&gt; [5] tibble_3.2.1                          </span></span>
-<span><span class="co">#&gt; [6] dplyr_1.1.3                           </span></span>
+<span><span class="co">#&gt; [6] dplyr_1.1.4                           </span></span>
 <span><span class="co">#&gt; [7] MASS_7.3-60                           </span></span>
 <span><span class="co">#&gt; [8] ggplot2_3.4.4                         </span></span>
-<span><span class="co">#&gt; [9] MotrpacRatTrainingPhysiologyData_0.1.0</span></span>
+<span><span class="co">#&gt; [9] MotrpacRatTrainingPhysiologyData_2.0.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] sass_0.4.7         utf8_1.2.4         generics_0.1.3     rstatix_0.7.2     </span></span>
-<span><span class="co">#&gt;  [5] lattice_0.21-8     stringi_1.7.12     digest_0.6.33      magrittr_2.0.3    </span></span>
-<span><span class="co">#&gt;  [9] estimability_1.4.1 evaluate_0.22      grid_4.3.1         mvtnorm_1.2-3     </span></span>
-<span><span class="co">#&gt; [13] fastmap_1.1.1      rprojroot_2.0.3    jsonlite_1.8.7     backports_1.4.1   </span></span>
-<span><span class="co">#&gt; [17] fansi_1.0.5        scales_1.2.1       textshaping_0.3.7  jquerylib_0.1.4   </span></span>
-<span><span class="co">#&gt; [21] abind_1.4-5        cli_3.6.1          rlang_1.1.1        munsell_0.5.0     </span></span>
-<span><span class="co">#&gt; [25] withr_2.5.1        cachem_1.0.8       yaml_2.3.7         ggbeeswarm_0.7.2  </span></span>
-<span><span class="co">#&gt; [29] tools_4.3.1        memoise_2.0.1      ggsignif_0.6.4     colorspace_2.1-0  </span></span>
-<span><span class="co">#&gt; [33] ggpubr_0.6.0       broom_1.0.5        vctrs_0.6.4        R6_2.5.1          </span></span>
-<span><span class="co">#&gt; [37] lifecycle_1.0.3    stringr_1.5.0      car_3.1-2          fs_1.6.3          </span></span>
-<span><span class="co">#&gt; [41] vipor_0.4.5        ragg_1.2.6         pkgconfig_2.0.3    beeswarm_0.4.0    </span></span>
-<span><span class="co">#&gt; [45] desc_1.4.2         pkgdown_2.0.7      pillar_1.9.0       bslib_0.5.1       </span></span>
-<span><span class="co">#&gt; [49] gtable_0.3.4       glue_1.6.2         systemfonts_1.0.5  xfun_0.40         </span></span>
-<span><span class="co">#&gt; [53] tidyselect_1.2.0   knitr_1.44         farver_2.1.1       htmltools_0.5.6.1 </span></span>
-<span><span class="co">#&gt; [57] labeling_0.4.3     carData_3.0-5      rmarkdown_2.25     compiler_4.3.1</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] gtable_0.3.4       beeswarm_0.4.0     xfun_0.41          bslib_0.6.1       </span></span>
+<span><span class="co">#&gt;  [5] rstatix_0.7.2      lattice_0.21-9     vctrs_0.6.5        tools_4.3.2       </span></span>
+<span><span class="co">#&gt;  [9] generics_0.1.3     fansi_1.0.6        highr_0.10         pkgconfig_2.0.3   </span></span>
+<span><span class="co">#&gt; [13] desc_1.4.3         lifecycle_1.0.4    compiler_4.3.2     farver_2.1.1      </span></span>
+<span><span class="co">#&gt; [17] stringr_1.5.1      textshaping_0.3.7  munsell_0.5.0      carData_3.0-5     </span></span>
+<span><span class="co">#&gt; [21] vipor_0.4.7        htmltools_0.5.7    sass_0.4.8         yaml_2.3.8        </span></span>
+<span><span class="co">#&gt; [25] pillar_1.9.0       pkgdown_2.0.7      car_3.1-2          ggpubr_0.6.0      </span></span>
+<span><span class="co">#&gt; [29] jquerylib_0.1.4    cachem_1.0.8       abind_1.4-5        tidyselect_1.2.0  </span></span>
+<span><span class="co">#&gt; [33] digest_0.6.34      mvtnorm_1.2-4      stringi_1.8.3      labeling_0.4.3    </span></span>
+<span><span class="co">#&gt; [37] fastmap_1.1.1      grid_4.3.2         colorspace_2.1-0   cli_3.6.2         </span></span>
+<span><span class="co">#&gt; [41] magrittr_2.0.3     utf8_1.2.4         broom_1.0.5        withr_3.0.0       </span></span>
+<span><span class="co">#&gt; [45] scales_1.3.0       backports_1.4.1    ggbeeswarm_0.7.2   estimability_1.4.1</span></span>
+<span><span class="co">#&gt; [49] rmarkdown_2.25     ggsignif_0.6.4     ragg_1.2.7         memoise_2.0.1     </span></span>
+<span><span class="co">#&gt; [53] evaluate_0.23      knitr_1.45         rlang_1.1.3        glue_1.7.0        </span></span>
+<span><span class="co">#&gt; [57] jsonlite_1.8.8     R6_2.5.1           systemfonts_1.0.5  fs_1.6.3</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

@@ -18,7 +18,7 @@ fat, lean mass, and % lean mass) both pre- and post-training."><!-- mathjax --><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MotrpacRatTrainingPhysiologyData</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -57,22 +57,22 @@ fat, lean mass, and % lean mass) both pre- and post-training."><!-- mathjax --><
       <a href="../articles/analyte_plots.html">Plots of plasma clinical analytes</a>
     </li>
     <li>
-      <a href="../articles/baseline_plots.html">Plots of baseline measures</a>
+      <a href="../articles/baseline_plots.html">Plots of baseline body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/dissection_time_plots.html">Plots of tissue dissection times</a>
     </li>
     <li>
+      <a href="../articles/fiber_area_plots.html">Plots of fiber area by muscle and fiber type</a>
+    </li>
+    <li>
       <a href="../articles/fiber_count_plots.html">Plots of muscle fiber type percentages</a>
     </li>
     <li>
-      <a href="../articles/fiber_type_plots.html">Plots of fiber area by muscle and fiber type</a>
+      <a href="../articles/muscle_plots.html">Plots of muscle-specific measures</a>
     </li>
     <li>
-      <a href="../articles/muscle_plots.html">Plots of muscle measures</a>
-    </li>
-    <li>
-      <a href="../articles/pre_post_plots.html">Plots of post - pre differences</a>
+      <a href="../articles/pre_post_plots.html">Plots of post- vs. pre-training body composition and VO2max testing measures</a>
     </li>
     <li>
       <a href="../articles/weekly_measures_plots.html">Plots of weekly body mass and blood lactate</a>
@@ -82,7 +82,7 @@ fat, lean mass, and % lean mass) both pre- and post-training."><!-- mathjax --><
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/" class="external-link">
+  <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -97,7 +97,7 @@ fat, lean mass, and % lean mass) both pre- and post-training."><!-- mathjax --><
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>NMR body composition measures</h1>
-    <small class="dont-index">Source: <a href="https://github.com/PNNL-Comp-Mass-Spec/MotrpacRatTrainingPhysiologyData/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/MoTrPAC/MotrpacRatTrainingPhysiologyData/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
     <div class="hidden name"><code>NMR.Rd</code></div>
     </div>
 
@@ -200,19 +200,19 @@ as <code>post_lean / post_body_mass * 100</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 10044337  06F8T8  6M Female   SED 2018-07-25         185.2 21.2980 108.8976</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 10044418  06F8T9  6M Female   SED 2018-07-25         178.3 20.1479 104.1272</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   pre_fat_pct pre_lean_pct pre_fluid_pct   post_day post_body_mass post_fat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        11.2         60.3           9.5 2018-09-26            199  21.2004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        10.7         59.2           9.6 2018-09-30            203  25.4180</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        11.0         59.2          10.0 2018-09-30            202  27.0320</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        11.3         58.2           9.7 2018-09-26            190  24.6432</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        11.5         58.8          10.1 2018-09-26            205  27.5948</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        11.3         58.4           9.6 2018-09-27            191  24.4271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        11.2         60.3           9.5 2018-09-26            199   23.283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        10.7         59.2           9.6 2018-09-30            203   28.826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        11.0         59.2          10.0 2018-09-30            202   31.310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        11.3         58.2           9.7 2018-09-26            190   25.840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        11.5         58.8          10.1 2018-09-26            205   30.545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        11.3         58.4           9.6 2018-09-27            191   26.167</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   post_lean post_fat_pct post_lean_pct post_fluid_pct</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  107.9952         11.7          59.6           10.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   99.7030         14.2          55.7            9.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   96.9664         15.5          55.6            9.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  103.8276         13.6          57.3           10.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  101.4896         14.9          54.8            9.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  102.7008         13.7          57.6            9.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   118.604         11.7          59.6           10.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   113.071         14.2          55.7            9.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   112.312         15.5          55.6            9.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   108.870         13.6          57.3           10.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   112.340         14.9          54.8            9.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   110.016         13.7          57.6            9.7</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -40,10 +40,10 @@
     <loc>/articles/dissection_time_plots.html</loc>
   </url>
   <url>
-    <loc>/articles/fiber_count_plots.html</loc>
+    <loc>/articles/fiber_area_plots.html</loc>
   </url>
   <url>
-    <loc>/articles/fiber_type_plots.html</loc>
+    <loc>/articles/fiber_count_plots.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
@@ -97,9 +97,6 @@
     <loc>/reference/FIBER_COUNT_EMM.html</loc>
   </url>
   <url>
-    <loc>/reference/FIBER_COUNT_MVT.html</loc>
-  </url>
-  <url>
     <loc>/reference/FIBER_COUNT_STATS.html</loc>
   </url>
   <url>
@@ -149,6 +146,9 @@
   </url>
   <url>
     <loc>/reference/plot_lm.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot_lme.html</loc>
   </url>
   <url>
     <loc>/reference/plot_pre_post.html</loc>
