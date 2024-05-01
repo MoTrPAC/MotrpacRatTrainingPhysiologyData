@@ -1,21 +1,21 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  ANALYTES_STATS: ANALYTES_STATS.html
-  BASELINE_STATS: BASELINE_STATS.html
-  FIBER_AREA_STATS: FIBER_AREA_STATS.html
-  FIBER_COUNT_STATS: FIBER_COUNT_STATS.html
-  MUSCLES_STATS: MUSCLES_STATS.html
-  PRE_POST_STATS: PRE_POST_STATS.html
-  WEEKLY_BODY_MASS_STATS: WEEKLY_BODY_MASS_STATS.html
   analyte_plots: analyte_plots.html
+  ANALYTES_STATS: ANALYTES_STATS.html
   baseline_plots: baseline_plots.html
+  BASELINE_STATS: BASELINE_STATS.html
   dissection_time_plots: dissection_time_plots.html
   fiber_area_plots: fiber_area_plots.html
+  FIBER_AREA_STATS: FIBER_AREA_STATS.html
   fiber_count_plots: fiber_count_plots.html
+  FIBER_COUNT_STATS: FIBER_COUNT_STATS.html
   muscle_plots: muscle_plots.html
+  MUSCLES_STATS: MUSCLES_STATS.html
   pre_post_plots: pre_post_plots.html
+  PRE_POST_STATS: PRE_POST_STATS.html
+  WEEKLY_BODY_MASS_STATS: WEEKLY_BODY_MASS_STATS.html
   weekly_measures_plots: weekly_measures_plots.html
-last_built: 2024-01-19T00:54Z
+last_built: 2024-05-01T21:41Z
 
